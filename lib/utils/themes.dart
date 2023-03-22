@@ -24,10 +24,52 @@ final kTextStyleButton = GoogleFonts.roboto(textStyle: const TextStyle(
   fontFamily: 'NunitoSans',
 ));
 
+const kTextStyleWeather =  TextStyle(
+  fontSize: 80,
+  color: Colors.white,
+  // fontWeight: FontWeight.w600,
+);
+const kTextStyleWeather1 =  TextStyle(
+  fontSize: 30,
+  color: Colors.white,
+  // fontWeight: FontWeight.w600,
+);
+
+const kTextStyleWeather2 =  TextStyle(
+  fontSize: 18,
+  color: Colors.white,
+  // fontWeight: FontWeight.w600,
+);
+
+const kTextStyleWeather3 =  TextStyle(
+  fontSize: 16,
+  color: Colors.white60,
+  // fontWeight: FontWeight.w600,
+);
+
+const kTextStyleDeg =  TextStyle(
+  fontSize: 50,
+  color: Colors.white,
+  // fontWeight: FontWeight.w600,
+);
+
+final kTextStyleSubtitle4 = GoogleFonts.roboto(textStyle: const TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.w400,
+  fontFamily: 'NunitoSans',
+));
+
 final kTextStyleSubtitle1 = GoogleFonts.roboto(textStyle: const TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w400,
   fontFamily: 'NunitoSans',
+));
+
+final kTextStyleSubtitle12 = GoogleFonts.roboto(textStyle: const TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w400,
+  fontFamily: 'NunitoSans',
+  color: Colors.black
 ));
 
 final kTextStyleSubtitle3 = GoogleFonts.roboto(textStyle: const TextStyle(
@@ -94,7 +136,7 @@ final kTextStyleHeadline6w = GoogleFonts.roboto(textStyle: const TextStyle(
 ));
 
 final kTextStyleSubtitle3b = GoogleFonts.roboto(textStyle: const TextStyle(
-  color: Colors.black54,
+  color: Colors.black,
   fontSize: 12,
   fontWeight: FontWeight.w300,
   fontFamily: 'NunitoSans',
@@ -109,6 +151,27 @@ final kTextStyleSubtitle2b = GoogleFonts.roboto(textStyle: const TextStyle(
 final kTextStyleSubtitle4b = GoogleFonts.roboto(textStyle: const TextStyle(
    color: Colors.black54,
   fontSize: 16,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'NunitoSans',
+));
+
+final kTextStyleSubtitle4bl = GoogleFonts.roboto(textStyle: const TextStyle(
+   color: Colors.black54,
+  fontSize: 16,
+  fontWeight: FontWeight.w200,
+  fontFamily: 'NunitoSans',
+));
+
+final kTextStyleSubtitle5b = GoogleFonts.roboto(textStyle: const TextStyle(
+   color: Colors.black54,
+  fontSize: 20,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'NunitoSans',
+));
+
+final kTextStyleSubtitle6b = GoogleFonts.roboto(textStyle: const TextStyle(
+   color: Colors.black54,
+  fontSize: 24,
   fontWeight: FontWeight.w500,
   fontFamily: 'NunitoSans',
 ));

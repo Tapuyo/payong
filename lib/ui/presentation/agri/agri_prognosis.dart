@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:convert';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -10,15 +10,14 @@ import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
 import 'package:payong/services/daily_services.dart';
-import 'package:payong/ui/presentation/10days/utils/rain_fall_chart.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
+ bool dayNow = true;
+class AgriPrognosisWidget extends HookWidget {
+  const AgriPrognosisWidget({Key? key}) : super(key: key);
+  
 
-bool dayNow = true;
-
-class Daily10Widget extends HookWidget {
-  const Daily10Widget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final rainFallColorCode = useState('#3d85c6');
@@ -28,17 +27,7 @@ class Daily10Widget extends HookWidget {
     final highTemp = useState('0');
     final highTempColorCode = useState('#3d85c6');
     final selectIndex = useState<int>(0);
-    final showExpandable1 = useState<bool>(false);
-    final showExpandable2 = useState<bool>(false);
-    final showExpandable3 = useState<bool>(false);
-    final showExpandable4 = useState<bool>(false);
-    final showExpandable5 = useState<bool>(false);
-    final showExpandable6 = useState<bool>(false);
-    final showExpandable7 = useState<bool>(false);
-    final showExpandable8 = useState<bool>(false);
-    final showExpandable9 = useState<bool>(false);
-    final showExpandable10 = useState<bool>(false);
-
+   
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
       dayNow = true;
@@ -56,60 +45,47 @@ class Daily10Widget extends HookWidget {
       Future.microtask(() async {
         final dailyProvider = context.read<DailyProvider>();
         String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
-        if (id.isEmpty) {
-          print(locId);
-          await DailyServices.getDailyDetails(context, locId!, dt);
-        } else {
-          await DailyServices.getDailyDetails(context, id, dt);
-        }
+        // if (id.isEmpty) {
+        //   print(locId);
+        //   await DailyServices.getDailyDetails(context, locId!, dt);
+        // } else {
+        //   await DailyServices.getDailyDetails(context, id, dt);
+        // }
       });
       return;
     }, [id]);
 
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height - 200,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              // ignore: prefer_const_literals_to_create_immutables
-              colors: [
-                if (dayNow) ...[
-                  Color(0xFFF2E90B),
-                  Color(0xFF762917),
-                ] else ...[
-                  Color(0xFF005EEB),
-                  Color.fromARGB(255, 74, 133, 222),
-                ]
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              tileMode: TileMode.clamp),
+    return Container(
+       height: MediaQuery.of(context).size.height - 200,
+      // decoration: BoxDecoration(
+      //   gradient: LinearGradient(
+      //       // ignore: prefer_const_literals_to_create_immutables
+      //       colors: [
+      //         if (dayNow) ...[
+      //           Color(0xFFF2E90B),
+      //           Color(0xFF762917),
+      //         ] else ...[
+      //           Color(0xFF005EEB),
+      //           Color.fromARGB(255, 74, 133, 222),
+      //         ]
+      //       ],
+      //       begin: Alignment.topCenter,
+      //       end: Alignment.bottomCenter,
+      //       tileMode: TileMode.clamp),
+      // ),
+      width: MediaQuery.of(context).size.width,
+      child: Column(children: [
+      
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Agri Prognosis",
+            style: kTextStyleSubtitle4b,
+          ),
         ),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ColoredBox(
-                  color: kColorDarkBlue.withOpacity(.5),
-                  child: SizedBox(
-                    height: 2,
-                    width: 80,
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "10 Days Forecast",
-                    style: kTextStyleSubtitle1,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
+
+        SizedBox(height: 20,),
+        Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +106,6 @@ class Daily10Widget extends HookWidget {
             ),
             Expanded(
               child: ListView(children: [
-                LineChartSample1(),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     // ignore: prefer_const_literals_to_create_immutables
@@ -198,7 +173,7 @@ class Daily10Widget extends HookWidget {
                               style: kTextStyleWeather,
                             ),
                             Text(
-                              'mm',
+                              '%',
                               style: kTextStyleWeather1,
                             ),
                           ],
@@ -242,160 +217,49 @@ class Daily10Widget extends HookWidget {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Divider(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Row(
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          'Date',
-                          style: kTextStyleWeather2,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          'Rain Fall',
-                          style: kTextStyleWeather2,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          'Temp',
-                          style: kTextStyleWeather2,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'Cloud',
-                          style: kTextStyleWeather2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Divider(),
-                ),
-                dateWidget(showExpandable1, 0),
-                dateWidget(showExpandable2, 1),
-                dateWidget(showExpandable3, 2),
-                dateWidget(showExpandable4, 3),
-                dateWidget(showExpandable5, 4),
-                dateWidget(showExpandable6, 5),
-                dateWidget(showExpandable7, 6),
-                dateWidget(showExpandable8, 7),
-                dateWidget(showExpandable9, 8),
-                dateWidget(showExpandable10, 9),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                //   child: Row(
+                //     // ignore: prefer_const_literals_to_create_immutables
+                //     children: [
+                //       Expanded(
+                //         flex: 2,
+                //         child: Text(
+                //           'Date',
+                //           style: kTextStyleWeather2,
+                //         ),
+                //       ),
+                //       Expanded(
+                //         flex: 2,
+                //         child: Text(
+                //           'Rain Fall',
+                //           style: kTextStyleWeather2,
+                //         ),
+                //       ),
+                //       Expanded(
+                //         flex: 2,
+                //         child: Text(
+                //           'Temp',
+                //           style: kTextStyleWeather2,
+                //         ),
+                //       ),
+                //       Expanded(
+                //         flex: 1,
+                //         child: Text(
+                //           'Cloud',
+                //           style: kTextStyleWeather2,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                //   child: Divider(),
+                // ),
               ]),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Column dateWidget(ValueNotifier<bool> showExpandable1, int addDay) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            showExpandable1.value = !showExpandable1.value;
-          },
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Column(
-              children: [
-                Row(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        DateFormat.MMMEd()
-                            .format(DateTime.now().add(Duration(days: addDay)))
-                            .toString(),
-                        style: kTextStyleWeather2,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        '30 mm',
-                        style: kTextStyleWeather2,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        '27°',
-                        style: kTextStyleWeather2,
-                      ),
-                    ),
-                    Expanded(
-                        flex: 1,
-                        child: Icon(
-                          Icons.cloud,
-                          size: 30,
-                          color: Colors.white,
-                        )),
-                  ],
-                ),
-                if (showExpandable1.value) Divider(),
-                if (showExpandable1.value)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Text(
-                        'Humidity 82',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'WindSpeed 15 NE',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'No Rain',
-                        style: kTextStyleWeather3,
-                      ),
-                    ],
-                  ),
-                if (showExpandable1.value) cloudIcons('CLOUDY'),
-                if (showExpandable1.value)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Text(
-                        'Low Temp 26',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'High Temp 26',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'MeanTemp 26',
-                        style: kTextStyleWeather3,
-                      ),
-                    ],
-                  ),
-                if (showExpandable1.value)
-                  SizedBox(
-                    height: 12,
-                  ),
-              ],
-            ),
-          ),
-        ),
-        Divider(),
-      ],
+      ]),
     );
   }
 
@@ -427,17 +291,15 @@ class Daily10Widget extends HookWidget {
         children: [
           Align(
               alignment: Alignment.center,
-              child: dayNow
-                  ? Icon(
-                      Icons.sunny,
-                      size: 200,
-                      color: Colors.yellow.withOpacity(.9),
-                    )
-                  : Icon(
-                      FontAwesomeIcons.solidMoon,
-                      size: 200,
-                      color: Colors.yellow.withOpacity(.9),
-                    )),
+              child: dayNow ? Icon(
+                Icons.sunny,
+                size: 200,
+                color: Colors.yellow.withOpacity(.9),
+              ): Icon(
+                FontAwesomeIcons.solidMoon,
+                size: 200,
+                color: Colors.yellow.withOpacity(.9),
+              )),
           Align(
             alignment: Alignment.center,
             child: Padding(

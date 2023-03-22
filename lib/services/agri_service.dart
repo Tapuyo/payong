@@ -10,14 +10,14 @@ abstract class AgriServices {
       BuildContext context, String date) async {
         date = '2023-02-09';
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/daily_agri.php?fdate=$date'));
+        'http://203.177.82.125:8081/payong_app/API/agri_daily.php'));
     var jsondata = json.decode(response.body);
 
     List<AgriModel> newDailyList = [];
 
     for (var u in jsondata) {
       AgriModel daily = AgriModel(
-          u['ForecastAgriID'],
+          '',
           u['LocationDescription'],
           u['coordinates'] ?? [],
           u['AgriDate'],
@@ -38,17 +38,19 @@ abstract class AgriServices {
 
   static Future<void> getAgriDetails(
       BuildContext context, String dailyDetailsID,String date) async {
+        date = '2023-02-09';
      final dailyProvider = context.read<AgriProvider>();
      dailyProvider.setRefresh(true);
+     print(dailyDetailsID);
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/daily_agri.php?DailyAgriID=$dailyDetailsID'));
+        'http://203.177.82.125:8081/payong_app/API/daily_agri.php?DailyAgriID=$dailyDetailsID&fdate=$date'));
     var jsondata = json.decode(response.body);
 
     List<AgriModel> newDailyList = [];
 
     for (var u in jsondata) {
       AgriModel daily = AgriModel(
-          u['ForecastAgriID'],
+          u['ForecastAgriID'] ?? '',
           u['LocationDescription'],
           u['coordinates'] ?? [],
           u['AgriDate'],

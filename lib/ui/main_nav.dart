@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parallax_rain/parallax_rain.dart';
@@ -17,7 +16,14 @@ import 'package:payong/services/agri_service.dart';
 import 'package:payong/services/daily_services.dart';
 import 'package:payong/ui/menu_fab/expandable_fab.dart';
 import 'package:payong/ui/presentation/10days/10days.dart';
-import 'package:payong/ui/presentation/agi10days/agridays.dart';
+import 'package:payong/ui/presentation/agri/agri_advisory.dart';
+import 'package:payong/ui/presentation/agri/agri_forecast.dart';
+import 'package:payong/ui/presentation/agri/agri_prognosis.dart';
+import 'package:payong/ui/presentation/agri/agri_synopsis.dart';
+import 'package:payong/ui/presentation/agri10days/agri_advisory10.dart';
+import 'package:payong/ui/presentation/agri10days/agri_forecast10.dart';
+import 'package:payong/ui/presentation/agri10days/agri_prognosis10.dart';
+import 'package:payong/ui/presentation/agri10days/agri_synopsis10.dart';
 import 'package:payong/ui/presentation/daily/daily.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
@@ -46,35 +52,36 @@ class _MyWidgetState extends State<MainNav> {
   String title = 'Philippines';
   double rainDropSpeed = 5;
   bool rainDropShow = false;
+  int agriTab = 0;
+   bool dayNow = true;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
-    zoom: 6,
+    zoom: 5.5,
   );
 
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(11.051436, 122.880019),
       tilt: 59.440717697143555,
-      zoom: 6);
+      zoom: 5.5);
 
   int selectIndex = 0;
-  late MapController controller = MapController(
-    initPosition: GeoPoint(latitude: 11.051436, longitude: 122.880019),
-    initMapWithUserPosition: false,
-  );
 
 //11.051436, 122.880019
   @override
   void initState() {
     selectIndex = widget.index!;
-    controller = MapController(
-      initPosition: GeoPoint(latitude: 11.051436, longitude: 122.880019),
-      initMapWithUserPosition: false,
-    );
     getDataPerModule();
     getPast10Days();
     super.initState();
+    if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
+      //evening
+      dayNow = true;
+    } else {
+      //day
+      dayNow = false;
+    }
   }
 
   void getDataPerModule() {
@@ -85,6 +92,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       getDailyList('10days');
     } else if (selectIndex == 3) {
+      getAgriList();
     } else if (selectIndex == 4) {
       getDailyList('month');
     } else {
@@ -94,7 +102,7 @@ class _MyWidgetState extends State<MainNav> {
 
   Future<void> getAgriList() async {
     setState(() {
-      isRefresh = true;
+      isRefresh = false;
     });
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
     await AgriServices.getAgriList(context, dt);
@@ -228,42 +236,42 @@ class _MyWidgetState extends State<MainNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(
-          // title: Column(
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     Text(
-          //       title,
-          //       style: kTextStyleSubtitle2b,
-          //     ),
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Text(
-          //           '${getMonthString(selectedDate.month)} ${selectedDate.day}, ${selectedDate.year}',
-          //           style: TextStyle(fontSize: 12, color: Colors.black38),
-          //         ),
-          //       ],
-          //     )
-          //   ],
-          // ),
-          // leading: IconButton(
-          //   icon: const Icon(
-          //     Icons.arrow_back_ios,
-          //     size: 30,
-          //   ),
-          //   onPressed: () {
-          //     Navigator.of(context).pushReplacementNamed(Routes.mobMain);
-          //   },
-          // ),
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(
-          //       Icons.help,
-          //       size: 30,
-          //     ),
-          //     onPressed: () {},
-          //   )
-          // ]),
+      // title: Column(
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Text(
+      //       title,
+      //       style: kTextStyleSubtitle2b,
+      //     ),
+      //     Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         Text(
+      //           '${getMonthString(selectedDate.month)} ${selectedDate.day}, ${selectedDate.year}',
+      //           style: TextStyle(fontSize: 12, color: Colors.black38),
+      //         ),
+      //       ],
+      //     )
+      //   ],
+      // ),
+      // leading: IconButton(
+      //   icon: const Icon(
+      //     Icons.arrow_back_ios,
+      //     size: 30,
+      //   ),
+      //   onPressed: () {
+      //     Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+      //   },
+      // ),
+      // actions: [
+      //   IconButton(
+      //     icon: const Icon(
+      //       Icons.help,
+      //       size: 30,
+      //     ),
+      //     onPressed: () {},
+      //   )
+      // ]),
       body: mainTab(context),
       floatingActionButton: ExpandableFabClass(
         distanceBetween: 150.0,
@@ -357,12 +365,10 @@ class _MyWidgetState extends State<MainNav> {
     final now = DateTime.now();
     String formatter = DateFormat('yMd').format(now);
     if (selectIndex == 0) {
+      //DAILY WIDGET
       return SlidingUpPanel(
           minHeight: 120,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(30),
-          ),
-          maxHeight: MediaQuery.of(context).size.height - 200,
+          maxHeight: MediaQuery.of(context).size.height - 150,
           panel: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
@@ -370,8 +376,9 @@ class _MyWidgetState extends State<MainNav> {
           ),
           body: mapWid());
     } else if (selectIndex == 1) {
+      //AGRI WIDGET DAILY
       return SlidingUpPanel(
-        minHeight: 120,
+          minHeight: 120,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -379,12 +386,21 @@ class _MyWidgetState extends State<MainNav> {
           panel: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
-            children: [AgriWidget()],
+            children: [
+                 AgriSynopsisWidget()
+              // if(agriTab == 0 || agriTab == 1)...[
+              //   //sypnosis
+              //   AgriSynopsisWidget()
+              // ]else...[
+              //  AgriPrognosisWidget(),
+              // ]
+            ],
           ),
-          body: mapWid());
+          body: mapWidAgri());
     } else if (selectIndex == 2) {
+      //10 DAYS WIDGET
       return SlidingUpPanel(
-        minHeight: 120,
+          minHeight: 120,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -396,8 +412,8 @@ class _MyWidgetState extends State<MainNav> {
           ),
           body: mapWid());
     } else if (selectIndex == 3) {
-      return SlidingUpPanel(
-        minHeight: 120,
+       return SlidingUpPanel(
+          minHeight: 120,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -406,28 +422,19 @@ class _MyWidgetState extends State<MainNav> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ColoredBox(
-                    color: kColorDarkBlue.withOpacity(.5),
-                    child: SizedBox(
-                      height: 2,
-                      width: 80,
-                    )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Agri 10 Days",
-                  style: kTextStyleSubtitle2b,
-                ),
-              ),
+              // if(agriTab == 0 || agriTab == 1)...[
+              //   //sypnosis
+              //   AgriSynopsis10Widget()
+              // ]else...[
+              //  AgriPrognosis10Widget(),
+              // ]
+              AgriSynopsis10Widget()
             ],
           ),
-          body: mapWid());
+          body: mapWidAgri10Days());
     } else if (selectIndex == 4) {
       return SlidingUpPanel(
-        minHeight: 120,
+          minHeight: 120,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -457,7 +464,7 @@ class _MyWidgetState extends State<MainNav> {
           body: mapWid());
     } else {
       return SlidingUpPanel(
-        minHeight: 120,
+          minHeight: 120,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -486,6 +493,280 @@ class _MyWidgetState extends State<MainNav> {
           ),
           body: mapWid());
     }
+  }
+  Widget mapWidAgri() {
+    return Stack(
+      children: [
+        //tab
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: (){
+                  setState(() {
+                    agriTab = 0;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: agriTab == 0 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
+                    
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Forecast',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                 onTap: (){
+                  setState(() {
+                    agriTab = 1;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                     color: agriTab == 1 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
+                    
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Advisory',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                 onTap: (){
+                  setState(() {
+                    agriTab = 2;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                     color: agriTab == 2 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
+                  
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Prognosis',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
+            child: Column(children: [
+              if(agriTab == 2)...[
+                AgriPrognosisWidget()
+              //   Container(
+              //   height: MediaQuery.of(context).size.height - 200,
+              //   width: MediaQuery.of(context).size.width,
+              //    child: GoogleMap(
+              //                myLocationEnabled: true,
+              //                myLocationButtonEnabled: true,
+              //                mapType: mapType,
+              //                polygons: polygons,
+              //                initialCameraPosition: _kGooglePlex,
+              //                zoomGesturesEnabled: true,
+              //                tiltGesturesEnabled: false,
+              //                onMapCreated: (GoogleMapController controller) {
+              //     _controller.complete(controller);
+              //                },
+              //          ),
+              //  )
+              ]else if(agriTab == 1)...[
+                AgriAdvisoryWidget()
+              ]else...[
+                AgriForecastWidget()
+              ]
+            ]),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget mapWidAgri10Days() {
+    return Stack(
+      children: [
+        //tab
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: (){
+                  setState(() {
+                    agriTab = 0;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: agriTab == 0 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
+                    
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Forecast',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                 onTap: (){
+                  setState(() {
+                    agriTab = 1;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                     color: agriTab == 1 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
+                    
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Advisory',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                 onTap: (){
+                  setState(() {
+                    agriTab = 2;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                     color: agriTab == 2 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
+                  
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Prognosis',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
+            child: Column(children: [
+              if(agriTab == 2)...[
+                AgriPrognosis10Widget()
+              //   Container(
+              //   height: MediaQuery.of(context).size.height - 200,
+              //   width: MediaQuery.of(context).size.width,
+              //    child: GoogleMap(
+              //                myLocationEnabled: true,
+              //                myLocationButtonEnabled: true,
+              //                mapType: mapType,
+              //                polygons: polygons,
+              //                initialCameraPosition: _kGooglePlex,
+              //                zoomGesturesEnabled: true,
+              //                tiltGesturesEnabled: false,
+              //                onMapCreated: (GoogleMapController controller) {
+              //     _controller.complete(controller);
+              //                },
+              //          ),
+              //  )
+              ]else if(agriTab == 1)...[
+                AgriAdvisory10Widget()
+              ]else...[
+                AgriForecast10Widget()
+              ]
+            ]),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget mapWid() {
@@ -523,15 +804,10 @@ class _MyWidgetState extends State<MainNav> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).pushReplacementNamed(Routes.mobMain);
               },
               child: Container(
-                child: Center(
-                  child: Icon(
-                    Icons.help
-                  ),
-                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   color: Colors.white,
@@ -541,6 +817,9 @@ class _MyWidgetState extends State<MainNav> {
                 ),
                 height: 40,
                 width: 40,
+                child: Center(
+                  child: Icon(Icons.help),
+                ),
               ),
             ),
           ),
@@ -550,15 +829,10 @@ class _MyWidgetState extends State<MainNav> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).pushReplacementNamed(Routes.mobMain);
               },
               child: Container(
-                child: Center(
-                  child: Icon(
-                    Icons.arrow_back_ios
-                  ),
-                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   color: Colors.white,
@@ -568,6 +842,9 @@ class _MyWidgetState extends State<MainNav> {
                 ),
                 height: 40,
                 width: 40,
+                child: Center(
+                  child: Icon(Icons.arrow_back_ios),
+                ),
               ),
             ),
           ),
@@ -575,7 +852,9 @@ class _MyWidgetState extends State<MainNav> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 230),
+            padding: selectIndex != 0
+                ? EdgeInsets.fromLTRB(20, 0, 0, 230)
+                : EdgeInsets.fromLTRB(20, 0, 0, 140),
             child:
                 Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               GestureDetector(
@@ -588,8 +867,8 @@ class _MyWidgetState extends State<MainNav> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.0),
                       color: mapType == MapType.normal
-                          ? Colors.blue.withOpacity(.8)
-                          : Colors.blue.withOpacity(.4),
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -612,8 +891,8 @@ class _MyWidgetState extends State<MainNav> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.0),
                       color: mapType == MapType.hybrid
-                          ? Colors.blue.withOpacity(.8)
-                          : Colors.blue.withOpacity(.4),
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -636,8 +915,8 @@ class _MyWidgetState extends State<MainNav> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.0),
                       color: mapType == MapType.satellite
-                          ? Colors.blue.withOpacity(.8)
-                          : Colors.blue.withOpacity(.4),
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -655,10 +934,7 @@ class _MyWidgetState extends State<MainNav> {
             alignment: Alignment.center,
             child: CircularProgressIndicator(),
           ),
-        if (selectIndex == 0 ||
-            selectIndex == 1 ||
-            selectIndex == 2 ||
-            selectIndex == 3)
+        if (selectIndex == 1 || selectIndex == 2 || selectIndex == 3)
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -690,8 +966,8 @@ class _MyWidgetState extends State<MainNav> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(17.0),
                   color: selectedDate == item
-                      ? Colors.blue.withOpacity(.8)
-                      : Colors.blue.withOpacity(.4),
+                      ? Colors.white.withOpacity(.8)
+                      : Colors.white.withOpacity(.4),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),

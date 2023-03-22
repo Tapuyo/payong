@@ -41,14 +41,19 @@ dependencies:
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
 
-  #test
-  flutter_osm_plugin: ^0.42.0
+  #modules
   google_maps_flutter: ^2.2.3
   geolocator: ^9.0.2
+  firebase_messaging: ^14.2.5
+  firebase_core: ^2.7.0
+  geocoding: ^2.0.5
 
   #utils
   google_fonts: ^4.0.3
   parallax_rain: ^1.1.0
+  easy_localization: ^3.0.1
+  fl_chart: ^0.61.0
+  carousel_slider: ^4.2.1
   
 dev_dependencies:
   flutter_test:
