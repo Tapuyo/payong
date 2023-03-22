@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 import 'dart:convert';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,9 +6,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:payong/models/daily_10_model.dart';
 import 'package:payong/models/daily_model.dart';
+import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
+import 'package:payong/services/daily10_service.dart';
 import 'package:payong/services/daily_services.dart';
 import 'package:payong/ui/presentation/10days/utils/rain_fall_chart.dart';
 import 'package:payong/utils/hex_to_color.dart';
@@ -47,20 +50,50 @@ class Daily10Widget extends HookWidget {
       dayNow = false;
     }
 
-    final bool isRefresh = context.select((DailyProvider p) => p.isRefresh);
-    final String id = context.select((DailyProvider p) => p.dailyIDSelected);
+    final bool isRefresh = context.select((Daily10Provider p) => p.isRefresh);
+    final String id = context.select((Daily10Provider p) => p.dailyIDSelected);
     final String? locId = context.select((InitProvider p) => p.myLocationId);
-    final DailyModel? dailyDetails =
-        context.select((DailyProvider p) => p.dailyDetails);
+    final DailyModel10? dailyDetails =
+        context.select((Daily10Provider p) => p.dailyDetails);
+    final dailyDetails1 = useState<DailyModel10?>(null);
+    final dailyDetails2 = useState<DailyModel10?>(null);
+    final dailyDetails3 = useState<DailyModel10?>(null);
+    final dailyDetails4 = useState<DailyModel10?>(null);
+    final dailyDetails5 = useState<DailyModel10?>(null);
+    final dailyDetails6 = useState<DailyModel10?>(null);
+    final dailyDetails7 = useState<DailyModel10?>(null);
+    final dailyDetails8 = useState<DailyModel10?>(null);
+    final dailyDetails9 = useState<DailyModel10?>(null);
+    final dailyDetails10 = useState<DailyModel10?>(null);
     useEffect(() {
       Future.microtask(() async {
         final dailyProvider = context.read<DailyProvider>();
         String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
         if (id.isEmpty) {
-          print(locId);
-          await DailyServices.getDailyDetails(context, locId!, dt);
+          await Daily10Services.getDailyDetails(context, locId!, dt);
+          // ignore: use_build_context_synchronously
+          dailyDetails1.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate));
+          dailyDetails2.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails3.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 2))));
+          dailyDetails4.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 3))));
+          dailyDetails5.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 4))));
+          dailyDetails6.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 5))));
+          dailyDetails7.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 6))));
+          dailyDetails8.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 7))));
+          dailyDetails9.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 8))));
+          dailyDetails10.value = await Daily10Services.getDailyDetails(context, locId, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 9))));
         } else {
-          await DailyServices.getDailyDetails(context, id, dt);
+          await Daily10Services.getDailyDetails(context, id, dt);
+          dailyDetails1.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails2.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails3.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails4.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails5.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails6.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails7.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails8.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails9.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
+          dailyDetails10.value = await Daily10Services.getDailyDetails(context, id, DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.add(Duration(days: 1))));
         }
       });
       return;
@@ -118,8 +151,8 @@ class Daily10Widget extends HookWidget {
                     dailyDetails != null
                         ? dailyDetails.locationDescription != ''
                             ? dailyDetails.locationDescription
-                            : 'Bohol'
-                        : 'Pilar Bohol',
+                            : 'No Data'
+                        : 'No Data',
                     style: kTextStyleSubtitle4,
                   ),
                 ],
@@ -136,15 +169,15 @@ class Daily10Widget extends HookWidget {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text(
-                        'Humidity 82',
+                        'Humidity ${dailyDetails != null ? dailyDetails!.humidity : ''}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'WindSpeed 15 NE',
+                        'Wind Speed ${dailyDetails != null ? dailyDetails.windSpeed:'0'} ${dailyDetails != null ? dailyDetails.windDirection : ''}',
                         style: kTextStyleWeather3,
                       ),
-                      Text(
-                        'No Rain',
+                      Text(dailyDetails != null ?
+                        dailyDetails.rainFallDescription:'',
                         style: kTextStyleWeather3,
                       ),
                     ],
@@ -157,20 +190,20 @@ class Daily10Widget extends HookWidget {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text(
-                        'Low Temp 26',
+                        'Low Temp ${dailyDetails != null ? dailyDetails.lowTemp: '0'}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'High Temp 26',
+                        'High Temp ${dailyDetails != null ? dailyDetails.highTemp: '0'}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'MeanTemp 26',
+                        'MeanTemp ${dailyDetails != null ? dailyDetails.meanTemp : '0'}',
                         style: kTextStyleWeather3,
                       ),
                     ],
                   ),
-                  cloudIcons('CLOUDY'),
+                  cloudIcons(dailyDetails != null ? dailyDetails.cloudCover:'CLOUDY'),
                 SizedBox(
                   height: 20,
                 ),
@@ -222,10 +255,10 @@ class Daily10Widget extends HookWidget {
                           children: [
                             Text(
                               dailyDetails != null
-                                  ? dailyDetails.rainFallPercentage != ''
-                                      ? dailyDetails.rainFallPercentage
+                                  ? dailyDetails.meanTemp != ''
+                                      ? dailyDetails.meanTemp
                                       : '0'
-                                  : '26',
+                                  : '0',
                               style: kTextStyleWeather,
                             ),
                             Text(
@@ -282,16 +315,16 @@ class Daily10Widget extends HookWidget {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Divider(),
                 ),
-                dateWidget(showExpandable1, 0),
-                dateWidget(showExpandable2, 1),
-                dateWidget(showExpandable3, 2),
-                dateWidget(showExpandable4, 3),
-                dateWidget(showExpandable5, 4),
-                dateWidget(showExpandable6, 5),
-                dateWidget(showExpandable7, 6),
-                dateWidget(showExpandable8, 7),
-                dateWidget(showExpandable9, 8),
-                dateWidget(showExpandable10, 9),
+                dateWidget(showExpandable1, 0, dailyDetails1.value),
+                dateWidget(showExpandable2, 1, dailyDetails2.value),
+                dateWidget(showExpandable3, 2, dailyDetails3.value),
+                dateWidget(showExpandable4, 3, dailyDetails4.value),
+                dateWidget(showExpandable5, 4, dailyDetails5.value),
+                dateWidget(showExpandable6, 5, dailyDetails6.value),
+                dateWidget(showExpandable7, 6, dailyDetails7.value),
+                dateWidget(showExpandable8, 7, dailyDetails8.value),
+                dateWidget(showExpandable9, 8, dailyDetails9.value),
+                dateWidget(showExpandable10, 9, dailyDetails10.value),
               ]),
             ),
           ],
@@ -300,8 +333,8 @@ class Daily10Widget extends HookWidget {
     );
   }
 
-  Column dateWidget(ValueNotifier<bool> showExpandable1, int addDay) {
-    return Column(
+  Widget dateWidget(ValueNotifier<bool> showExpandable1, int addDay, DailyModel10? daily) {
+    return daily != null ? Column(
       children: [
         GestureDetector(
           onTap: () {
@@ -326,14 +359,14 @@ class Daily10Widget extends HookWidget {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '30 mm',
+                        '${daily.rainFallPercentage}mm',
                         style: kTextStyleWeather2,
                       ),
                     ),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        '27°',
+                        '${daily.meanTemp}°',
                         style: kTextStyleWeather2,
                       ),
                     ),
@@ -353,35 +386,35 @@ class Daily10Widget extends HookWidget {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text(
-                        'Humidity 82',
+                        'Humidity ${daily.humidity}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'WindSpeed 15 NE',
+                        'WindSpeed ${daily.windSpeed} ${daily.windDirection}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'No Rain',
+                        daily.rainFallDescription,
                         style: kTextStyleWeather3,
                       ),
                     ],
                   ),
-                if (showExpandable1.value) cloudIcons('CLOUDY'),
+                if (showExpandable1.value) cloudIcons(daily.cloudCover),
                 if (showExpandable1.value)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text(
-                        'Low Temp 26',
+                        'Low Temp ${daily.lowTemp}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'High Temp 26',
+                        'High Temp ${daily.highTemp}',
                         style: kTextStyleWeather3,
                       ),
                       Text(
-                        'MeanTemp 26',
+                        'MeanTemp ${daily.meanTemp}',
                         style: kTextStyleWeather3,
                       ),
                     ],
@@ -396,7 +429,7 @@ class Daily10Widget extends HookWidget {
         ),
         Divider(),
       ],
-    );
+    ): SizedBox();
   }
 
   Widget cloudIcons(String des) {

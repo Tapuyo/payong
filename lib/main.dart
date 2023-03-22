@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:payong/provider/agri_provider.dart';
+import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
 import 'package:payong/routes/route_generator.dart';
 import 'package:payong/routes/routes.dart';
-import 'package:payong/splash_page.dart';
 import 'package:payong/ui/mob_main.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
@@ -19,11 +19,13 @@ void main() async{
       ChangeNotifierProvider(create: (_) => InitProvider()),
       ChangeNotifierProvider(create: (_) => DailyProvider()),
       ChangeNotifierProvider(create: (_) => AgriProvider()),
+       ChangeNotifierProvider(create: (_) => Daily10Provider()),
     ],
     child:  MyApp(),
   ));
 }
 
+// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
 
  @override

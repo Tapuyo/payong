@@ -1,4 +1,4 @@
-class DailyModel {
+class DailyModel10 {
   final String dailyDetailsID;
   final String locationDescription;
   final List<dynamic> locationCoordinate;
@@ -18,7 +18,7 @@ class DailyModel {
   final String meanTemp;
 
 
-  DailyModel(
+  DailyModel10(
       this.dailyDetailsID,
       this.locationDescription,
       this.locationCoordinate,
@@ -37,4 +37,34 @@ class DailyModel {
       this.windDirection,
       this.meanTemp
       );
+
+
+      
 }
+
+
+// "DailyDetailsID":"1",
+//       "ForecastDate":"2023-03-03",
+//       "LocationDescription":"Tayum,Abra",
+//       "RainFall":"0",
+//       "RainFallColorCode":"",
+//       "RainFallPercentage":"0",
+//       "RainFallPercentageColorCode":"#cc0000",
+//       "RainFallDescription":"NO RAIN",
+//       "CloudCover":"CLOUDY",
+//       "Humidity":"82",
+//       "WindSpeed":"15",
+//       "WindDirection":"NE",
+//       "LowTemp":"26",
+//       "LowTempColorCode":"#37d4f5",
+//       "HighTemp":"26",
+//       "HighTempColorCode":"#e9f132",
+//       "MeanTemp":"26",
+//       "coordinates":[
+//          {
+//             "coordinate":"17.61731114443119, 120.62541906043792"
+//          },
+//          {
+//             "coordinate":"17.60274923767965, 120.63863698669239"
+//          }
+//       ]

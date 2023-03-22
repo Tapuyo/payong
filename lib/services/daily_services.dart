@@ -35,12 +35,13 @@ abstract class DailyServices {
     dailyProvider.setDailyList(newDailyList);
   }
 
-  static Future<void> getDailyDetails(
+  static Future<DailyModel?> getDailyDetails(
       BuildContext context, String dailyDetailsID, String date) async {
         print(dailyDetailsID);
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
-    // date = '2023-02-09';
+    date = '2023-03-03';
+    dailyDetailsID = '1';
     final response = await http.get(Uri.parse(
         'http://203.177.82.125:8081/payong_app/API/daily_details.php?fdate=$date&DailyDetailsID=$dailyDetailsID'));
 
@@ -72,5 +73,10 @@ abstract class DailyServices {
     // }else{
     //   return ;
     // }
+    if(newDailyList.isNotEmpty){
+      return newDailyList.first;
+    }else{
+      return null;
+    }
   }
 }

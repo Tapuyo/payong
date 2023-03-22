@@ -10,6 +10,7 @@ class DailyModel {
   final String lowTempColorCode;
   final String highTemp;
   final String highTempColorCode;
+  
 
   DailyModel(
       this.dailyDetailsID,
