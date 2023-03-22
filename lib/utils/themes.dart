@@ -156,9 +156,9 @@ final kTextStyleSubtitle4b = GoogleFonts.roboto(textStyle: const TextStyle(
 ));
 
 final kTextStyleSubtitle4bl = GoogleFonts.roboto(textStyle: const TextStyle(
-   color: Colors.black54,
+   color: Colors.black,
   fontSize: 16,
-  fontWeight: FontWeight.w200,
+  fontWeight: FontWeight.w500,
   fontFamily: 'NunitoSans',
 ));
 

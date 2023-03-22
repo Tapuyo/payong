@@ -92,7 +92,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       getDailyList('10days');
     } else if (selectIndex == 3) {
-      getAgriList();
+      // getAgriList();
     } else if (selectIndex == 4) {
       getDailyList('month');
     } else {
@@ -101,60 +101,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Future<void> getAgriList() async {
-    setState(() {
-      isRefresh = false;
-    });
-    String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
-    await AgriServices.getAgriList(context, dt);
-    final dailyProvider = context.read<AgriProvider>();
-    dailyProvider.setDateSelect(selectedDate);
-    setState(() {
-      polygons.clear();
-      title = 'Philippines';
-      agriList = dailyProvider.dailyList;
-
-      for (var name in agriList) {
-        List<dynamic> coordinates = name.locationCoordinate;
-        List<LatLng> polygonCoords = [];
-        for (var coor in coordinates) {
-          var latLng = coor['coordinate'].toString().split(",");
-          double latitude = double.parse(latLng[0]);
-          double longitude = double.parse(latLng[1]);
-          polygonCoords.add(LatLng(latitude, longitude));
-        }
-        polygons.add(Polygon(
-            onTap: () {
-              setState(() {
-                title = name.locationDescription;
-                if (double.parse(name.rainFallFrom) >= 50) {
-                  rainDropShow = true;
-                  if (double.parse(name.rainFallFrom) > 50) {
-                    rainDropSpeed = 2;
-                  } else if (double.parse(name.rainFallFrom) > 70) {
-                    rainDropSpeed = 5;
-                  } else if (double.parse(name.rainFallFrom) > 90) {
-                    rainDropSpeed = 10;
-                  } else {
-                    rainDropSpeed = 15;
-                  }
-                } else {
-                  rainDropShow = false;
-                }
-              });
-
-              dailyProvider.setDailyId(name.forecastAgriID);
-            },
-            consumeTapEvents: true,
-            polygonId: PolygonId(name.forecastAgriID),
-            points: polygonCoords,
-            strokeWidth: 4,
-            fillColor: Color.fromARGB(117, 76, 175, 79),
-            strokeColor: Color.fromARGB(190, 76, 175, 79)));
-      }
-    });
-    setState(() {
-      isRefresh = false;
-    });
+    await AgriServices.getAgriSypnosis(context);
   }
 
   Future<void> getDailyList(String mod) async {

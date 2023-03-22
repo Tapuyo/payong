@@ -1,12 +1,16 @@
 import 'package:flutter/foundation.dart';
+import 'package:payong/models/agri_advisory_model.dart';
+import 'package:payong/models/agri_forecast_model.dart';
 import 'package:payong/models/agri_model.dart';
 
 class AgriProvider with ChangeNotifier{
-  List<AgriModel> dailyList = [];
   AgriModel? daily;
   String dailyID = '';
   bool refresh = false;
   DateTime selectedDate = DateTime.now();
+  List<AgriForecastModel> agriForecastModel = [];
+
+  List<AgriAdvModel> agriAdvModel = [];
 
   DateTime  get dateSelect => selectedDate; 
 
@@ -16,10 +20,17 @@ class AgriProvider with ChangeNotifier{
 
   AgriModel?  get dailyDetails => daily; 
 
-  List<AgriModel> get myDailyList => dailyList;
+  List<AgriForecastModel>?  get agriForecastModels => agriForecastModel; 
 
-  void setDailyList(List<AgriModel> dailyListValue) {
-    dailyList = dailyListValue;
+  List<AgriAdvModel>?  get agriAdvModels => agriAdvModel; 
+
+  void setAdvisory(List<AgriAdvModel> value) {
+    agriAdvModel = value;
+    notifyListeners();
+  }
+
+  void setForecast(List<AgriForecastModel> value) {
+    agriForecastModel = value;
     notifyListeners();
   }
 

@@ -6,7 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:payong/models/agri_model.dart';
 import 'package:payong/models/daily_model.dart';
+import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
 import 'package:payong/services/daily_services.dart';
@@ -20,13 +22,7 @@ class AgriSynopsis10Widget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rainFallColorCode = useState('#3d85c6');
-    final rainFallPercentageColorCode = useState('#3d85c6');
-    final lowTemp = useState('0');
-    final lowTempColorCode = useState('#3d85c6');
-    final highTemp = useState('0');
-    final highTempColorCode = useState('#3d85c6');
-    final selectIndex = useState<int>(0);
+  
    
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
@@ -36,25 +32,12 @@ class AgriSynopsis10Widget extends HookWidget {
       dayNow = false;
     }
 
-    final bool isRefresh = context.select((DailyProvider p) => p.isRefresh);
-    final String id = context.select((DailyProvider p) => p.dailyIDSelected);
+    final bool isRefresh = context.select((AgriProvider p) => p.isRefresh);
+    final String id = context.select((AgriProvider p) => p.dailyIDSelected);
     final String? locId = context.select((InitProvider p) => p.myLocationId);
-    final DailyModel? dailyDetails =
-        context.select((DailyProvider p) => p.dailyDetails);
-    useEffect(() {
-      Future.microtask(() async {
-        final dailyProvider = context.read<DailyProvider>();
-        String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
-        // if (id.isEmpty) {
-        //   print(locId);
-        //   await DailyServices.getDailyDetails(context, locId!, dt);
-        // } else {
-        //   await DailyServices.getDailyDetails(context, id, dt);
-        // }
-      });
-      return;
-    }, [id]);
-
+    final AgriModel? agriSypnosis =
+        context.select((AgriProvider p) => p.dailyDetails);
+  
     return Container(
       height: MediaQuery.of(context).size.height - 200,
       decoration: BoxDecoration(
@@ -76,23 +59,19 @@ class AgriSynopsis10Widget extends HookWidget {
       width: MediaQuery.of(context).size.width,
       child: Column(children: [
       
+        
+         SizedBox(height: 20,),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Agri Sypnosis",
-            style: kTextStyleSubtitle2b,
+          child: Text(agriSypnosis != null ? agriSypnosis.title : 'No Data',
+            style: kTextStyleSubtitle2,
           ),
         ),
          SizedBox(height: 20,),
-         Text(
-           DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString(),
-           style: kTextStyleWeather2,
-         ),
-         SizedBox(height: 20,),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is though",
+          child: Text(agriSypnosis != null ?
+            agriSypnosis.content : '',
             style: kTextStyleSubtitle2b,
           ),
         ),
@@ -101,121 +80,4 @@ class AgriSynopsis10Widget extends HookWidget {
     );
   }
 
-  Widget cloudIcons(String des) {
-    if (des == 'CLOUDY') {
-      return Stack(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.cloud,
-                size: 200,
-                color: Colors.white.withOpacity(.5),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Cloudy',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (des == 'SUNNY') {
-      return Stack(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: dayNow ? Icon(
-                Icons.sunny,
-                size: 200,
-                color: Colors.yellow.withOpacity(.9),
-              ): Icon(
-                FontAwesomeIcons.solidMoon,
-                size: 200,
-                color: Colors.yellow.withOpacity(.9),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Sunny',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (des == 'RAINY') {
-      return Stack(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Icon(
-                FontAwesomeIcons.cloudRain,
-                size: 200,
-                color: Colors.white.withOpacity(.5),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Rainy',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (des == 'THUNDER') {
-      return Stack(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Icon(
-                FontAwesomeIcons.cloudBolt,
-                size: 200,
-                color: Colors.yellowAccent.withOpacity(.9),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Thunder',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Stack(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.sunny,
-                size: 200,
-                color: Colors.yellowAccent.withOpacity(.5),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Sunny',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-  }
 }
