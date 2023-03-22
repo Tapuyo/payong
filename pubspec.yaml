@@ -56,6 +56,16 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_html: ^2.2.1
   
+  # launcher icon
+  flutter_launcher_icons: ^0.11.0
+
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/payonglogo.png"
+  min_sdk_android: 21 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

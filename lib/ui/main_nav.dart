@@ -92,7 +92,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       getDailyList('10days');
     } else if (selectIndex == 3) {
-      // getAgriList();
+      getAgriList();
     } else if (selectIndex == 4) {
       getDailyList('month');
     } else {
@@ -369,13 +369,13 @@ class _MyWidgetState extends State<MainNav> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-              // if(agriTab == 0 || agriTab == 1)...[
-              //   //sypnosis
-              //   AgriSynopsis10Widget()
-              // ]else...[
-              //  AgriPrognosis10Widget(),
-              // ]
-              AgriSynopsis10Widget()
+              if(agriTab == 0 || agriTab == 1)...[
+                //sypnosis
+                AgriSynopsis10Widget()
+              ]else...[
+               AgriPrognosis10Widget(),
+              ]
+              // AgriSynopsis10Widget()
             ],
           ),
           body: mapWidAgri10Days());
@@ -662,23 +662,23 @@ class _MyWidgetState extends State<MainNav> {
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
             child: Column(children: [
               if(agriTab == 2)...[
-                AgriPrognosis10Widget()
-              //   Container(
-              //   height: MediaQuery.of(context).size.height - 200,
-              //   width: MediaQuery.of(context).size.width,
-              //    child: GoogleMap(
-              //                myLocationEnabled: true,
-              //                myLocationButtonEnabled: true,
-              //                mapType: mapType,
-              //                polygons: polygons,
-              //                initialCameraPosition: _kGooglePlex,
-              //                zoomGesturesEnabled: true,
-              //                tiltGesturesEnabled: false,
-              //                onMapCreated: (GoogleMapController controller) {
-              //     _controller.complete(controller);
-              //                },
-              //          ),
-              //  )
+                // AgriPrognosis10Widget()
+                Container(
+                height: MediaQuery.of(context).size.height - 200,
+                width: MediaQuery.of(context).size.width,
+                 child: GoogleMap(
+                             myLocationEnabled: true,
+                             myLocationButtonEnabled: true,
+                             mapType: mapType,
+                             polygons: polygons,
+                             initialCameraPosition: _kGooglePlex,
+                             zoomGesturesEnabled: true,
+                             tiltGesturesEnabled: false,
+                             onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                             },
+                       ),
+               )
               ]else if(agriTab == 1)...[
                 AgriAdvisory10Widget()
               ]else...[

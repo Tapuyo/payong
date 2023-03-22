@@ -57,22 +57,22 @@ class AgriPrognosis10Widget extends HookWidget {
 
     return Container(
         height: MediaQuery.of(context).size.height - 200,
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //       // ignore: prefer_const_literals_to_create_immutables
-      //       colors: [
-      //         if (dayNow) ...[
-      //           Color(0xFFF2E90B),
-      //           Color(0xFF762917),
-      //         ] else ...[
-      //           Color(0xFF005EEB),
-      //           Color.fromARGB(255, 74, 133, 222),
-      //         ]
-      //       ],
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter,
-      //       tileMode: TileMode.clamp),
-      // ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            // ignore: prefer_const_literals_to_create_immutables
+            colors: [
+              if (dayNow) ...[
+                Color(0xFFF2E90B),
+                Color(0xFF762917),
+              ] else ...[
+                Color(0xFF005EEB),
+                Color.fromARGB(255, 74, 133, 222),
+              ]
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            tileMode: TileMode.clamp),
+      ),
       width: MediaQuery.of(context).size.width,
       child: Column(children: [
       
@@ -133,15 +133,15 @@ class AgriPrognosis10Widget extends HookWidget {
                     children: [
                       Text(
                         'Low Temp 26',
-                        style: kTextStyleWeather3,
+                        // style: kTextStyleWeather3,
                       ),
                       Text(
                         'High Temp 26',
-                        style: kTextStyleWeather3,
+                        // style: kTextStyleWeather3,
                       ),
                       Text(
                         'MeanTemp 26',
-                        style: kTextStyleWeather3,
+                        // style: kTextStyleWeather3,
                       ),
                     ],
                   ),

@@ -67,6 +67,7 @@ class AgriForecast10Widget extends HookWidget {
                       SizedBox(
                            height: MediaQuery.of(context).size.height + 100,
                         child: ListView.builder(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
                           scrollDirection: Axis.vertical,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
