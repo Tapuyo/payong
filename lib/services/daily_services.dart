@@ -37,7 +37,6 @@ abstract class DailyServices {
 
   static Future<DailyModel?> getDailyDetails(
       BuildContext context, String dailyDetailsID, String date) async {
-        print(dailyDetailsID);
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
     date = '2023-03-03';

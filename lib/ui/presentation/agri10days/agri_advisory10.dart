@@ -40,7 +40,7 @@ class AgriAdvisory10Widget extends HookWidget {
         context.select((AgriProvider p) => p.agriAdvModels);
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgriAdvisory(context, id);
+        await AgriServices.getAgriAdvisory(context, id, false);
       });
       return;
     }, [id]);
@@ -73,7 +73,7 @@ class AgriAdvisory10Widget extends HookWidget {
                           scrollDirection: Axis.vertical,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
-                            return advisoryWidget(dailyAgriDetails[index]);
+                            return advisoryWidget(context,dailyAgriDetails[index]);
                           },
                         ),
                       ),
@@ -84,7 +84,7 @@ class AgriAdvisory10Widget extends HookWidget {
         : SizedBox();
   }
 
-  Widget advisoryWidget(AgriAdvModel? agriAdsModel) {
+  Widget advisoryWidget(BuildContext context,AgriAdvModel? agriAdsModel) {
     return agriAdsModel != null
         ? Column(children: [
             Divider(
@@ -109,13 +109,18 @@ class AgriAdvisory10Widget extends HookWidget {
                         height: 18,
                       ),
                       Container(
+                        padding: EdgeInsets.all(5),
+                        width: MediaQuery.of(context).size.width - 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: Colors.black26,
                         ),
-                        child: Html(
-                          shrinkWrap: true,
-                          data: agriAdsModel.content,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Html(
+                            shrinkWrap: false,
+                            data: agriAdsModel.content,
+                          ),
                         ),
                       )
                     ],

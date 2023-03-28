@@ -2,10 +2,12 @@
 import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:payong/models/agri_10_days_forecast.dart';
 import 'package:payong/models/agri_forecast_model.dart';
 import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
@@ -34,11 +36,11 @@ class AgriForecast10Widget extends HookWidget {
 
     final bool isRefresh = context.select((AgriProvider p) => p.isRefresh);
     final String id = context.select((AgriProvider p) => p.dailyIDSelected);
-    final List<AgriForecastModel>? dailyAgriDetails =
-        context.select((AgriProvider p) => p.agriForecastModel);
+    final List<Agri10DaysForecastvModel>? dailyAgriDetails =
+        context.select((AgriProvider p) => p.agri10Forecasts);
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgriForecast(context, id);
+        await AgriServices.getAgri10Days(context, id);
       });
       return;
     }, [id]);
@@ -71,7 +73,7 @@ class AgriForecast10Widget extends HookWidget {
                           scrollDirection: Axis.vertical,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
-                            return foreCastWidget(dailyAgriDetails[index]);
+                            return foreCastWidget(context,dailyAgriDetails[index]);
                           },
                         ),
                       ),
@@ -82,199 +84,46 @@ class AgriForecast10Widget extends HookWidget {
         : SizedBox();
   }
 
-  Widget foreCastWidget(AgriForecastModel? agriForecastModel) {
+  Widget foreCastWidget(BuildContext context, Agri10DaysForecastvModel? agriForecastModel) {
     return agriForecastModel != null
         ? Column(children: [
-            Divider(thickness: 3,),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Divider(),
-                      Text(
-                        'Humidity Areas: ',
-                        style: kTextStyleSubtitle4bl,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      location(agriForecastModel.humidityLocation),
-                      
-                      SizedBox(
-                        height: 18,
-                      ),
-                      Text(
-                        'Minimum Humidity ${agriForecastModel.minHumidity}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        'Maximum Humidity ${agriForecastModel.maxHumidity}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                  Icon(
-                    FontAwesomeIcons.cloud,
-                    size: 100,
-                    color: dayNow ? kColorSecondary : kColorBlue,
-                  )
-                ],
-              ),
+            Divider(
+              thickness: 3,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.leaf,
-                    size: 100,
-                    color: dayNow ? kColorSecondary : kColorBlue,
-                  ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: 12,
                       ),
-                      Divider(),
                       Text(
-                        'Leaf Wetness Areas: ',
-                        style: kTextStyleSubtitle4bl,
+                        agriForecastModel.title,
+                        style: kTextStyleSubtitle4b,
                       ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      location(agriForecastModel.leafWetnessLocation),
                       SizedBox(
                         height: 18,
                       ),
-                      Text(
-                        'Minimum Leaf Wetness ${agriForecastModel.minLeafWetness}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        'Maximum Leaf Wetness ${agriForecastModel.maxLeafWetness}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      Divider(),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.black26,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Html(
+                            shrinkWrap: false,
+                            data: agriForecastModel.content,
+                          ),
+                        ),
+                      )
                     ],
                   ),
-                ],
-              ),
-            ),
-           
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Divider(),
-                      Text(
-                        'Temperature Areas: ',
-                        style: kTextStyleSubtitle4bl,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                     location(agriForecastModel.tempLocation),
-                      SizedBox(
-                        height: 18,
-                      ),
-                      Text(
-                        'Low Land Minimum Temperature  ${agriForecastModel.highLandMinTemp}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        'Low Land Maximum Temperature  ${agriForecastModel.lowLandcMaxTemp}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        'High Land Minimum Temperature  ${agriForecastModel.highLandMinTemp}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        'High Land Maximum Temperature  ${agriForecastModel.highLandMaxTemp}',
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                   Icon(
-                    FontAwesomeIcons.temperatureHalf,
-                    size: 100,
-                    color: dayNow ? kColorSecondary : kColorBlue,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.wind,
-                    size: 100,
-                    color: dayNow ? kColorSecondary : kColorBlue,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Divider(),
-                      Text(
-                        'Wind Condition Areas: ',
-                        style: kTextStyleSubtitle4bl,
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                    location(agriForecastModel.windContidionLocation),
-                      SizedBox(
-                        height: 18,
-                      ),
-                      Text(
-                         agriForecastModel.windCondition,
-                        style: kTextStyleSubtitle2b,
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                  
                 ],
               ),
             ),

@@ -25,6 +25,7 @@ import 'package:payong/ui/presentation/agri10days/agri_forecast10.dart';
 import 'package:payong/ui/presentation/agri10days/agri_prognosis10.dart';
 import 'package:payong/ui/presentation/agri10days/agri_synopsis10.dart';
 import 'package:payong/ui/presentation/daily/daily.dart';
+import 'package:payong/ui/presentation/mcao/mcao.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -306,7 +307,7 @@ class _MyWidgetState extends State<MainNav> {
     );
   }
 
-  SlidingUpPanel mainTab(
+  Widget mainTab(
     BuildContext context,
   ) {
     final now = DateTime.now();
@@ -325,7 +326,8 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 1) {
       //AGRI WIDGET DAILY
       return SlidingUpPanel(
-          minHeight: 120,
+          minHeight: 0,
+          
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -344,6 +346,7 @@ class _MyWidgetState extends State<MainNav> {
             ],
           ),
           body: mapWidAgri());
+          
     } else if (selectIndex == 2) {
       //10 DAYS WIDGET
       return SlidingUpPanel(
@@ -360,7 +363,7 @@ class _MyWidgetState extends State<MainNav> {
           body: mapWid());
     } else if (selectIndex == 3) {
        return SlidingUpPanel(
-          minHeight: 120,
+          minHeight: agriTab == 2 ? 120:0,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -381,7 +384,7 @@ class _MyWidgetState extends State<MainNav> {
           body: mapWidAgri10Days());
     } else if (selectIndex == 4) {
       return SlidingUpPanel(
-          minHeight: 120,
+          minHeight: 0,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -408,7 +411,7 @@ class _MyWidgetState extends State<MainNav> {
               ),
             ],
           ),
-          body: mapWid());
+          body: mCaoWidget());
     } else {
       return SlidingUpPanel(
           minHeight: 120,
@@ -450,6 +453,7 @@ class _MyWidgetState extends State<MainNav> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+             
               GestureDetector(
                 onTap: (){
                   setState(() {
@@ -466,7 +470,7 @@ class _MyWidgetState extends State<MainNav> {
                   height: 35,
                   child: Center(
                     child: Text(
-                      'Forecast',
+                      'Daily Farm',
                       style: kTextStyleSubtitle4b,
                     ),
                   ),
@@ -494,7 +498,7 @@ class _MyWidgetState extends State<MainNav> {
                   ),
                 ),
               ),
-              GestureDetector(
+               GestureDetector(
                  onTap: (){
                   setState(() {
                     agriTab = 2;
@@ -510,7 +514,7 @@ class _MyWidgetState extends State<MainNav> {
                   height: 35,
                   child: Center(
                     child: Text(
-                      'Prognosis',
+                      'Synopsis',
                       style: kTextStyleSubtitle4b,
                     ),
                   ),
@@ -525,7 +529,7 @@ class _MyWidgetState extends State<MainNav> {
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
             child: Column(children: [
               if(agriTab == 2)...[
-                AgriPrognosisWidget()
+                AgriSynopsisWidget()
               //   Container(
               //   height: MediaQuery.of(context).size.height - 200,
               //   width: MediaQuery.of(context).size.width,
@@ -712,6 +716,80 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
+      ],
+    );
+  }
+
+    Widget mCaoWidget() {
+    return Stack(
+      children: [
+       mCaOPage(),
+        Visibility(
+          visible: rainDropShow,
+          child: IgnorePointer(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: ParallaxRain(
+                // ignore: prefer_const_literals_to_create_immutables
+                dropColors: [Colors.white],
+                trail: true,
+                dropFallSpeed: rainDropSpeed,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.help),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
+            ),
+          ),
+        ),
+        
       ],
     );
   }

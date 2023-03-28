@@ -41,6 +41,9 @@ class DailyWidget extends HookWidget {
     final String? locId = context.select((InitProvider p) => p.myLocationId);
     final DailyModel? dailyDetails =
         context.select((DailyProvider p) => p.dailyDetails);
+    final daily1 = useState<DailyModel?>(null);
+    final daily2 = useState<DailyModel?>(null);
+    final daily3 = useState<DailyModel?>(null);
     useEffect(() {
       Future.microtask(() async {
         final dailyProvider = context.read<DailyProvider>();
@@ -48,6 +51,8 @@ class DailyWidget extends HookWidget {
         if (id.isEmpty) {
           print(locId);
           await DailyServices.getDailyDetails(context, locId!, dt);
+          // ignore: use_build_context_synchronously
+          // daily1.value = DailyServices.getDailyDetails(context, locId, dt);
         } else {
           await DailyServices.getDailyDetails(context, id, dt);
         }

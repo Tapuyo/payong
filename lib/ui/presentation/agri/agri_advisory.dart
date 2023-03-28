@@ -40,7 +40,7 @@ class AgriAdvisoryWidget extends HookWidget {
         context.select((AgriProvider p) => p.agriAdvModels);
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgriAdvisory(context, id);
+        await AgriServices.getAgriAdvisory(context, id, true);
       });
       return;
     }, [id]);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:payong/models/agri_10_days_forecast.dart';
 import 'package:payong/models/agri_advisory_model.dart';
 import 'package:payong/models/agri_forecast_model.dart';
 import 'package:payong/models/agri_model.dart';
@@ -34,8 +35,9 @@ abstract class AgriServices {
 
   static Future<void> getAgriForecast(
       BuildContext context, String id) async {
+
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/agri_daily_details.php?AgriDailyID=$id'));
+        'http://203.177.82.125:8081/payong_app/API/agri_daily_details.php?AgriDailyID=1'));
     var jsondata = json.decode(response.body);
 
     List<AgriForecastModel> newDailyList = [];
@@ -86,9 +88,16 @@ abstract class AgriServices {
 
 
   static Future<void> getAgriAdvisory(
-      BuildContext context, String id) async {
-    final response = await http.get(Uri.parse(
+      BuildContext context, String id, bool daily) async {
+         var response;
+    if(daily){
+     response = await http.get(Uri.parse(
         'http://203.177.82.125:8081/payong_app/API/agri_daily_advisory.php'));
+    }else{
+      response = await http.get(Uri.parse(
+        'http://203.177.82.125:8081/payong_app/API/agri_advisory.php?AgriInfoID=1'));
+    }
+    
     var jsondata = json.decode(response.body);
 
     List<AgriAdvModel> newDailyList = [];
@@ -105,6 +114,30 @@ abstract class AgriServices {
     // ignore: use_build_context_synchronously
     final dailyProvider = context.read<AgriProvider>();
     dailyProvider.setAdvisory(newDailyList);
+  }
+
+
+  static Future<void> getAgri10Days(
+      BuildContext context, String id,) async {
+    final response = await http.get(Uri.parse(
+        'http://203.177.82.125:8081/payong_app/API/agri_FORECAST.php?AgriInfoID=1'));
+    
+    var jsondata = json.decode(response.body);
+
+    List<Agri10DaysForecastvModel> newDailyList = [];
+
+    for (var u in jsondata) {
+      
+      Agri10DaysForecastvModel daily = Agri10DaysForecastvModel(
+          u['Title'] ?? '',
+          u['Content'] ?? '',
+          
+          );
+      newDailyList.add(daily);
+    }
+    // ignore: use_build_context_synchronously
+    final dailyProvider = context.read<AgriProvider>();
+    dailyProvider.setAgri10Forecast(newDailyList);
   }
 
  
