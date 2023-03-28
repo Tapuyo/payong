@@ -26,6 +26,7 @@ import 'package:payong/ui/presentation/agri10days/agri_prognosis10.dart';
 import 'package:payong/ui/presentation/agri10days/agri_synopsis10.dart';
 import 'package:payong/ui/presentation/daily/daily.dart';
 import 'package:payong/ui/presentation/mcao/mcao.dart';
+import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -110,23 +111,29 @@ class _MyWidgetState extends State<MainNav> {
       isRefresh = true;
     });
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
-    await DailyServices.getDailyList(context, mod, dt);
+    await DailyServices.getDailyList(context, dt);
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setDateSelect(selectedDate);
-    setState(() {
+    try{
+      setState(() {
       polygons.clear();
       title = 'Philippines';
       dailyList = dailyProvider.dailyList;
 
       for (var name in dailyList) {
+        
         List<dynamic> coordinates = name.locationCoordinate;
         List<LatLng> polygonCoords = [];
         for (var coor in coordinates) {
+          
+         
           var latLng = coor['coordinate'].toString().split(",");
           double latitude = double.parse(latLng[0]);
           double longitude = double.parse(latLng[1]);
-          polygonCoords.add(LatLng(latitude, longitude));
+           print('klasldkjalskdj $latitude');
+          polygonCoords.add(LatLng(longitude, latitude));
         }
+        Color lxColor = name.rainFallColorCode.toColor();
         polygons.add(Polygon(
             onTap: () {
               print(name.dailyDetailsID);
@@ -154,10 +161,14 @@ class _MyWidgetState extends State<MainNav> {
             polygonId: PolygonId(name.dailyDetailsID),
             points: polygonCoords,
             strokeWidth: 4,
-            fillColor: Color.fromARGB(117, 76, 175, 79),
-            strokeColor: Color.fromARGB(190, 76, 175, 79)));
+            fillColor: lxColor.withOpacity(.3),
+            strokeColor: lxColor
+            ));
       }
     });
+    }catch(e){
+      print('error');
+    }
     setState(() {
       isRefresh = false;
     });

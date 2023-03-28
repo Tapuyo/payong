@@ -41,9 +41,13 @@ class DailyWidget extends HookWidget {
     final String? locId = context.select((InitProvider p) => p.myLocationId);
     final DailyModel? dailyDetails =
         context.select((DailyProvider p) => p.dailyDetails);
-    final daily1 = useState<DailyModel?>(null);
-    final daily2 = useState<DailyModel?>(null);
-    final daily3 = useState<DailyModel?>(null);
+    final DailyModel? dailyDetails1 =
+        context.select((DailyProvider p) => p.dailyDetails);
+    final DailyModel? dailyDetails2 =
+        context.select((DailyProvider p) => p.dailyDetails);
+
+    final DailyModel? dailyDetails3 =
+        context.select((DailyProvider p) => p.dailyDetails);
     useEffect(() {
       Future.microtask(() async {
         final dailyProvider = context.read<DailyProvider>();
@@ -52,7 +56,6 @@ class DailyWidget extends HookWidget {
           print(locId);
           await DailyServices.getDailyDetails(context, locId!, dt);
           // ignore: use_build_context_synchronously
-          // daily1.value = DailyServices.getDailyDetails(context, locId, dt);
         } else {
           await DailyServices.getDailyDetails(context, id, dt);
         }
@@ -108,11 +111,16 @@ class DailyWidget extends HookWidget {
           ),
         ),
         cloudIcons('CLOUDY'),
+        Text(
+           DateFormat.MMMEd().format(DateTime.now()).toString(),
+          style: kTextStyleWeather2,
+        ),
         SizedBox(
           height: 20,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               children: [
@@ -121,17 +129,17 @@ class DailyWidget extends HookWidget {
                   style: kTextStyleWeather2,
                 ),
                 SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       dailyDetails != null
                           ? dailyDetails.rainFallPercentage != ''
                               ? dailyDetails.rainFallPercentage
                               : '0'
-                          : '10',
+                          : '0',
                       style: kTextStyleWeather,
                     ),
                     Text(
@@ -151,18 +159,18 @@ class DailyWidget extends HookWidget {
                   'Temperature',
                   style: kTextStyleWeather2,
                 ),
-                SizedBox(
-                  height: 8,
-                ),
+                // SizedBox(
+                //   height: 8,
+                // ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       dailyDetails != null
-                          ? dailyDetails.rainFallPercentage != ''
+                          ? dailyDetails.lowTemp != ''
                               ? dailyDetails.rainFallPercentage
                               : '0'
-                          : '26',
+                          : '0',
                       style: kTextStyleWeather,
                     ),
                     Text(
@@ -189,21 +197,21 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                      DateFormat.MMMEd().format(DateTime.now()).toString(),
+                      DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString(),
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '30 mm',
+                      '${dailyDetails1!.rainFallPercentage} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                     Expanded(
                     flex: 1,
                     child: Text(
-                      '26°',
+                      '${dailyDetails1.lowTemp}°',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -223,21 +231,21 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                      DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString(),
+                      DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 2))).toString(),
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '10 mm',
+                      '${dailyDetails2!.rainFallPercentage} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                     Expanded(
                     flex: 1,
                     child: Text(
-                      '27°',
+                      '${dailyDetails2.lowTemp}°',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -257,21 +265,21 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                       DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 2))).toString(),
+                       DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 3))).toString(),
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '10 mm',
+                      '${dailyDetails3!.rainFallPercentage} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                     Expanded(
                     flex: 1,
                     child: Text(
-                      '26°',
+                      '${dailyDetails3.lowTemp}°',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -282,6 +290,7 @@ class DailyWidget extends HookWidget {
                 ],
               ),
             ),
+            
           ],
         ),
         

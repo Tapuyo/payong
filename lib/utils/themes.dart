@@ -25,7 +25,7 @@ final kTextStyleButton = GoogleFonts.roboto(textStyle: const TextStyle(
 ));
 
 const kTextStyleWeather =  TextStyle(
-  fontSize: 80,
+  fontSize: 30,
   color: Colors.white,
   // fontWeight: FontWeight.w600,
 );
@@ -153,7 +153,7 @@ final kTextStyleSubtitle4b = GoogleFonts.roboto(textStyle: const TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w500,
   fontFamily: 'NunitoSans',
-  
+
 ));
 
 final kTextStyleSubtitle4bl = GoogleFonts.roboto(textStyle: const TextStyle(

@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/init_provider.dart';
+import 'package:payong/services/daily_services.dart';
 import 'package:payong/services/getLocationId.dart';
 import 'package:payong/ui/drawer/drawer.dart';
 import 'package:payong/ui/main_nav.dart';
@@ -100,6 +102,9 @@ class _MainPageState extends State<MainPage> {
       print(locID);
       intProv.setLocationId(locID);
     }
+// DateTime selectedDate = DateTime.now();
+//      String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
+//     await DailyServices.getDailyList(context, mod, dt);
   }
 
   Future<Position> _determinePosition() async {
