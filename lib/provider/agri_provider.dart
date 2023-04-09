@@ -1,10 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:payong/models/agri_10_days_forecast.dart';
 import 'package:payong/models/agri_advisory_model.dart';
+import 'package:payong/models/agri_forecast_humidity_model.dart';
+import 'package:payong/models/agri_forecast_leafwetness_model.dart';
 import 'package:payong/models/agri_forecast_model.dart';
+import 'package:payong/models/agri_forecast_temperature_model.dart';
+import 'package:payong/models/agri_forecast_weather_model.dart';
+import 'package:payong/models/agri_forecast_wind_model.dart';
 import 'package:payong/models/agri_model.dart';
 
-class AgriProvider with ChangeNotifier{
+class AgriProvider with ChangeNotifier {
   AgriModel? daily;
   String dailyID = '';
   bool refresh = false;
@@ -15,21 +20,61 @@ class AgriProvider with ChangeNotifier{
 
   List<Agri10DaysForecastvModel> agri10Forecast = [];
 
-  DateTime  get dateSelect => selectedDate; 
+  List<AgriForecastTempModel> _agriForecastTemp = [];
+  List<AgriForecastWindModel> _agriForecastWind = [];
+  List<AgriForecastWeatherModel> _agriForecastWeather = [];
+  List<AgriForecastHumidityModel> _agriForecastHumidity = [];
+  List<AgriForecastLeafWetnessModel> _agriForecastLeafWetness = [];
 
-  bool  get isRefresh => refresh; 
+  List<AgriForecastTempModel> get agriForecastTemp => _agriForecastTemp;
+  List<AgriForecastWindModel> get agriForecastWind => _agriForecastWind;
+  List<AgriForecastWeatherModel> get agriForecastWeather =>
+      _agriForecastWeather;
+  List<AgriForecastHumidityModel> get agriForecastHumidity =>
+      _agriForecastHumidity;
+  List<AgriForecastLeafWetnessModel> get agriForecastLeafWetness =>
+      _agriForecastLeafWetness;
 
-  String  get dailyIDSelected => dailyID; 
+  void setAgriForecastTemp(List<AgriForecastTempModel> value) {
+    _agriForecastTemp = value;
+    notifyListeners();
+  }
 
-  AgriModel?  get dailyDetails => daily; 
+  void setAgriForecastWind(List<AgriForecastWindModel> value) {
+    _agriForecastWind = value;
+    notifyListeners();
+  }
 
-  List<AgriForecastModel>?  get agriForecastModels => agriForecastModel; 
+  void setAgriForecastWeather(List<AgriForecastWeatherModel> value) {
+    _agriForecastWeather = value;
+    notifyListeners();
+  }
 
-  List<AgriAdvModel>?  get agriAdvModels => agriAdvModel; 
+  void setAgriForecastHumidity(List<AgriForecastHumidityModel> value) {
+    _agriForecastHumidity = value;
+    notifyListeners();
+  }
 
-  List<Agri10DaysForecastvModel>?  get agri10Forecasts => agri10Forecast; 
+  void setAgriForecastLeafwetness(List<AgriForecastLeafWetnessModel> value) {
+    _agriForecastLeafWetness = value;
+    notifyListeners();
+  }
 
-    void setAgri10Forecast(List<Agri10DaysForecastvModel> value) {
+  DateTime get dateSelect => selectedDate;
+
+  bool get isRefresh => refresh;
+
+  String get dailyIDSelected => dailyID;
+
+  AgriModel? get dailyDetails => daily;
+
+  List<AgriForecastModel>? get agriForecastModels => agriForecastModel;
+
+  List<AgriAdvModel>? get agriAdvModels => agriAdvModel;
+
+  List<Agri10DaysForecastvModel>? get agri10Forecasts => agri10Forecast;
+
+  void setAgri10Forecast(List<Agri10DaysForecastvModel> value) {
     agri10Forecast = value;
     notifyListeners();
   }

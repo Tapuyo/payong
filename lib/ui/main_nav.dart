@@ -92,7 +92,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 1) {
       getAgriList();
     } else if (selectIndex == 2) {
-      // getDailyList('10days');
+      getDailyList('10days');
     } else if (selectIndex == 3) {
       // getAgriList();
     } else if (selectIndex == 4) {

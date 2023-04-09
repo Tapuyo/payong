@@ -12,7 +12,7 @@ abstract class Daily10Services {
       BuildContext context, String selectMod, String date) async {
     // date = '2023-02-09';
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/daily_details.php?fdate=$date'));
+        'http://18.139.91.35/payong/API/daily_details.php?fdate=$date'));
     var jsondata = json.decode(response.body);
 
     List<DailyModel10> newDailyList = [];
@@ -51,7 +51,7 @@ abstract class Daily10Services {
     // date = '2023-03-03';
     // dailyDetailsID = '1';
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/daily_details.php?fdate=$date'));
+        'http://18.139.91.35/payong/API/daily_details.php?fdate=$date'));
 
     // if (response.statusCode == 201 || response.statusCode == 200) {
     var jsondata = json.decode(response.body);

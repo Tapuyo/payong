@@ -18,3 +18,14 @@ const days10Map = 'http://18.139.91.35/payong/API/daily_details.php?'; //http://
 const days10MapLocation = 'http://18.139.91.35/payong/API/locations.php?'; //http://18.139.91.35/payong/API/locations.php?location=Aliaga,Nueva Ecija
 
 const days10Details = 'http://18.139.91.35/payong/API/daily_details.php?'; //http://18.139.91.35/payong/API/daily_details.php?DailyDetailsID=1
+
+
+//Agri Module
+
+const parentAgri = 'http://18.139.91.35/payong/API/agri_daily.php';
+
+const agriForecastTempApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=Temperature';
+const agriForecastWindApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=WindCondition';
+const agriForecastWeatherApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=WeatherCondition';
+const agriForecastHumidityApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=Humidity';
+const agriForecastLeafWetnessApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=LeafWetness';
