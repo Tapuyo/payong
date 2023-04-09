@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_model.dart';
 
 class DailyProvider with ChangeNotifier{
@@ -8,8 +9,10 @@ class DailyProvider with ChangeNotifier{
   DailyModel? daily2;
   DailyModel? daily3;
   String dailyID = '';
+  String _option = 'ActualRainfall';
   bool refresh = false;
   DateTime selectedDate = DateTime.now();
+  Set<Polygon> polygon = {};
 
   DateTime  get dateSelect => selectedDate; 
 
@@ -22,7 +25,27 @@ class DailyProvider with ChangeNotifier{
   DailyModel?  get dailyDetails2 => daily2; 
   DailyModel?  get dailyDetails3 => daily3; 
 
+  Set<Polygon>?  get polygons => polygon; 
+
   List<DailyModel> get myDailyList => dailyList;
+
+  String  get option => _option;
+
+  void clearPolygon() {
+    polygon = {};
+    notifyListeners();
+  }
+
+  void setOption(String value) {
+    _option = value;
+    notifyListeners();
+  }
+
+
+  void setPolygonDaiy(Set<Polygon> value) {
+    polygon = value;
+    notifyListeners();
+  }
 
   void setDailyList(List<DailyModel> dailyListValue) {
     dailyList = dailyListValue;

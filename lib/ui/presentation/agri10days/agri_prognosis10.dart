@@ -30,7 +30,7 @@ class AgriPrognosis10Widget extends HookWidget {
    
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
-      dayNow = true;
+      dayNow = false;
     } else {
       //day
       dayNow = false;
@@ -61,13 +61,13 @@ class AgriPrognosis10Widget extends HookWidget {
         gradient: LinearGradient(
             // ignore: prefer_const_literals_to_create_immutables
             colors: [
-              if (dayNow) ...[
-                Color(0xFFF2E90B),
-                Color(0xFF762917),
-              ] else ...[
-                Color(0xFF005EEB),
-                Color.fromARGB(255, 74, 133, 222),
-              ]
+              // if (dayNow) ...[
+              //   Color(0xFFF2E90B),
+              //   Color(0xFF762917),
+              // ] else ...[
+                 Color(0xFF005EEB),
+                    Color(0xFF489E59),
+              // ]
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -164,12 +164,7 @@ class AgriPrognosis10Widget extends HookWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              dailyDetails != null
-                                  ? dailyDetails.rainFallPercentage != ''
-                                      ? dailyDetails.rainFallPercentage
-                                      : '0'
-                                  : '10',
+                            Text('10',
                               style: kTextStyleWeather,
                             ),
                             Text(
@@ -195,12 +190,7 @@ class AgriPrognosis10Widget extends HookWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              dailyDetails != null
-                                  ? dailyDetails.rainFallPercentage != ''
-                                      ? dailyDetails.rainFallPercentage
-                                      : '0'
-                                  : '26',
+                            Text( '26',
                               style: kTextStyleWeather,
                             ),
                             Text(

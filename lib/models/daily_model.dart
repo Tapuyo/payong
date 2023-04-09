@@ -2,26 +2,28 @@ class DailyModel {
   final String dailyDetailsID;
   final String locationDescription;
   final List<dynamic> locationCoordinate;
-  final String rainFall;
-  final String rainFallColorCode;
-  final String rainFallPercentage;
-  final String rainFallPercentageColorCode;
+  final String rainFallActual;
+  final String rainFallActualColorCode;
+  final String rainFallNormal;
+  final String rainFallNormalColorCode;
   final String lowTemp;
   final String lowTempColorCode;
   final String highTemp;
   final String highTempColorCode;
+  final String percentrainFallColorCode;
   
 
   DailyModel(
       this.dailyDetailsID,
       this.locationDescription,
       this.locationCoordinate,
-      this.rainFall,
-      this.rainFallColorCode,
-      this.rainFallPercentage,
-      this.rainFallPercentageColorCode,
+      this.rainFallActual,
+      this.rainFallActualColorCode,
+      this.rainFallNormal,
+      this.rainFallNormalColorCode,
       this.lowTemp,
       this.lowTempColorCode,
       this.highTemp,
-      this.highTempColorCode);
+      this.highTempColorCode,
+      this.percentrainFallColorCode);
 }

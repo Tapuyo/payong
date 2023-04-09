@@ -55,7 +55,7 @@ class _MyWidgetState extends State<MainNav> {
   double rainDropSpeed = 5;
   bool rainDropShow = false;
   int agriTab = 0;
-   bool dayNow = true;
+  bool dayNow = true;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
@@ -79,7 +79,7 @@ class _MyWidgetState extends State<MainNav> {
     super.initState();
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
-      dayNow = true;
+      dayNow = false;
     } else {
       //day
       dayNow = false;
@@ -92,13 +92,13 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 1) {
       getAgriList();
     } else if (selectIndex == 2) {
-      getDailyList('10days');
+      // getDailyList('10days');
     } else if (selectIndex == 3) {
-      getAgriList();
+      // getAgriList();
     } else if (selectIndex == 4) {
-      getDailyList('month');
+      // getDailyList('month');
     } else {
-      getDailyList('daily');
+      // getDailyList('daily');
     }
   }
 
@@ -110,64 +110,78 @@ class _MyWidgetState extends State<MainNav> {
     setState(() {
       isRefresh = true;
     });
-    String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
-    await DailyServices.getDailyList(context, dt);
     final dailyProvider = context.read<DailyProvider>();
+    String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String optionFilter = 'ActualRainfall';
+    if (dailyProvider.option == 'MinTemp') {
+      optionFilter = 'MinTemp';
+    } else if (dailyProvider.option == 'NormalRainfall') {
+      optionFilter = 'NormalRainfall';
+    } else if (dailyProvider.option == 'MaxTemp') {
+      optionFilter = 'MaxTemp';
+    } else if (dailyProvider.option == 'ActualRainfall') {
+      optionFilter = 'ActualRainfall';
+    } else if (dailyProvider.option == 'RainfallPercent') {
+      optionFilter = 'RainfallPercent';
+    } else {
+      optionFilter = 'ActualRainfall';
+    }
+    await DailyServices.getDailyList(context, dt, '1', optionFilter);
+
     dailyProvider.setDateSelect(selectedDate);
-    try{
+    try {
       setState(() {
-      polygons.clear();
-      title = 'Philippines';
-      dailyList = dailyProvider.dailyList;
+        polygons.clear();
+        title = 'Philippines';
+        dailyList = dailyProvider.dailyList;
 
-      for (var name in dailyList) {
-        
-        List<dynamic> coordinates = name.locationCoordinate;
-        List<LatLng> polygonCoords = [];
-        for (var coor in coordinates) {
-          
-         
-          var latLng = coor['coordinate'].toString().split(",");
-          double latitude = double.parse(latLng[0]);
-          double longitude = double.parse(latLng[1]);
-           print('klasldkjalskdj $latitude');
-          polygonCoords.add(LatLng(longitude, latitude));
+        for (var name in dailyList) {
+          print(name.toString());
+
+          List<dynamic> coordinates = name.locationCoordinate;
+          List<LatLng> polygonCoords = [];
+          if (coordinates.isNotEmpty) {
+            for (var coor in coordinates) {
+              var latLng = coor['coordinate'].toString().split(",");
+              double latitude = double.parse(latLng[0]);
+              double longitude = double.parse(latLng[1]);
+              print('latitude: $latitude');
+              polygonCoords.add(LatLng(longitude, latitude));
+            }
+            Color lxColor = name.rainFallActualColorCode.toColor();
+
+            if (dailyProvider.option == 'MinTemp') {
+              lxColor = name.lowTempColorCode.toColor();
+            } else if (dailyProvider.option == 'NormalRainfall') {
+              lxColor = name.rainFallNormalColorCode.toColor();
+            } else if (dailyProvider.option == 'MaxTemp') {
+              lxColor = name.highTempColorCode.toColor();
+            } else if (dailyProvider.option == 'ActualRainfall') {
+              lxColor = name.rainFallActualColorCode.toColor();
+            } else if (dailyProvider.option == 'RainfallPercent') {
+              lxColor = name.percentrainFallColorCode.toColor();
+            } else {
+              lxColor = name.rainFallActualColorCode.toColor();
+            }
+
+            polygons.add(Polygon(
+                onTap: () {
+                  print(lxColor);
+
+                  dailyProvider.setDailyId(name.dailyDetailsID);
+                },
+                consumeTapEvents: true,
+                polygonId: PolygonId(name.dailyDetailsID),
+                points: polygonCoords,
+                strokeWidth: 4,
+                fillColor: lxColor.withOpacity(.3),
+                strokeColor: lxColor));
+          }
+          dailyProvider.setPolygonDaiy(polygons);
         }
-        Color lxColor = name.rainFallColorCode.toColor();
-        polygons.add(Polygon(
-            onTap: () {
-              print(name.dailyDetailsID);
-              setState(() {
-                title = name.locationDescription;
-                if (double.parse(name.rainFallPercentage) >= 50) {
-                  rainDropShow = true;
-                  if (double.parse(name.rainFallPercentage) > 50) {
-                    rainDropSpeed = 2;
-                  } else if (double.parse(name.rainFallPercentage) > 70) {
-                    rainDropSpeed = 5;
-                  } else if (double.parse(name.rainFallPercentage) > 90) {
-                    rainDropSpeed = 10;
-                  } else {
-                    rainDropSpeed = 15;
-                  }
-                } else {
-                  rainDropShow = false;
-                }
-              });
-
-              dailyProvider.setDailyId(name.dailyDetailsID);
-            },
-            consumeTapEvents: true,
-            polygonId: PolygonId(name.dailyDetailsID),
-            points: polygonCoords,
-            strokeWidth: 4,
-            fillColor: lxColor.withOpacity(.3),
-            strokeColor: lxColor
-            ));
-      }
-    });
-    }catch(e){
-      print('error');
+      });
+    } catch (e) {
+      print('error $e');
     }
     setState(() {
       isRefresh = false;
@@ -338,7 +352,6 @@ class _MyWidgetState extends State<MainNav> {
       //AGRI WIDGET DAILY
       return SlidingUpPanel(
           minHeight: 0,
-          
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -347,7 +360,7 @@ class _MyWidgetState extends State<MainNav> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-                 AgriSynopsisWidget()
+              AgriSynopsisWidget()
               // if(agriTab == 0 || agriTab == 1)...[
               //   //sypnosis
               //   AgriSynopsisWidget()
@@ -357,7 +370,6 @@ class _MyWidgetState extends State<MainNav> {
             ],
           ),
           body: mapWidAgri());
-          
     } else if (selectIndex == 2) {
       //10 DAYS WIDGET
       return SlidingUpPanel(
@@ -373,8 +385,8 @@ class _MyWidgetState extends State<MainNav> {
           ),
           body: mapWid());
     } else if (selectIndex == 3) {
-       return SlidingUpPanel(
-          minHeight: agriTab == 2 ? 120:0,
+      return SlidingUpPanel(
+          minHeight: agriTab == 2 ? 120 : 0,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -383,11 +395,11 @@ class _MyWidgetState extends State<MainNav> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-              if(agriTab == 0 || agriTab == 1)...[
+              if (agriTab == 0 || agriTab == 1) ...[
                 //sypnosis
                 AgriSynopsis10Widget()
-              ]else...[
-               AgriPrognosis10Widget(),
+              ] else ...[
+                AgriPrognosis10Widget(),
               ]
               // AgriSynopsis10Widget()
             ],
@@ -455,6 +467,7 @@ class _MyWidgetState extends State<MainNav> {
           body: mapWid());
     }
   }
+
   Widget mapWidAgri() {
     return Stack(
       children: [
@@ -464,9 +477,8 @@ class _MyWidgetState extends State<MainNav> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-             
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     agriTab = 0;
                   });
@@ -475,8 +487,36 @@ class _MyWidgetState extends State<MainNav> {
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 0 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
-                    
+                    color: agriTab == 0
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Synopsis',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    agriTab = 1;
+                  });
+                },
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: agriTab == 1
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
                   ),
                   height: 35,
                   child: Center(
@@ -488,29 +528,7 @@ class _MyWidgetState extends State<MainNav> {
                 ),
               ),
               GestureDetector(
-                 onTap: (){
-                  setState(() {
-                    agriTab = 1;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                     color: agriTab == 1 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
-                    
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Advisory',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-               GestureDetector(
-                 onTap: (){
+                onTap: () {
                   setState(() {
                     agriTab = 2;
                   });
@@ -519,13 +537,16 @@ class _MyWidgetState extends State<MainNav> {
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                     color: agriTab == 2 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
-                  
+                    color: agriTab == 2
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
                   ),
                   height: 35,
                   child: Center(
                     child: Text(
-                      'Synopsis',
+                      'Advisory',
                       style: kTextStyleSubtitle4b,
                     ),
                   ),
@@ -539,28 +560,28 @@ class _MyWidgetState extends State<MainNav> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
             child: Column(children: [
-              if(agriTab == 2)...[
+              if (agriTab == 0) ...[
                 AgriSynopsisWidget()
-              //   Container(
-              //   height: MediaQuery.of(context).size.height - 200,
-              //   width: MediaQuery.of(context).size.width,
-              //    child: GoogleMap(
-              //                myLocationEnabled: true,
-              //                myLocationButtonEnabled: true,
-              //                mapType: mapType,
-              //                polygons: polygons,
-              //                initialCameraPosition: _kGooglePlex,
-              //                zoomGesturesEnabled: true,
-              //                tiltGesturesEnabled: false,
-              //                onMapCreated: (GoogleMapController controller) {
-              //     _controller.complete(controller);
-              //                },
-              //          ),
-              //  )
-              ]else if(agriTab == 1)...[
-                AgriAdvisoryWidget()
-              ]else...[
+                //   Container(
+                //   height: MediaQuery.of(context).size.height - 200,
+                //   width: MediaQuery.of(context).size.width,
+                //    child: GoogleMap(
+                //                myLocationEnabled: true,
+                //                myLocationButtonEnabled: true,
+                //                mapType: mapType,
+                //                polygons: polygons,
+                //                initialCameraPosition: _kGooglePlex,
+                //                zoomGesturesEnabled: true,
+                //                tiltGesturesEnabled: false,
+                //                onMapCreated: (GoogleMapController controller) {
+                //     _controller.complete(controller);
+                //                },
+                //          ),
+                //  )
+              ] else if (agriTab == 1) ...[
                 AgriForecastWidget()
+              ] else ...[
+                AgriAdvisoryWidget()
               ]
             ]),
           ),
@@ -593,6 +614,7 @@ class _MyWidgetState extends State<MainNav> {
       ],
     );
   }
+
   Widget mapWidAgri10Days() {
     return Stack(
       children: [
@@ -603,7 +625,7 @@ class _MyWidgetState extends State<MainNav> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     agriTab = 0;
                   });
@@ -612,8 +634,11 @@ class _MyWidgetState extends State<MainNav> {
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 0 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
-                    
+                    color: agriTab == 0
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
                   ),
                   height: 35,
                   child: Center(
@@ -625,7 +650,7 @@ class _MyWidgetState extends State<MainNav> {
                 ),
               ),
               GestureDetector(
-                 onTap: (){
+                onTap: () {
                   setState(() {
                     agriTab = 1;
                   });
@@ -634,8 +659,11 @@ class _MyWidgetState extends State<MainNav> {
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                     color: agriTab == 1 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
-                    
+                    color: agriTab == 1
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
                   ),
                   height: 35,
                   child: Center(
@@ -647,7 +675,7 @@ class _MyWidgetState extends State<MainNav> {
                 ),
               ),
               GestureDetector(
-                 onTap: (){
+                onTap: () {
                   setState(() {
                     agriTab = 2;
                   });
@@ -656,13 +684,16 @@ class _MyWidgetState extends State<MainNav> {
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                     color: agriTab == 2 ? dayNow ? kColorSecondary:kColorBlue:Colors.white,
-                  
+                    color: agriTab == 2
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
                   ),
                   height: 35,
                   child: Center(
                     child: Text(
-                      'Prognosis',
+                      'Croponology',
                       style: kTextStyleSubtitle4b,
                     ),
                   ),
@@ -676,27 +707,27 @@ class _MyWidgetState extends State<MainNav> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
             child: Column(children: [
-              if(agriTab == 2)...[
+              if (agriTab == 2) ...[
                 // AgriPrognosis10Widget()
                 Container(
-                height: MediaQuery.of(context).size.height - 200,
-                width: MediaQuery.of(context).size.width,
-                 child: GoogleMap(
-                             myLocationEnabled: true,
-                             myLocationButtonEnabled: true,
-                             mapType: mapType,
-                             polygons: polygons,
-                             initialCameraPosition: _kGooglePlex,
-                             zoomGesturesEnabled: true,
-                             tiltGesturesEnabled: false,
-                             onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                             },
-                       ),
-               )
-              ]else if(agriTab == 1)...[
+                  height: MediaQuery.of(context).size.height - 200,
+                  width: MediaQuery.of(context).size.width,
+                  child: GoogleMap(
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    mapType: mapType,
+                    polygons: polygons,
+                    initialCameraPosition: _kGooglePlex,
+                    zoomGesturesEnabled: true,
+                    tiltGesturesEnabled: false,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                  ),
+                )
+              ] else if (agriTab == 1) ...[
                 AgriAdvisory10Widget()
-              ]else...[
+              ] else ...[
                 AgriForecast10Widget()
               ]
             ]),
@@ -731,10 +762,10 @@ class _MyWidgetState extends State<MainNav> {
     );
   }
 
-    Widget mCaoWidget() {
+  Widget mCaoWidget() {
     return Stack(
       children: [
-       mCaOPage(),
+        mCaOPage(),
         Visibility(
           visible: rainDropShow,
           child: IgnorePointer(
@@ -800,19 +831,19 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
-        
       ],
     );
   }
 
   Widget mapWid() {
+    final dailyProvider = context.read<DailyProvider>().polygons;
     return Stack(
       children: [
         GoogleMap(
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           mapType: mapType,
-          polygons: polygons,
+          polygons: dailyProvider!,
           initialCameraPosition: _kGooglePlex,
           zoomGesturesEnabled: true,
           tiltGesturesEnabled: false,
@@ -841,7 +872,133 @@ class _MyWidgetState extends State<MainNav> {
             padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 290,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('ActualRainfall');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Actual Rainfall',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('NormalRainfall');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Normal Rainfall',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('RainfallPercent');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Rainfall Percent',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('MaxTemp');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Max Temperature',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('MinTemp');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Minimum Temperature',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               child: Container(
                 decoration: BoxDecoration(

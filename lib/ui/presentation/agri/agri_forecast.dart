@@ -24,9 +24,10 @@ class AgriForecastWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final agriTab = useState(0);
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
-      dayNow = true;
+      dayNow = false;
     } else {
       //day
       dayNow = false;
@@ -52,20 +53,105 @@ class AgriForecastWidget extends HookWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Forecast for ${DateFormat.MMMEd().format(DateTime.now()).toString()}",
-                              style: kTextStyleSubtitle4b,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              agriTab.value = 0;
+                            },
+                            child: Container(
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: agriTab.value == 0
+                                    ? dayNow
+                                        ? kColorSecondary
+                                        : kColorBlue
+                                    : Colors.white,
+                              ),
+                              height: 35,
+                              child: Center(
+                                child: Text(
+                                  'Humidity',
+                                  style: kTextStyleSubtitle4b,
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              agriTab.value = 1;
+                            },
+                            child: Container(
+                              width: 120,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: agriTab.value == 1
+                                    ? dayNow
+                                        ? kColorSecondary
+                                        : kColorBlue
+                                    : Colors.white,
+                              ),
+                              height: 35,
+                              child: Center(
+                                child: Text(
+                                  'Leaf Wetness',
+                                  style: kTextStyleSubtitle4b,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              agriTab.value = 2;
+                            },
+                            child: Container(
+                              width: 110,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: agriTab.value == 2
+                                    ? dayNow
+                                        ? kColorSecondary
+                                        : kColorBlue
+                                    : Colors.white,
+                              ),
+                              height: 35,
+                              child: Center(
+                                child: Text(
+                                  'Temperature',
+                                  style: kTextStyleSubtitle4b,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              agriTab.value = 3;
+                            },
+                            child: Container(
+                              width: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: agriTab.value == 3
+                                    ? dayNow
+                                        ? kColorSecondary
+                                        : kColorBlue
+                                    : Colors.white,
+                              ),
+                              height: 35,
+                              child: Center(
+                                child: Text(
+                                  'Wind',
+                                  style: kTextStyleSubtitle4b,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
-                           height: MediaQuery.of(context).size.height + 100,
+                        height: MediaQuery.of(context).size.height + 100,
                         child: ListView.builder(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
                           scrollDirection: Axis.vertical,
@@ -85,7 +171,9 @@ class AgriForecastWidget extends HookWidget {
   Widget foreCastWidget(AgriForecastModel? agriForecastModel) {
     return agriForecastModel != null
         ? Column(children: [
-            Divider(thickness: 3,),
+            Divider(
+              thickness: 3,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -106,7 +194,6 @@ class AgriForecastWidget extends HookWidget {
                         height: 12,
                       ),
                       location(agriForecastModel.humidityLocation),
-                      
                       SizedBox(
                         height: 18,
                       ),
@@ -177,13 +264,11 @@ class AgriForecastWidget extends HookWidget {
                 ],
               ),
             ),
-           
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -198,7 +283,7 @@ class AgriForecastWidget extends HookWidget {
                       SizedBox(
                         height: 12,
                       ),
-                     location(agriForecastModel.tempLocation),
+                      location(agriForecastModel.tempLocation),
                       SizedBox(
                         height: 18,
                       ),
@@ -230,7 +315,7 @@ class AgriForecastWidget extends HookWidget {
                       Divider(),
                     ],
                   ),
-                   Icon(
+                  Icon(
                     FontAwesomeIcons.temperatureHalf,
                     size: 100,
                     color: dayNow ? kColorSecondary : kColorBlue,
@@ -251,7 +336,6 @@ class AgriForecastWidget extends HookWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       SizedBox(
                         height: 12,
                       ),
@@ -263,18 +347,17 @@ class AgriForecastWidget extends HookWidget {
                       SizedBox(
                         height: 12,
                       ),
-                    location(agriForecastModel.windContidionLocation),
+                      location(agriForecastModel.windContidionLocation),
                       SizedBox(
                         height: 18,
                       ),
                       Text(
-                         agriForecastModel.windCondition,
+                        agriForecastModel.windCondition,
                         style: kTextStyleSubtitle2b,
                       ),
                       Divider(),
                     ],
                   ),
-                  
                 ],
               ),
             ),
@@ -282,8 +365,13 @@ class AgriForecastWidget extends HookWidget {
         : SizedBox();
   }
 
-  Widget location(List<String> areaList){
-    var textList = areaList.map<Text>((s) => Text('$s, ',style: kTextStyleSubtitle4b,)).toList();
+  Widget location(List<String> areaList) {
+    var textList = areaList
+        .map<Text>((s) => Text(
+              '$s, ',
+              style: kTextStyleSubtitle4b,
+            ))
+        .toList();
 
     return Column(children: textList);
   }

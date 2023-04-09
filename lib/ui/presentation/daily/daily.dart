@@ -53,7 +53,6 @@ class DailyWidget extends HookWidget {
         final dailyProvider = context.read<DailyProvider>();
         String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
         if (id.isEmpty) {
-          print(locId);
           await DailyServices.getDailyDetails(context, locId!, dt);
           // ignore: use_build_context_synchronously
         } else {
@@ -69,13 +68,13 @@ class DailyWidget extends HookWidget {
         gradient: LinearGradient(
             // ignore: prefer_const_literals_to_create_immutables
             colors: [
-              if (dayNow) ...[
-                Color(0xFFF2E90B),
-                Color(0xFF762917),
-              ] else ...[
-                Color(0xFF005EEB),
-                Color.fromARGB(255, 74, 133, 222),
-              ]
+              // if (dayNow) ...[
+              //   Color(0xFFF2E90B),
+              //   Color(0xFF762917),
+              // ] else ...[
+                 Color(0xFF005EEB),
+                    Color(0xFF489E59),
+              // ]
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -136,8 +135,8 @@ class DailyWidget extends HookWidget {
                   children: [
                     Text(
                       dailyDetails != null
-                          ? dailyDetails.rainFallPercentage != ''
-                              ? dailyDetails.rainFallPercentage
+                          ? dailyDetails.rainFallActual != ''
+                              ? dailyDetails.rainFallActual
                               : '0'
                           : '0',
                       style: kTextStyleWeather,
@@ -168,7 +167,7 @@ class DailyWidget extends HookWidget {
                     Text(
                       dailyDetails != null
                           ? dailyDetails.lowTemp != ''
-                              ? dailyDetails.rainFallPercentage
+                              ? dailyDetails.rainFallNormal
                               : '0'
                           : '0',
                       style: kTextStyleWeather,
@@ -204,14 +203,14 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails1!.rainFallPercentage} mm',
+                      '${dailyDetails1 != null ? dailyDetails1.rainFallActual:''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                     Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails1.lowTemp}°',
+                      '${dailyDetails1 != null ? dailyDetails1.lowTemp:''}°',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -238,14 +237,14 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails2!.rainFallPercentage} mm',
+                      '${dailyDetails2 != null ? dailyDetails2.rainFallActual:''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                     Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails2.lowTemp}°',
+                      '${dailyDetails2 != null ? dailyDetails2.lowTemp:''}°',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -272,14 +271,14 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails3!.rainFallPercentage} mm',
+                      '${dailyDetails3 != null ? dailyDetails3.rainFallActual:''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                     Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails3.lowTemp}°',
+                      '${dailyDetails3 != null ? dailyDetails3.lowTemp:''}°',
                       style: kTextStyleWeather2,
                     ),
                   ),

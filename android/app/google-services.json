@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "737079891052",
+    "project_id": "payong-8f929",
+    "storage_bucket": "payong-8f929.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737079891052:android:ba6de9173088bb97ab7449",
+        "android_client_info": {
+          "package_name": "com.payong.app.payong"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737079891052-n5qsctv5ij3cggkhheoum4qr91ri7gvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4KbKMMAZPCkgnfVCL0C8Yq2cxOFnXw7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737079891052-n5qsctv5ij3cggkhheoum4qr91ri7gvt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "737079891052-akejt7d4bmlvb8i04btldkcpgpvp8j6o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.payong.app.payong"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

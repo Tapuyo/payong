@@ -47,7 +47,7 @@ class Daily10Widget extends HookWidget {
       dayNow = true;
     } else {
       //day
-      dayNow = false;
+      dayNow = true;
     }
 
     final bool isRefresh = context.select((Daily10Provider p) => p.isRefresh);
@@ -106,13 +106,13 @@ class Daily10Widget extends HookWidget {
           gradient: LinearGradient(
               // ignore: prefer_const_literals_to_create_immutables
               colors: [
-                if (dayNow) ...[
-                  Color(0xFFF2E90B),
-                  Color(0xFF762917),
-                ] else ...[
-                  Color(0xFF005EEB),
-                  Color.fromARGB(255, 74, 133, 222),
-                ]
+                // if (dayNow) ...[
+                //   Color(0xFFF2E90B),
+                //   Color(0xFF762917),
+                // ] else ...[
+                   Color(0xFF005EEB),
+                    Color(0xFF489E59),
+                // ]
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,

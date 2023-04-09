@@ -49,9 +49,9 @@ abstract class Daily10Services {
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setRefresh(true);
     // date = '2023-03-03';
-    dailyDetailsID = '1';
+    // dailyDetailsID = '1';
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/daily_details.php?fdate=$date&DailyDetailsID=$dailyDetailsID'));
+        'http://203.177.82.125:8081/payong_app/API/daily_details.php?fdate=$date'));
 
     // if (response.statusCode == 201 || response.statusCode == 200) {
     var jsondata = json.decode(response.body);

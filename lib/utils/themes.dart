@@ -153,7 +153,6 @@ final kTextStyleSubtitle4b = GoogleFonts.roboto(textStyle: const TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w500,
   fontFamily: 'NunitoSans',
-
 ));
 
 final kTextStyleSubtitle4bl = GoogleFonts.roboto(textStyle: const TextStyle(
@@ -181,5 +180,13 @@ final kTextStyleBody2b = GoogleFonts.roboto(textStyle: const TextStyle(
   color: Colors.black,
   fontSize: 12,
   fontWeight: FontWeight.w200,
+  fontFamily: 'NunitoSans',
+));
+
+
+final buttonStyleWhiet = GoogleFonts.roboto(textStyle: const TextStyle(
+   color: Colors.white,
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
   fontFamily: 'NunitoSans',
 ));
