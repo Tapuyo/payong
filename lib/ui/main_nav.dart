@@ -10,12 +10,15 @@ import 'package:parallax_rain/parallax_rain.dart';
 import 'package:payong/models/agri_model.dart';
 import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
+import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/routes/routes.dart';
 import 'package:payong/services/agri_service.dart';
+import 'package:payong/services/daily10_service.dart';
 import 'package:payong/services/daily_services.dart';
 import 'package:payong/ui/menu_fab/expandable_fab.dart';
 import 'package:payong/ui/presentation/10days/10days.dart';
+import 'package:payong/ui/presentation/10days/search_list.dart';
 import 'package:payong/ui/presentation/agri/agri_advisory.dart';
 import 'package:payong/ui/presentation/agri/agri_forecast.dart';
 import 'package:payong/ui/presentation/agri/agri_prognosis.dart';
@@ -92,7 +95,6 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 1) {
       getAgriList();
     } else if (selectIndex == 2) {
-      getDailyList('10days');
     } else if (selectIndex == 3) {
       // getAgriList();
     } else if (selectIndex == 4) {
@@ -383,7 +385,8 @@ class _MyWidgetState extends State<MainNav> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [Daily10Widget()],
           ),
-          body: mapWid());
+          body: map10Wid()
+          );
     } else if (selectIndex == 3) {
       return SlidingUpPanel(
           minHeight: agriTab == 2 ? 120 : 0,
@@ -831,6 +834,234 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget map10Wid() {
+    final dailyProvider = context.read<DailyProvider>().polygons;
+    return Stack(
+      children: [
+        Align(
+          child: Column(children: [
+            Padding(padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
+            child: TextField(
+              style: TextStyle(color: Colors.black),
+                onChanged: (value)async{
+                              final dailyProvider = context.read<Daily10Provider>();
+                              dailyProvider.setSearchString(value);
+                              await Daily10Services.get10DaysSearch(context, value);
+                           },
+                    decoration: InputDecoration(
+                    hintText: "Search Location",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                     borderRadius:
+                    BorderRadius.all(Radius.circular(7.0)),
+                              ),
+                            ),
+                          ),),
+              SearchList()
+          ]),
+        ),
+        Visibility(
+          visible: rainDropShow,
+          child: IgnorePointer(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: ParallaxRain(
+                // ignore: prefer_const_literals_to_create_immutables
+                dropColors: [Colors.white],
+                trail: true,
+                dropFallSpeed: rainDropSpeed,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 290,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('ActualRainfall');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Actual Rainfall',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('NormalRainfall');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Normal Rainfall',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('RainfallPercent');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Rainfall Percent',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('MaxTemp');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Max Temperature',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('MinTemp');
+                              getDailyList('daily');
+                              Navigator.pop(context);
+                            },
+                            child: ColoredBox(
+                              color: kColorBlue,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Minimum Temperature',
+                                    style: buttonStyleWhiet,
+                                  ))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.help),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
+            ),
+          ),
+        ),
+        
+        if (isRefresh)
+          Align(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          ),
+      
       ],
     );
   }

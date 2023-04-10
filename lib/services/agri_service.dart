@@ -86,10 +86,10 @@ abstract class AgriServices {
     var response;
     if (daily) {
       response = await http.get(Uri.parse(
-          'http://203.177.82.125:8081/payong_app/API/agri_daily_advisory.php'));
+          'http://18.139.91.35/payong/API/agri_daily_advisory.php'));
     } else {
       response = await http.get(Uri.parse(
-          'http://203.177.82.125:8081/payong_app/API/agri_advisory.php?AgriInfoID=1'));
+          'http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=1'));
     }
 
     var jsondata = json.decode(response.body);
@@ -113,7 +113,7 @@ abstract class AgriServices {
     String id,
   ) async {
     final response = await http.get(Uri.parse(
-        'http://203.177.82.125:8081/payong_app/API/agri_FORECAST.php?AgriInfoID=1'));
+        'http://18.139.91.35/payong/API/agri_FORECAST.php?AgriInfoID=1'));
 
     var jsondata = json.decode(response.body);
 

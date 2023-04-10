@@ -19,6 +19,8 @@ const days10MapLocation = 'http://18.139.91.35/payong/API/locations.php?'; //htt
 
 const days10Details = 'http://18.139.91.35/payong/API/daily_details.php?'; //http://18.139.91.35/payong/API/daily_details.php?DailyDetailsID=1
 
+const day10SearchApi = 'http://18.139.91.35/payong/API/locations.php?location=';
+
 
 //Agri Module
 

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:payong/models/daily_10_model.dart';
+import 'package:payong/models/daily_10_search_model.dart';
 import 'package:payong/provider/daily10_provider.dart';
+import 'package:payong/utils/strings.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:payong/models/daily_model.dart';
@@ -48,10 +50,10 @@ abstract class Daily10Services {
     print(dailyDetailsID);
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setRefresh(true);
-    // date = '2023-03-03';
+    date = '2023-03-16';
     // dailyDetailsID = '1';
-    final response = await http.get(Uri.parse(
-        'http://18.139.91.35/payong/API/daily_details.php?fdate=$date'));
+    final response = await http.get(Uri.parse('$days10Details fdate=$date&location=$dailyDetailsID'));
+    // http://18.139.91.35/payong/API/daily_details.php?fdate=2023-03-16&location=12
 
     // if (response.statusCode == 201 || response.statusCode == 200) {
     var jsondata = json.decode(response.body);
@@ -93,5 +95,26 @@ abstract class Daily10Services {
     } else {
       return null;
     }
+  }
+
+  static Future<DailyModel10?> get10DaysSearch(
+      BuildContext context, String searchString) async {
+    final dailyProvider = context.read<Daily10Provider>();
+    dailyProvider.setRefresh(true);
+    final response = await http.get(Uri.parse('$day10SearchApi $searchString'));
+
+    var jsondata = json.decode(response.body);
+
+    List<Daily10SearchModel> daily10response = [];
+
+    for (var u in jsondata) {
+      Daily10SearchModel daily = Daily10SearchModel(
+        u['LocationID'] ?? '',
+        u['LocationDescription'] ?? '',
+      );
+      daily10response.add(daily);
+    }
+    print(daily10response.length);
+    dailyProvider.setDaily10Search(daily10response);
   }
 }
