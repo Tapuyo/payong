@@ -235,7 +235,8 @@ class _MainPageState extends State<MainPage> {
                 //     ),
                 //   ],
                 // ),
-                body: bodyWidget()),
+                body: bodyWidget()
+                ),
           ),
         ),
       ],
@@ -245,285 +246,150 @@ class _MainPageState extends State<MainPage> {
   Widget bodyWidget() {
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      child: Expanded(
-        child: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  colors: [
-                    Color(0xFF005EEB),
-                    Color(0xFF489E59),
-                    // Color(0xFFF2E90B),
-                    // Color(0xFF762917),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  tileMode: TileMode.clamp),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  height: 280.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(
-                        bottom: Radius.elliptical(
-                            MediaQuery.of(context).size.width / 1.2, 150.0)),
-                  ),
-                  child:
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: isDrawerOpen
-                                      ? IconButton(
-                                          icon: const Icon(
-                                            Icons.arrow_back_ios,
-                                            size: 35,
-                                          ),
-                                          onPressed: () {
-                                            setState(
-                                              () {
-                                                xOffset = 0;
-                                                yOffset = 0;
-                                                scaleFactor = 1;
-                                                isDrawerOpen = false;
-                                              },
-                                            );
-                                          },
-                                        )
-                                      : IconButton(
-                                          icon: const Icon(
-                                            Icons.menu,
-                                            size: 35,
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              xOffset =
-                                                  size.width - size.width / 3;
-                                              yOffset = size.height * 0.1;
-                                              scaleFactor = 0.8;
-                                              isDrawerOpen = true;
-                                            });
-                                          },
+      child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                // ignore: prefer_const_literals_to_create_immutables
+                colors: [
+                  Color(0xFF005EEB),
+                  Color(0xFF489E59),
+                  // Color(0xFFF2E90B),
+                  // Color(0xFF762917),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                tileMode: TileMode.clamp),
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 280.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                      bottom: Radius.elliptical(
+                          MediaQuery.of(context).size.width / 1.2, 150.0)),
+                ),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: isDrawerOpen
+                                    ? IconButton(
+                                        icon: const Icon(
+                                          Icons.arrow_back_ios,
+                                          size: 35,
                                         ),
-                                ),
-                                // Spacer(),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                                      child: Container(
-                                        width: 100,
-                                        height: 100,
-                                        child: Image.asset(
-                                          'assets/payonglogo.png',
-                                          width: 200.0,
-                                          height: 200.0,
-                                          fit: BoxFit.cover,
+                                        onPressed: () {
+                                          setState(
+                                            () {
+                                              xOffset = 0;
+                                              yOffset = 0;
+                                              scaleFactor = 1;
+                                              isDrawerOpen = false;
+                                            },
+                                          );
+                                        },
+                                      )
+                                    : IconButton(
+                                        icon: const Icon(
+                                          Icons.menu,
+                                          size: 35,
                                         ),
+                                        onPressed: () {
+                                          setState(() {
+                                            xOffset =
+                                                size.width - size.width / 3;
+                                            yOffset = size.height * 0.1;
+                                            scaleFactor = 0.8;
+                                            isDrawerOpen = true;
+                                          });
+                                        },
+                                      ),
+                              ),
+                              // Spacer(),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                                    child: Container(
+                                      width: 100,
+                                      height: 100,
+                                      child: Image.asset(
+                                        'assets/payonglogo.png',
+                                        width: 200.0,
+                                        height: 200.0,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ],
-                                ),
-                                Stack(
-                                  children: <Widget>[
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.notifications_none,
-                                        color: notifnum == true
-                                            ? kColorDarkBlue
-                                            : Colors.grey,
-                                        size: 35,
+                                  ),
+                                ],
+                              ),
+                              Stack(
+                                children: <Widget>[
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.notifications_none,
+                                      color: notifnum == true
+                                          ? kColorDarkBlue
+                                          : Colors.grey,
+                                      size: 35,
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: notifnum,
+                                    child: const Positioned(
+                                      top: 20,
+                                      right: 10,
+                                      child: SizedBox(
+                                        width: 20,
+                                        child: CircleAvatar(
+                                            backgroundColor: kColorBlue,
+                                            child: Text(
+                                              'Avatar',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 8),
+                                            )),
                                       ),
                                     ),
-                                    Visibility(
-                                      visible: notifnum,
-                                      child: const Positioned(
-                                        top: 20,
-                                        right: 10,
-                                        child: SizedBox(
-                                          width: 20,
-                                          child: CircleAvatar(
-                                              backgroundColor: kColorBlue,
-                                              child: Text(
-                                                'Avatar',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 8),
-                                              )),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          'PAYONG \nPAGASA',
-                          style: kTextStyletitlew,
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ]),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const MainNav(index: 0)),
-                              );
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(17.0),
-                                    color: const Color(0xffffffff),
-                                  ),
-                                  child: Center(
-                                    //     child: Icon(
-                                    //   Icons.cloud_done,
-                                    //   color: kColorBlue,
-                                    //   size: 40,
-                                    // )
-                                    child: Image.asset(
-                                      'assets/daily.png',
-                                      width: 200.0,
-                                      height: 200.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Text(
-                                  'Daily \nMonitoring',
-                                  style: kTextStyleSubtitle12,
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const MainNav(index: 2)),
-                              );
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(17.0),
-                                    color: const Color(0xffffffff),
-                                  ),
-                                  child: Center(
-                                    child: Image.asset(
-                                      'assets/daily10days.png',
-                                      width: 200.0,
-                                      height: 200.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Text(
-                                  '10 Days',
-                                  style: kTextStyleSubtitle12,
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const MainNav(index: 4)),
-                              );
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(17.0),
-                                    color: const Color(0xffffffff),
-                                  ),
-                                  child: Center(
-                                    child: Image.asset(
-                                      'assets/monthly.png',
-                                      width: 200.0,
-                                      height: 200.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Text(
-                                  'Monthly \nCAO',
-                                  style: kTextStyleSubtitle12,
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      Text(
+                        'PAYONG \nPAGASA',
+                        style: kTextStyletitlew,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ]),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
@@ -531,11 +397,12 @@ class _MainPageState extends State<MainPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const MainNav(index: 1)),
+                                  builder: (context) =>
+                                      const MainNav(index: 0)),
                             );
                           },
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 width: 80,
@@ -545,8 +412,13 @@ class _MainPageState extends State<MainPage> {
                                   color: const Color(0xffffffff),
                                 ),
                                 child: Center(
+                                  //     child: Icon(
+                                  //   Icons.cloud_done,
+                                  //   color: kColorBlue,
+                                  //   size: 40,
+                                  // )
                                   child: Image.asset(
-                                    'assets/agri.png',
+                                    'assets/daily.png',
                                     width: 200.0,
                                     height: 200.0,
                                     fit: BoxFit.cover,
@@ -557,22 +429,21 @@ class _MainPageState extends State<MainPage> {
                                 height: 12,
                               ),
                               Text(
-                                'Daily Farm \nWeather Forecasts \nand Advisories',
+                                'Daily \nMonitoring',
                                 style: kTextStyleSubtitle12,
                                 textAlign: TextAlign.center,
                               )
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          width: 60,
-                        ),
+                        Spacer(),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const MainNav(index: 3)),
+                                  builder: (context) =>
+                                      const MainNav(index: 2)),
                             );
                           },
                           child: Column(
@@ -587,7 +458,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                                 child: Center(
                                   child: Image.asset(
-                                    'assets/agri10days.png',
+                                    'assets/daily10days.png',
                                     width: 200.0,
                                     height: 200.0,
                                     fit: BoxFit.cover,
@@ -598,7 +469,47 @@ class _MainPageState extends State<MainPage> {
                                 height: 12,
                               ),
                               Text(
-                                '10-Day Regional \nAgri-weather \nInformation',
+                                '10 Days',
+                                style: kTextStyleSubtitle12,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainNav(index: 4)),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(17.0),
+                                  color: const Color(0xffffffff),
+                                ),
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/monthly.png',
+                                    width: 200.0,
+                                    height: 200.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                'Monthly \nCAO',
                                 style: kTextStyleSubtitle12,
                                 textAlign: TextAlign.center,
                               )
@@ -607,61 +518,149 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ],
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                GestureDetector(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CarouselSlider(
-                        options: CarouselOptions(height: 140.0, viewportFraction: .9, autoPlay: true,enlargeFactor:.4),
-                        items: [1, 2, 3, 4, 5].map((i) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 100,
-                                width: MediaQuery.of(context).size.width - 50,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width:
-                                        1, //                   <--- border width here
-                                  ),
-                                  borderRadius: BorderRadius.circular(17.0),
-                                  color: Colors.white,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      // ignore: prefer_const_literals_to_create_immutables
-                                      children: [
-                                        Text(
-                                          'Lorem ipsum dolor sit amet, consectetur \nadipiscing elit,sed do eiusmod tempor \nincididunt ut labore et dolore \nmagna aliqua. Cursus risus at ultrices mi ',
-                                          style: kTextStyleSubtitle3b,
-                                        ),
-                                        const Icon(
-                                          Icons.tips_and_updates,
-                                          color: kColorSecondary,
-                                          size: 70,
-                                        )
-                                      ]),
-                                ),
-                              );
-                            },
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainNav(index: 1)),
                           );
-                        }).toList(),
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17.0),
+                                color: const Color(0xffffffff),
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/agri.png',
+                                  width: 200.0,
+                                  height: 200.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Text(
+                              'Daily Farm \nWeather Forecasts \nand Advisories',
+                              style: kTextStyleSubtitle12,
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 60,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainNav(index: 3)),
+                          );
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17.0),
+                                color: const Color(0xffffffff),
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/agri10days.png',
+                                  width: 200.0,
+                                  height: 200.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Text(
+                              '10-Day Regional \nAgri-weather \nInformation',
+                              style: kTextStyleSubtitle12,
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              GestureDetector(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CarouselSlider(
+                      options: CarouselOptions(height: 140.0, viewportFraction: .9, autoPlay: true,enlargeFactor:.4),
+                      items: [1, 2, 3, 4, 5].map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 100,
+                              width: MediaQuery.of(context).size.width - 50,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width:
+                                      1, //                   <--- border width here
+                                ),
+                                borderRadius: BorderRadius.circular(17.0),
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    // ignore: prefer_const_literals_to_create_immutables
+                                    children: [
+                                      Text(
+                                        'Lorem ipsum dolor sit amet, consectetur \nadipiscing elit,sed do eiusmod tempor \nincididunt ut labore et dolore \nmagna aliqua. Cursus risus at ultrices mi ',
+                                        style: kTextStyleSubtitle3b,
+                                      ),
+                                      const Icon(
+                                        Icons.tips_and_updates,
+                                        color: kColorSecondary,
+                                        size: 70,
+                                      )
+                                    ]),
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
-              ],
-            )),
-      ),
+              ),
+            ],
+          )),
     );
   }
 }

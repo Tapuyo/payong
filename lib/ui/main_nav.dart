@@ -53,7 +53,7 @@ class _MyWidgetState extends State<MainNav> {
   List<DateTime> lastDay = [];
   DateTime selectedDate = DateTime.now();
   bool isRefresh = false;
-  MapType mapType = MapType.hybrid;
+  MapType mapType = MapType.normal;
   String title = 'Philippines';
   double rainDropSpeed = 5;
   bool rainDropShow = false;
