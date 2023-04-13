@@ -44,7 +44,7 @@ class AgriForecast10Widget extends HookWidget {
         await AgriServices.getAgri10Days(context, id);
       });
       return;
-    }, [id]);
+    }, const []);
 
     return dailyAgriDetails != null
         ? SizedBox(

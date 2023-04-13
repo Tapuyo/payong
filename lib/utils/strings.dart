@@ -26,8 +26,8 @@ const day10SearchApi = 'http://18.139.91.35/payong/API/locations.php?location=';
 
 const parentAgri = 'http://18.139.91.35/payong/API/agri_daily.php';
 
-const agriForecastTempApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=Temperature';
-const agriForecastWindApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=WindCondition';
-const agriForecastWeatherApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=WeatherCondition';
-const agriForecastHumidityApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=Humidity';
-const agriForecastLeafWetnessApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=1&option=LeafWetness';
+const agriForecastTempApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=';
+const agriForecastWindApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=';
+const agriForecastWeatherApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=';
+const agriForecastHumidityApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=';
+const agriForecastLeafWetnessApi = 'http://18.139.91.35/payong/API/agri_daily_details.php?AgriDailyID=';
