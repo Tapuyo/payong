@@ -62,11 +62,10 @@ class AgriForecastHumidityWidget extends HookWidget {
                             child: Text('${dailyAgriDetails[index].minHumidity} - ${dailyAgriDetails[index].maxHumidity}',
                               style: kTextStyleSubtitle4b,
                             )),
-                        // Expanded(
-                        //     flex: 2,
-                        //     child: Text('Low Land \n${dailyAgriDetails[index].lowLandMaxTemp} - ${dailyAgriDetails[index].lowLandMinTemp}',
-                        //       style: kTextStyleSubtitle4b,
-                        //     )),
+                        Expanded(
+                                  flex: 1,
+                                  child:
+                                      Icon(FontAwesomeIcons.glassWaterDroplet)),
                                           ],
                                         ),
                       ));

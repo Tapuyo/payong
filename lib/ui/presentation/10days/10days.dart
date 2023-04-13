@@ -213,7 +213,7 @@ class Daily10Widget extends HookWidget {
                     Column(
                       children: [
                         Text(
-                          'Rain Fall',
+                          'Rainfall',
                           style: kTextStyleWeather2,
                         ),
                         SizedBox(

@@ -196,7 +196,7 @@ class LineChartSample1State extends State<LineChartSample1> {
                 height: 37,
               ),
               const Text(
-                '10 Days Rain Fall Chart',
+                '10 Days Rainfall Chart',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

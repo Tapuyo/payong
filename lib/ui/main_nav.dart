@@ -138,7 +138,6 @@ class _MyWidgetState extends State<MainNav> {
         dailyList = dailyProvider.dailyList;
 
         for (var name in dailyList) {
-          print(name.toString());
 
           List<dynamic> coordinates = name.locationCoordinate;
           List<LatLng> polygonCoords = [];
@@ -147,10 +146,10 @@ class _MyWidgetState extends State<MainNav> {
               var latLng = coor['coordinate'].toString().split(",");
               double latitude = double.parse(latLng[0]);
               double longitude = double.parse(latLng[1]);
-              print('latitude: $latitude');
+              
               polygonCoords.add(LatLng(longitude, latitude));
             }
-            Color lxColor = name.rainFallActualColorCode.toColor();
+            Color lxColor = name.rainFallNormalColorCode.toColor();
 
             if (dailyProvider.option == 'MinTemp') {
               lxColor = name.lowTempColorCode.toColor();
@@ -165,10 +164,10 @@ class _MyWidgetState extends State<MainNav> {
             } else {
               lxColor = name.rainFallActualColorCode.toColor();
             }
-
+            print('color: $lxColor');
             polygons.add(Polygon(
                 onTap: () {
-                  print(lxColor);
+                  
 
                   dailyProvider.setDailyId(name.dailyDetailsID);
                 },

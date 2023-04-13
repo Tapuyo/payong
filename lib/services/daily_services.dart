@@ -10,9 +10,8 @@ import 'package:payong/provider/daily_provider.dart';
 abstract class DailyServices {
   static Future<void> getDailyList(
       BuildContext context, String date, String page, String option) async {
-          print('mnxmvnmxcnvxcv $date');
-        date = '2023-04-07';
-        
+       
+        print('$dailyMap page=$page&fdate=$date&option=$option');
     final response = await http.get(Uri.parse('$dailyMap page=$page&fdate=$date&option=$option'));
     var jsondata = json.decode(response.body);
 
@@ -25,14 +24,14 @@ abstract class DailyServices {
           u['LocationDescription'] ?? '',
           u['coordinates'] ?? [],
           u['ActualRainFall'] ?? '',
-          u['ActualRainFallColor'] ?? '#006633',
+          u['ActualRainFallColor'] ?? '',
           u['NormalRainFall'] ?? '',
-          u['NormalRainFallColor'] ?? '#006633',
+          u['NormalRainfallColor'] ?? '',
           u['MinTemp'] ?? '' ,
-          u['MinTempColor'] ?? '#006633',
+          u['MinTempColor'] ?? '',
           u['MaxTemp'] ?? '',
-          u['MaxTempColor'] ?? '#006633', 
-          u['RainfallPercentColor'] ?? '#006633',);
+          u['MaxTempColor'] ?? '', 
+          u['RainfallPercentColor'] ?? '',);
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -44,7 +43,7 @@ abstract class DailyServices {
       BuildContext context, String dailyDetailsID, String date) async {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
-    date = '2023-04-07';
+    // date = '2023-04-07';
     // dailyDetailsID = '1';
     final response = await http.get(Uri.parse(
         '$dailyDetails fdate=$date&location_id=$dailyDetailsID'));
@@ -95,7 +94,7 @@ abstract class DailyServices {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
         String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.subtract(Duration(days: 1)));
-    dt = '2023-04-06';
+    // dt = '2023-04-06';
     final response = await http.get(Uri.parse(
         '$dailyDetails fdate=$dt&location_id=$dailyDetailsID'));
 
@@ -141,7 +140,7 @@ abstract class DailyServices {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
       String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.subtract(Duration(days: 2)));
-      dt = '2023-04-05';
+      // dt = '2023-04-05';
     final response = await http.get(Uri.parse(
         '$dailyDetails fdate=$dt&location_id=$dailyDetailsID'));
 
@@ -187,7 +186,7 @@ abstract class DailyServices {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
       String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate.subtract(Duration(days: 3)));
-      dt = '2023-04-04';
+      // dt = '2023-04-04';
     final response = await http.get(Uri.parse(
         '$dailyDetails fdate=$dt&location_id=$dailyDetailsID'));
 

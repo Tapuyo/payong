@@ -59,15 +59,13 @@ class AgriForecastLeafWidget extends HookWidget {
                             )),
                             Spacer(),
                         Expanded(
-                            flex: 3,
+                            flex: 2,
                             child: Text('${dailyAgriDetails[index].minLeafWetness} - ${dailyAgriDetails[index].maxLeafWetness}',
                               style: kTextStyleSubtitle4b,
                             )),
-                        // Expanded(
-                        //     flex: 2,
-                        //     child: Text('Low Land \n${dailyAgriDetails[index].lowLandMaxTemp} - ${dailyAgriDetails[index].lowLandMinTemp}',
-                        //       style: kTextStyleSubtitle4b,
-                        //     )),
+                         Expanded(
+                            flex: 1,
+                            child: Icon(FontAwesomeIcons.leaf)),
                                           ],
                                         ),
                       ));

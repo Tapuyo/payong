@@ -46,29 +46,34 @@ class AgriForecastTempWidget extends HookWidget {
                 itemBuilder: (context, index) {
                   return Card(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                                          children: [
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
                         Expanded(
                             flex: 3,
                             child: Text(
                               dailyAgriDetails[index].locations,
                               style: kTextStyleSubtitle4b,
                             )),
-                            Spacer(),
+                        Spacer(),
                         Expanded(
                             flex: 2,
-                            child: Text('High Land \n${dailyAgriDetails[index].highLandMaxTemp} - ${dailyAgriDetails[index].highLandMinTemp}',
+                            child: Text(
+                              'High Land \n${dailyAgriDetails[index].highLandMaxTemp} - ${dailyAgriDetails[index].highLandMinTemp}',
                               style: kTextStyleSubtitle4b,
                             )),
                         Expanded(
                             flex: 2,
-                            child: Text('Low Land \n${dailyAgriDetails[index].lowLandMaxTemp} - ${dailyAgriDetails[index].lowLandMinTemp}',
+                            child: Text(
+                              'Low Land \n${dailyAgriDetails[index].lowLandMaxTemp} - ${dailyAgriDetails[index].lowLandMinTemp}',
                               style: kTextStyleSubtitle4b,
                             )),
-                                          ],
-                                        ),
-                      ));
+                        Expanded(
+                            flex: 1,
+                            child: Icon(FontAwesomeIcons.temperatureFull)),
+                      ],
+                    ),
+                  ));
                 },
               ),
             ),

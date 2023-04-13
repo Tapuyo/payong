@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -15,15 +16,14 @@ import 'package:payong/services/daily_services.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
- bool dayNow = true;
+
+bool dayNow = true;
+
 class AgriSynopsisWidget extends HookWidget {
   const AgriSynopsisWidget({Key? key}) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
- 
-   
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
       dayNow = true;
@@ -31,13 +31,13 @@ class AgriSynopsisWidget extends HookWidget {
       //day
       dayNow = false;
     }
-
+String asd = "<strong><span class=\"ILfuVd\" lang=\"en\"><span class=\"hgKElc\">They went to fetch a pail of water, but unfortunately, their plan is disrupted when Jack falls and hits his head, and rolls back down the hill. Then, Jill falls too, and comes tumbling down after Jack. As you can see, the synopsis outlines what happens in the story.<\/span><\/span><\/strong>";
     final bool isRefresh = context.select((AgriProvider p) => p.isRefresh);
     final String id = context.select((AgriProvider p) => p.dailyIDSelected);
     final String? locId = context.select((InitProvider p) => p.myLocationId);
     final AgriModel? agriSypnosis =
         context.select((AgriProvider p) => p.dailyDetails);
-  
+
     return Container(
       // height: MediaQuery.of(context).size.height - 200,
       // decoration: BoxDecoration(
@@ -57,29 +57,34 @@ class AgriSynopsisWidget extends HookWidget {
       //       tileMode: TileMode.clamp),
       // ),
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-        
-        
-         SizedBox(height: 20,),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        SizedBox(
+          height: 20,
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(agriSypnosis != null ? agriSypnosis.title : 'No Data',
-            style: kTextStyleSubtitle2,
+          child: Text(
+            agriSypnosis != null ? agriSypnosis.title : 'No Data',
+            style: TextStyle(color: Colors.black),
           ),
         ),
-         SizedBox(height: 20,),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(agriSypnosis != null ?
-            agriSypnosis.content : '',
-            style: kTextStyleSubtitle2b,
-          ),
+        SizedBox(
+          height: 20,
         ),
         
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ColoredBox(
+            color: Colors.grey.withOpacity(.8),
+            child: Html(
+              shrinkWrap: false,
+              data: asd,
+            ),
+          ),
+        ),
       ]),
     );
   }
 
+   
 }

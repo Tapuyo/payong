@@ -20,7 +20,7 @@ class  assessmentPage extends HookWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height - 200,
-          child: const WebView(initialUrl: 'http://203.177.82.125:8081/payong_app/assessment.php')),
+          child: const WebView(initialUrl: 'http://18.139.91.35/payong/assessment.php')),
         Align(
           alignment: Alignment.topRight,
           child: Padding(

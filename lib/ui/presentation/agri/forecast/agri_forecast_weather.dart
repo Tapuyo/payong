@@ -64,11 +64,10 @@ class AgriForecastWeatherWidget extends HookWidget {
                                     dailyAgriDetails[index].weatherCondition,
                                     style: kTextStyleSubtitle4b,
                                   )),
-                              // Expanded(
-                              //     flex: 2,
-                              //     child: Text('Low Land \n${dailyAgriDetails[index].lowLandMaxTemp} - ${dailyAgriDetails[index].lowLandMinTemp}',
-                              //       style: kTextStyleSubtitle4b,
-                              //     )),
+                              Expanded(
+                                  flex: 1,
+                                  child:
+                                      Icon(FontAwesomeIcons.cloud)),
                             ],
                           )));
                 },

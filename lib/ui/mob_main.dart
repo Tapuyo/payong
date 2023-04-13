@@ -509,7 +509,7 @@ class _MainPageState extends State<MainPage> {
                                   height: 12,
                                 ),
                                 Text(
-                                  'Monthly \nCAaO',
+                                  'Monthly \nCAO',
                                   style: kTextStyleSubtitle12,
                                   textAlign: TextAlign.center,
                                 )
@@ -631,7 +631,7 @@ class _MainPageState extends State<MainPage> {
                                         1, //                   <--- border width here
                                   ),
                                   borderRadius: BorderRadius.circular(17.0),
-                                  color: Color.fromARGB(255, 219, 186, 18),
+                                  color: Colors.white,
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
