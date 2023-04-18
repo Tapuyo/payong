@@ -55,15 +55,15 @@ class AgriForecast10Widget extends HookWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       SizedBox(
-                           height: MediaQuery.of(context).size.height + 100,
+                        height: MediaQuery.of(context).size.height + 100,
                         child: ListView.builder(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
                           scrollDirection: Axis.vertical,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
-                            return foreCastWidget(context,dailyAgriDetails[index]);
+                            return foreCastWidget(
+                                context, dailyAgriDetails[index]);
                           },
                         ),
                       ),
@@ -74,12 +74,24 @@ class AgriForecast10Widget extends HookWidget {
         : SizedBox();
   }
 
-  Widget foreCastWidget(BuildContext context, Agri10DaysForecastvModel? agriForecastModel) {
+  Widget foreCastWidget(
+      BuildContext context, Agri10DaysForecastvModel? agriForecastModel) {
+    DateTime pubDate =
+        DateFormat("yyyy-MM-dd").parse(DateTime.now().toString());
+    final String publishDate = DateFormat.yMMMMd('en_US').format(pubDate);
     return agriForecastModel != null
         ? Column(children: [
-            Divider(
-              thickness: 3,
+            // Divider(
+            //   thickness: 3,
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Publish Date ${publishDate.toString()}',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
+            Divider( thickness: 3,),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -100,9 +112,23 @@ class AgriForecast10Widget extends HookWidget {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width - 50,
+                        // height: MediaQuery.of(context).size.height - 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.black26,
+                          gradient: LinearGradient(
+                              // ignore: prefer_const_literals_to_create_immutables
+                              colors: [
+                                // if (dayNow) ...[
+                                //   Color(0xFFF2E90B),
+                                //   Color(0xFF762917),
+                                // ] else ...[
+                                Color(0xFF005EEB),
+                                Color(0xFF489E59),
+                                // ]
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              tileMode: TileMode.clamp),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -121,8 +147,13 @@ class AgriForecast10Widget extends HookWidget {
         : SizedBox();
   }
 
-  Widget location(List<String> areaList){
-    var textList = areaList.map<Text>((s) => Text('$s, ',style: kTextStyleSubtitle4b,)).toList();
+  Widget location(List<String> areaList) {
+    var textList = areaList
+        .map<Text>((s) => Text(
+              '$s, ',
+              style: kTextStyleSubtitle4b,
+            ))
+        .toList();
 
     return Column(children: textList);
   }

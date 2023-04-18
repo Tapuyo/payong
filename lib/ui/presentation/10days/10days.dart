@@ -203,12 +203,13 @@ class Daily10Widget extends HookWidget {
                       ),
                     ],
                   ),
-                  cloudIcons(dailyDetails != null ? dailyDetails.cloudCover:'CLOUDY'),
+                  // cloudIcons(dailyDetails != null ? dailyDetails.cloudCover:'CLOUDY'),
                 SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       children: [
@@ -290,7 +291,7 @@ class Daily10Widget extends HookWidget {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          'Rain Fall',
+                          'Rainfall',
                           style: kTextStyleWeather2,
                         ),
                       ),
@@ -399,7 +400,7 @@ class Daily10Widget extends HookWidget {
                       ),
                     ],
                   ),
-                if (showExpandable1.value) cloudIcons(daily.cloudCover),
+                // if (showExpandable1.value) cloudIcons(daily.cloudCover),
                 if (showExpandable1.value)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

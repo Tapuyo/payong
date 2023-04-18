@@ -145,12 +145,13 @@ class AgriPrognosis10Widget extends HookWidget {
                       ),
                     ],
                   ),
-                  cloudIcons('CLOUDY'),
+                  // cloudIcons('CLOUDY'),
                 SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       children: [

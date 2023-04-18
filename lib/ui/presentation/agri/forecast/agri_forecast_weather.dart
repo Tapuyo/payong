@@ -67,7 +67,7 @@ class AgriForecastWeatherWidget extends HookWidget {
                               Expanded(
                                   flex: 1,
                                   child:
-                                      Icon(FontAwesomeIcons.cloud)),
+                                      Icon(FontAwesomeIcons.cloud, color: Colors.blueAccent,)),
                             ],
                           )));
                 },

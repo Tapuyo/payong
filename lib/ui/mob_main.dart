@@ -45,9 +45,11 @@ class _MainPageState extends State<MainPage> {
       sound: true,
     );
     FirebaseMessaging.instance.getToken().then((value) {
+      print('token: $value');
     });
 
     FirebaseMessaging.onMessage.listen((event) {
+      print(event.data);
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -67,6 +69,7 @@ class _MainPageState extends State<MainPage> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
     });
 
     FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -74,6 +77,8 @@ class _MainPageState extends State<MainPage> {
       badge: true,
       sound: true,
     );
+
+     FirebaseMessaging.instance.subscribeToTopic("Payong");
     
   }
 
@@ -439,12 +444,13 @@ class _MainPageState extends State<MainPage> {
                         Spacer(),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MainNav(index: 2)),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           const MainNav(index: 2)),
+                            // );
+                            
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,

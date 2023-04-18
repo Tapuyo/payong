@@ -59,6 +59,7 @@ class _MyWidgetState extends State<MainNav> {
   bool rainDropShow = false;
   int agriTab = 0;
   bool dayNow = true;
+  bool showLegends = false;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
@@ -138,7 +139,6 @@ class _MyWidgetState extends State<MainNav> {
         dailyList = dailyProvider.dailyList;
 
         for (var name in dailyList) {
-
           List<dynamic> coordinates = name.locationCoordinate;
           List<LatLng> polygonCoords = [];
           if (coordinates.isNotEmpty) {
@@ -146,7 +146,7 @@ class _MyWidgetState extends State<MainNav> {
               var latLng = coor['coordinate'].toString().split(",");
               double latitude = double.parse(latLng[0]);
               double longitude = double.parse(latLng[1]);
-              
+
               polygonCoords.add(LatLng(longitude, latitude));
             }
             Color lxColor = name.rainFallNormalColorCode.toColor();
@@ -167,7 +167,16 @@ class _MyWidgetState extends State<MainNav> {
             print('color: $lxColor');
             polygons.add(Polygon(
                 onTap: () {
-                  
+                  setState(() {
+                    showLegends = true;
+                  });
+                  Future.delayed(Duration(seconds: 8), () {
+                      setState(() {
+                    showLegends = false;
+                  });
+                  });
+
+                
 
                   dailyProvider.setDailyId(name.dailyDetailsID);
                 },
@@ -384,8 +393,7 @@ class _MyWidgetState extends State<MainNav> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [Daily10Widget()],
           ),
-          body: map10Wid()
-          );
+          body: map10Wid());
     } else if (selectIndex == 3) {
       return SlidingUpPanel(
           minHeight: agriTab == 2 ? 120 : 0,
@@ -843,24 +851,25 @@ class _MyWidgetState extends State<MainNav> {
       children: [
         Align(
           child: Column(children: [
-            Padding(padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
-            child: TextField(
-              style: TextStyle(color: Colors.black),
-                onChanged: (value)async{
-                              final dailyProvider = context.read<Daily10Provider>();
-                              dailyProvider.setSearchString(value);
-                              await Daily10Services.get10DaysSearch(context, value);
-                           },
-                    decoration: InputDecoration(
-                    hintText: "Search Location",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                     borderRadius:
-                    BorderRadius.all(Radius.circular(7.0)),
-                              ),
-                            ),
-                          ),),
-              SearchList()
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
+              child: TextField(
+                style: TextStyle(color: Colors.black),
+                onChanged: (value) async {
+                  final dailyProvider = context.read<Daily10Provider>();
+                  dailyProvider.setSearchString(value);
+                  await Daily10Services.get10DaysSearch(context, value);
+                },
+                decoration: InputDecoration(
+                  hintText: "Search Location",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                ),
+              ),
+            ),
+            SearchList()
           ]),
         ),
         Visibility(
@@ -1054,13 +1063,11 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
-        
         if (isRefresh)
           Align(
             alignment: Alignment.center,
             child: CircularProgressIndicator(),
           ),
-      
       ],
     );
   }
@@ -1242,6 +1249,50 @@ class _MyWidgetState extends State<MainNav> {
                 width: 40,
                 child: Center(
                   child: Icon(Icons.help),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: showLegends,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 00, 20, 180),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.black.withOpacity(.2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Legends'),
+                      SizedBox(height: 12,),
+                      Row(
+                        children: [
+                          ColoredBox(color: Colors.green, child: SizedBox(width: 14, height: 14,)),
+                          Text('No Rain'),
+                          SizedBox(width: 12,),
+                           ColoredBox(color: Colors.blueGrey, child: SizedBox(width: 14, height: 14,)),
+                          Text('Rain'),
+                          SizedBox(width: 12,),
+                           ColoredBox(color: Colors.red, child: SizedBox(width: 14, height: 14,)),
+                          Text('Heavy Rain'),
+                          SizedBox(width: 12,),
+                           ColoredBox(color: Colors.blue, child: SizedBox(width: 14, height: 14,)),
+                          Text('Cloudy'),
+                          SizedBox(width: 12,),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

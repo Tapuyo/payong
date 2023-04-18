@@ -36,7 +36,7 @@ class RainFallLineChart extends StatelessWidget {
 
   FlTitlesData get titlesData1 => FlTitlesData(
         bottomTitles: AxisTitles(
-          sideTitles: bottomTitles,
+          sideTitles: null,
         ),
         rightTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -112,6 +112,12 @@ class RainFallLineChart extends StatelessWidget {
         break;
       case 12:
         text = const Text('Mar 24', style: style);
+        break;
+      case 15:
+        text = const Text('Mar 25', style: style);
+        break;
+      case 18:
+        text = const Text('Mar 26', style: style);
         break;
       default:
         text = const Text('');

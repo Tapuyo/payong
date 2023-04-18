@@ -113,7 +113,20 @@ class AgriAdvisory10Widget extends HookWidget {
                         width: MediaQuery.of(context).size.width - 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.black26,
+                           gradient: LinearGradient(
+                              // ignore: prefer_const_literals_to_create_immutables
+                              colors: [
+                                // if (dayNow) ...[
+                                //   Color(0xFFF2E90B),
+                                //   Color(0xFF762917),
+                                // ] else ...[
+                                Color(0xFF005EEB),
+                                Color(0xFF489E59),
+                                // ]
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              tileMode: TileMode.clamp),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

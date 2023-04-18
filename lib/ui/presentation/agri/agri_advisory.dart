@@ -73,7 +73,7 @@ class AgriAdvisoryWidget extends HookWidget {
                           scrollDirection: Axis.vertical,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
-                            return advisoryWidget(dailyAgriDetails[index]);
+                            return advisoryWidget(context,dailyAgriDetails[index]);
                           },
                         ),
                       ),
@@ -84,7 +84,7 @@ class AgriAdvisoryWidget extends HookWidget {
         : SizedBox();
   }
 
-  Widget advisoryWidget(AgriAdvModel? agriAdsModel) {
+  Widget advisoryWidget(BuildContext context, AgriAdvModel? agriAdsModel) {
     return agriAdsModel != null
         ? Column(children: [
             Divider(
@@ -109,9 +109,19 @@ class AgriAdvisoryWidget extends HookWidget {
                         height: 18,
                       ),
                       Container(
+                        width: MediaQuery.of(context).size.width - 100,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.black26,
+                          gradient: LinearGradient(
+                              // ignore: prefer_const_literals_to_create_immutables
+                              colors: [
+                                Color(0xFF005EEB),
+                                Color(0xFF489E59),
+
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              tileMode: TileMode.clamp),
                         ),
                         child: Html(
                           shrinkWrap: true,

@@ -65,7 +65,7 @@ class AgriForecastLeafWidget extends HookWidget {
                             )),
                          Expanded(
                             flex: 1,
-                            child: Icon(FontAwesomeIcons.leaf)),
+                            child: Icon(FontAwesomeIcons.leaf, color: Colors.greenAccent,)),
                                           ],
                                         ),
                       ));

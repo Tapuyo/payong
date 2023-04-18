@@ -47,7 +47,7 @@ class AgriForecastHumidityWidget extends HookWidget {
                 itemBuilder: (context, index) {
                   return Card(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Row(
                                           children: [
                         Expanded(
@@ -65,7 +65,7 @@ class AgriForecastHumidityWidget extends HookWidget {
                         Expanded(
                                   flex: 1,
                                   child:
-                                      Icon(FontAwesomeIcons.glassWaterDroplet)),
+                                      Icon(FontAwesomeIcons.droplet)),
                                           ],
                                         ),
                       ));
