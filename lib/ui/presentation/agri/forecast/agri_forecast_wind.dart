@@ -65,7 +65,10 @@ class AgriForecastWindWidget extends HookWidget {
                                   )),
                               Expanded(
                             flex: 1,
-                            child: Icon(FontAwesomeIcons.wind)),
+                            child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/lightmoderate.png'))),
                             ],
                           )));
                 },

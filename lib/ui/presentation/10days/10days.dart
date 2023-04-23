@@ -481,13 +481,8 @@ class Daily10Widget extends HookWidget {
                               style: kTextStyleWeather2,
                             ),
                           ),
-                          Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.cloud,
-                                size: 30,
-                                color: Colors.white,
-                              )),
+                          cloudIcons(daily.cloudCover),
+                          
                         ],
                       ),
                       if (showExpandable1.value) Divider(),
@@ -550,21 +545,10 @@ class Daily10Widget extends HookWidget {
         children: [
           Align(
               alignment: Alignment.center,
-              child: Icon(
-                Icons.cloud,
-                size: 200,
-                color: Colors.white.withOpacity(.5),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Cloudy',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/sunny.png'))),
         ],
       );
     } else if (des == 'MOSTLY SUNNY') {
@@ -572,71 +556,54 @@ class Daily10Widget extends HookWidget {
         children: [
           Align(
               alignment: Alignment.center,
-              child: dayNow
-                  ? Icon(
-                      Icons.sunny,
-                      size: 200,
-                      color: Colors.yellow.withOpacity(.9),
-                    )
-                  : Icon(
-                      FontAwesomeIcons.solidMoon,
-                      size: 200,
-                      color: Colors.yellow.withOpacity(.9),
-                    )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Sunny',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/mostly_sunny.png'))),
         ],
       );
-    } else if (des == 'PARTLY COUDY') {
+    } else if (des == 'CLOUDY') {
+      return Stack(
+        children: [
+         Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/cloudy.png'))),
+        ],
+      );
+    } else if (des == 'PARTLY CLOUDY') {
       return Stack(
         children: [
           Align(
               alignment: Alignment.center,
-              child: Icon(
-                FontAwesomeIcons.cloudRain,
-                size: 200,
-                color: Colors.white.withOpacity(.5),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Rainy',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/cloudy.png'))),
         ],
       );
-    } else if (des == 'RAINY') {
+    }  else if (des == 'MOSTLY CLOUDY') {
       return Stack(
         children: [
-          Align(
+      Align(
               alignment: Alignment.center,
-              child: Icon(
-                FontAwesomeIcons.cloudBolt,
-                size: 200,
-                color: Colors.yellowAccent.withOpacity(.9),
-              )),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Thunder',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/cloudy_rain.png'))),
+        ],
+      );
+    }  else if (des == 'RAINY') {
+      return Stack(
+        children: [
+         Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/rain.png'))),
         ],
       );
     } else {
@@ -648,16 +615,7 @@ class Daily10Widget extends HookWidget {
                 width: 30,
                 height: 30,
                 child: Image.asset('assets/sunny.png'))),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text(
-                'Sunny',
-                style: kTextStyleWeather2,
-              ),
-            ),
-          ),
+    
         ],
       );
     }

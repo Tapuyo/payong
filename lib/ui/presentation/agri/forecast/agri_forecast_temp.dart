@@ -70,7 +70,11 @@ class AgriForecastTempWidget extends HookWidget {
                             )),
                         Expanded(
                             flex: 1,
-                            child: Icon(FontAwesomeIcons.temperatureFull, color: Colors.amber,)),
+                            child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child:
+                                    Image.asset('assets/temperaturelow.jpg'))),
                       ],
                     ),
                   ));

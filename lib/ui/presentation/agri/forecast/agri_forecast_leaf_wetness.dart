@@ -48,27 +48,31 @@ class AgriForecastLeafWidget extends HookWidget {
                 itemBuilder: (context, index) {
                   return Card(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                                          children: [
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
                         Expanded(
                             flex: 3,
                             child: Text(
                               dailyAgriDetails[index].locations,
                               style: kTextStyleSubtitle4b,
                             )),
-                            Spacer(),
+                        Spacer(),
                         Expanded(
                             flex: 2,
-                            child: Text('${dailyAgriDetails[index].minLeafWetness} - ${dailyAgriDetails[index].maxLeafWetness}',
+                            child: Text(
+                              '${dailyAgriDetails[index].minLeafWetness} - ${dailyAgriDetails[index].maxLeafWetness}',
                               style: kTextStyleSubtitle4b,
                             )),
-                         Expanded(
+                        Expanded(
                             flex: 1,
-                            child: Icon(FontAwesomeIcons.leaf, color: Colors.greenAccent,)),
-                                          ],
-                                        ),
-                      ));
+                            child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Image.asset('assets/leadwetness.png'))),
+                      ],
+                    ),
+                  ));
                 },
               ),
             ),

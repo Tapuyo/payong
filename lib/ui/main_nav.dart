@@ -120,7 +120,7 @@ class _MyWidgetState extends State<MainNav> {
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 5; i++) {
+    for (var i = 1; i < 15; i++) {
       final result = await Daily10Services.get10DaysMap(context,i.toString());
      
       try {

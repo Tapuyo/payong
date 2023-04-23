@@ -65,7 +65,10 @@ class AgriForecastHumidityWidget extends HookWidget {
                         Expanded(
                                   flex: 1,
                                   child:
-                                      Icon(FontAwesomeIcons.droplet)),
+                                      SizedBox(
+                width: 30,
+                height: 30,
+                child: Image.asset('assets/soilmoistnormal.jpg'))),
                                           ],
                                         ),
                       ));
