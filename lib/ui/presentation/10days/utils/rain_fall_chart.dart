@@ -3,7 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:payong/utils/themes.dart';
 
 class RainFallLineChart extends StatelessWidget {
+  double d0;
+  double d1;
+  double d2;
+  double d3;
+  double d4;
+  double d5;
+  double d6;
+  double d7;
+  double d8;
+  double d9;
 
+   RainFallLineChart({required this.d0,required this.d1,required this.d2,required this.d3,required this.d4,required this.d5,required this.d6,required this.d7,required this.d8,required this.d9, Key? key}) : super(key: key);
 
 
   @override
@@ -63,19 +74,19 @@ class RainFallLineChart extends StatelessWidget {
     String text;
     switch (value.toInt()) {
       case 1:
-        text = '1m';
+        text = '1mm';
         break;
       case 2:
-        text = '2m';
+        text = '2mm';
         break;
       case 3:
-        text = '3m';
+        text = '3mm';
         break;
       case 4:
-        text = '4m';
+        text = '4mm';
         break;
       case 5:
-        text = '5m';
+        text = '5mm';
         break;
       default:
         return Container();
@@ -99,7 +110,7 @@ class RainFallLineChart extends StatelessWidget {
     Widget text;
     switch (value.toInt()) {
       case 1:
-        text = const Text('Mar 20', style: style);
+        text = const Text('Apr 19', style: style);
         break;
       case 3:
         text = const Text('Mar 21', style: style);
@@ -157,14 +168,14 @@ class RainFallLineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(3, 1.5),
-          FlSpot(5, 1.4),
-          FlSpot(7, 3.4),
-          FlSpot(10, 2),
-          FlSpot(12, 2.2),
-          FlSpot(13, 1.8),
+        spots:  [
+          FlSpot(1, d0),
+          FlSpot(3, d1),
+          FlSpot(5, d2),
+          FlSpot(7, d3),
+          FlSpot(10, d4),
+          FlSpot(12, d5),
+          FlSpot(13, d6),
         ],
       );
 
@@ -173,8 +184,21 @@ class RainFallLineChart extends StatelessWidget {
  
 }
 
+// ignore: must_be_immutable
 class LineChartSample1 extends StatefulWidget {
-  const LineChartSample1({super.key});
+  double d0;
+  double d1;
+  double d2;
+  double d3;
+  double d4;
+  double d5;
+  double d6;
+  double d7;
+  double d8;
+  double d9;
+
+   LineChartSample1({required this.d0,required this.d1,required this.d2,required this.d3,required this.d4,required this.d5,required this.d6,required this.d7,required this.d8,required this.d9, Key? key}) : super(key: key);
+
 
   @override
   State<StatefulWidget> createState() => LineChartSample1State();
@@ -218,7 +242,7 @@ class LineChartSample1State extends State<LineChartSample1> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, left: 6),
                   child:
-                      RainFallLineChart(),
+                      RainFallLineChart(d0:widget.d0,d1:widget.d1,d2:widget.d2,d3:widget.d3,d4:widget.d4,d5:widget.d5,d6:widget.d6,d7:widget.d7,d8:widget.d8,d9:widget.d9),
                 ),
               ),
               const SizedBox(

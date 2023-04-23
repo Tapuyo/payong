@@ -41,6 +41,12 @@ const kTextStyleWeather2 =  TextStyle(
   // fontWeight: FontWeight.w600,
 );
 
+const kTextStyleSubTitle =  TextStyle(
+  fontSize: 12,
+  color: Colors.white,
+  // fontWeight: FontWeight.w600,
+);
+
 const kTextStyleWeather3 =  TextStyle(
   fontSize: 16,
   color: Colors.white60,

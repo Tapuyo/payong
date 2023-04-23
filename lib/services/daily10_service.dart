@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:payong/models/daily_10_map.dart';
 import 'package:payong/models/daily_10_model.dart';
 import 'package:payong/models/daily_10_search_model.dart';
 import 'package:payong/provider/daily10_provider.dart';
@@ -116,5 +117,25 @@ abstract class Daily10Services {
     }
     print(daily10response.length);
     dailyProvider.setDaily10Search(daily10response);
+  }
+
+    static Future<List<Daily10MapModel>> get10DaysMap(
+      BuildContext context, String page) async {
+    final response = await http
+        .get(Uri.parse('http://18.139.91.35/payong/API/locationcoordinates.php?page=$page'));
+    var jsondata = json.decode(response.body);
+
+    List<Daily10MapModel> newDailyList = [];
+    print(jsondata.toString());
+    for (var u in jsondata) {
+      Daily10MapModel daily = Daily10MapModel(
+        u['LocationID'] ?? '',
+        u['LocationDescription'] ?? '',
+        u['coordinates'] ?? []
+      );
+      newDailyList.add(daily);
+    }
+    // ignore: use_build_context_synchronously
+    return newDailyList;
   }
 }

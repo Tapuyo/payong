@@ -11,6 +11,11 @@ class DailyModel {
   final String highTemp;
   final String highTempColorCode;
   final String percentrainFallColorCode;
+  final String totalNormalRainFall;
+  final String totalActualRainFall;
+  final String overAllMeannTemp;
+  final String overAllMinTemp;
+  final String overAllMaxTemp;
   
 
   DailyModel(
@@ -25,5 +30,11 @@ class DailyModel {
       this.lowTempColorCode,
       this.highTemp,
       this.highTempColorCode,
-      this.percentrainFallColorCode);
+      this.percentrainFallColorCode,
+      this.totalNormalRainFall,
+      this.totalActualRainFall,
+      this.overAllMeannTemp,
+      this.overAllMinTemp,
+      this.overAllMaxTemp,
+      );
 }

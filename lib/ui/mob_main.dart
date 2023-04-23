@@ -78,8 +78,7 @@ class _MainPageState extends State<MainPage> {
       sound: true,
     );
 
-     FirebaseMessaging.instance.subscribeToTopic("Payong");
-    
+    FirebaseMessaging.instance.subscribeToTopic("Payong");
   }
 
   getCurrentLocation() async {
@@ -97,7 +96,7 @@ class _MainPageState extends State<MainPage> {
       final locID = await SystemService.getLocationId(context, locationFilter);
       // ignore: use_build_context_synchronously
       final intProv = context.read<InitProvider>();
-  
+
       intProv.setLocationId(locID);
     }
 // DateTime selectedDate = DateTime.now();
@@ -144,7 +143,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-        // getDailyList(context);
+    // getDailyList(context);
 
     return Stack(
       children: <Widget>[
@@ -240,8 +239,7 @@ class _MainPageState extends State<MainPage> {
                 //     ),
                 //   ],
                 // ),
-                body: bodyWidget()
-                ),
+                body: bodyWidget()),
           ),
         ),
       ],
@@ -444,13 +442,26 @@ class _MainPageState extends State<MainPage> {
                         Spacer(),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           const MainNav(index: 2)),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainNav(index: 2)),
+                            );
+                            // final snackBar = SnackBar(
+                            //   content: const Text('Sorry, this module is under development.'),
+                            //   // action: SnackBarAction(
+                            //   //   label: 'Undo',
+                            //   //   onPressed: () {
+                            //   //     // Some code to undo the change.
+                            //   //   },
+                            //   // ),
                             // );
-                            
+
+                            // // Find the ScaffoldMessenger in the widget tree
+                            // // and use it to show a SnackBar.
+                            // ScaffoldMessenger.of(context)
+                            //     .showSnackBar(snackBar);
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -491,6 +502,20 @@ class _MainPageState extends State<MainPage> {
                                   builder: (context) =>
                                       const MainNav(index: 4)),
                             );
+                            // final snackBar = SnackBar(
+                            //   content: const Text('Sorry, this module is under development.'),
+                            //   // action: SnackBarAction(
+                            //   //   label: 'Undo',
+                            //   //   onPressed: () {
+                            //   //     // Some code to undo the change.
+                            //   //   },
+                            //   // ),
+                            // );
+
+                            // // Find the ScaffoldMessenger in the widget tree
+                            // // and use it to show a SnackBar.
+                            // ScaffoldMessenger.of(context)
+                            //     .showSnackBar(snackBar);
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -539,6 +564,20 @@ class _MainPageState extends State<MainPage> {
                             MaterialPageRoute(
                                 builder: (context) => const MainNav(index: 1)),
                           );
+                          // final snackBar = SnackBar(
+                          //     content: const Text('Sorry, this module is under development.'),
+                          //     // action: SnackBarAction(
+                          //     //   label: 'Undo',
+                          //     //   onPressed: () {
+                          //     //     // Some code to undo the change.
+                          //     //   },
+                          //     // ),
+                          //   );
+
+                          //   // Find the ScaffoldMessenger in the widget tree
+                          //   // and use it to show a SnackBar.
+                          //   ScaffoldMessenger.of(context)
+                          //       .showSnackBar(snackBar);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -575,11 +614,26 @@ class _MainPageState extends State<MainPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainNav(index: 3)),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => const MainNav(index: 3)),
+                          // );
+
+                          final snackBar = SnackBar(
+                              content: const Text('Sorry, this module is under development.'),
+                              // action: SnackBarAction(
+                              //   label: 'Undo',
+                              //   onPressed: () {
+                              //     // Some code to undo the change.
+                              //   },
+                              // ),
+                            );
+
+                            // Find the ScaffoldMessenger in the widget tree
+                            // and use it to show a SnackBar.
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -623,7 +677,11 @@ class _MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CarouselSlider(
-                      options: CarouselOptions(height: 140.0, viewportFraction: .9, autoPlay: true,enlargeFactor:.4),
+                      options: CarouselOptions(
+                          height: 140.0,
+                          viewportFraction: .9,
+                          autoPlay: true,
+                          enlargeFactor: .4),
                       items: [1, 2, 3, 4, 5].map((i) {
                         return Builder(
                           builder: (BuildContext context) {

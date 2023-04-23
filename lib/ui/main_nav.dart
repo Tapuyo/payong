@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parallax_rain/parallax_rain.dart';
 import 'package:payong/models/agri_model.dart';
+import 'package:payong/models/daily_legend_model.dart';
 import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/daily10_provider.dart';
@@ -94,8 +95,10 @@ class _MyWidgetState extends State<MainNav> {
     if (selectIndex == 0) {
       getDailyList('daily');
     } else if (selectIndex == 1) {
+      // get10DaysList();
       getAgriList();
     } else if (selectIndex == 2) {
+      get10DaysList();
     } else if (selectIndex == 3) {
       // getAgriList();
     } else if (selectIndex == 4) {
@@ -109,11 +112,68 @@ class _MyWidgetState extends State<MainNav> {
     await AgriServices.getAgriSypnosis(context);
   }
 
+
+  Future<void> get10DaysList() async {
+    setState(() {
+      isRefresh = false;
+    });
+    final dailyProvider = context.read<Daily10Provider>();
+    dailyProvider.setPolygonDaiyClear();
+    Set<Polygon> polygons = {};
+    for (var i = 1; i < 5; i++) {
+      final result = await Daily10Services.get10DaysMap(context,i.toString());
+     
+      try {
+        setState(() {
+          polygons.clear();
+
+          for (var name in result) {
+            List<dynamic> coordinates = name.locationCoordinate;
+            List<LatLng> polygonCoords = [];
+            if (coordinates.isNotEmpty) {
+              for (var coor in coordinates) {
+                var latLng = coor['coordinate'].toString().split(",");
+                double latitude = double.parse(latLng[0]);
+                double longitude = double.parse(latLng[1]);
+
+                polygonCoords.add(LatLng(longitude, latitude));
+              }
+             
+
+              dailyProvider.setPolygonDaiy(Polygon(
+                  onTap: () async {
+                     
+                      print(name.dailyDetailsID);
+                      final dailyProvider = context.read<Daily10Provider>();
+                  dailyProvider.setDailyId(name.dailyDetailsID);
+                  dailyProvider.setShowList(false);
+                  
+                  },
+                  consumeTapEvents: true,
+                  polygonId: PolygonId(name.dailyDetailsID),
+                  points: polygonCoords,
+                  strokeWidth: 4,
+                  fillColor: Colors.transparent,
+                  strokeColor: Colors.transparent));
+           
+            }
+          }
+        });
+      } catch (e) {
+        print('error $e');
+      }
+    }
+    setState(() {
+      isRefresh = false;
+    });
+  }
+
   Future<void> getDailyList(String mod) async {
     setState(() {
-      isRefresh = true;
+      isRefresh = false;
     });
     final dailyProvider = context.read<DailyProvider>();
+    dailyProvider.setPolygonDaiyClear();
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
     String optionFilter = 'ActualRainfall';
     if (dailyProvider.option == 'MinTemp') {
@@ -129,69 +189,74 @@ class _MyWidgetState extends State<MainNav> {
     } else {
       optionFilter = 'ActualRainfall';
     }
-    await DailyServices.getDailyList(context, dt, '1', optionFilter);
 
-    dailyProvider.setDateSelect(selectedDate);
-    try {
-      setState(() {
-        polygons.clear();
-        title = 'Philippines';
-        dailyList = dailyProvider.dailyList;
+    for (var i = 1; i < 20; i++) {
+      await DailyServices.getDailyList(context, dt, i.toString(), optionFilter);
 
-        for (var name in dailyList) {
-          List<dynamic> coordinates = name.locationCoordinate;
-          List<LatLng> polygonCoords = [];
-          if (coordinates.isNotEmpty) {
-            for (var coor in coordinates) {
-              var latLng = coor['coordinate'].toString().split(",");
-              double latitude = double.parse(latLng[0]);
-              double longitude = double.parse(latLng[1]);
+      dailyProvider.setDateSelect(selectedDate);
+      try {
+        setState(() {
+          polygons.clear();
+          title = 'Philippines';
+          dailyList = dailyProvider.dailyList;
 
-              polygonCoords.add(LatLng(longitude, latitude));
-            }
-            Color lxColor = name.rainFallNormalColorCode.toColor();
+          for (var name in dailyList) {
+            List<dynamic> coordinates = name.locationCoordinate;
+            List<LatLng> polygonCoords = [];
+            if (coordinates.isNotEmpty) {
+              for (var coor in coordinates) {
+                var latLng = coor['coordinate'].toString().split(",");
+                double latitude = double.parse(latLng[0]);
+                double longitude = double.parse(latLng[1]);
 
-            if (dailyProvider.option == 'MinTemp') {
-              lxColor = name.lowTempColorCode.toColor();
-            } else if (dailyProvider.option == 'NormalRainfall') {
-              lxColor = name.rainFallNormalColorCode.toColor();
-            } else if (dailyProvider.option == 'MaxTemp') {
-              lxColor = name.highTempColorCode.toColor();
-            } else if (dailyProvider.option == 'ActualRainfall') {
-              lxColor = name.rainFallActualColorCode.toColor();
-            } else if (dailyProvider.option == 'RainfallPercent') {
-              lxColor = name.percentrainFallColorCode.toColor();
-            } else {
-              lxColor = name.rainFallActualColorCode.toColor();
-            }
-            print('color: $lxColor');
-            polygons.add(Polygon(
-                onTap: () {
-                  setState(() {
-                    showLegends = true;
-                  });
-                  Future.delayed(Duration(seconds: 8), () {
+                polygonCoords.add(LatLng(longitude, latitude));
+              }
+              Color lxColor = name.rainFallNormalColorCode.toColor();
+
+              if (dailyProvider.option == 'MinTemp') {
+                lxColor = name.lowTempColorCode.toColor();
+              } else if (dailyProvider.option == 'NormalRainfall') {
+                lxColor = name.rainFallNormalColorCode.toColor();
+              } else if (dailyProvider.option == 'MaxTemp') {
+                lxColor = name.highTempColorCode.toColor();
+              } else if (dailyProvider.option == 'ActualRainfall') {
+                lxColor = name.rainFallActualColorCode.toColor();
+              } else if (dailyProvider.option == 'RainfallPercent') {
+                lxColor = name.percentrainFallColorCode.toColor();
+              } else {
+                lxColor = name.rainFallActualColorCode.toColor();
+              }
+
+              dailyProvider.setPolygonDaiy(Polygon(
+                  onTap: () async {
+                      dailyProvider.setDailyId(name.dailyDetailsID);
+                    await DailyServices.getDailyLegend(context);
+                    
+                    setState(() {
+                      showLegends = true;
+                    });
+                    Future.delayed(Duration(seconds: 8), () {
                       setState(() {
-                    showLegends = false;
-                  });
-                  });
+                        showLegends = false;
+                      });
+                    });
 
-                
-
-                  dailyProvider.setDailyId(name.dailyDetailsID);
-                },
-                consumeTapEvents: true,
-                polygonId: PolygonId(name.dailyDetailsID),
-                points: polygonCoords,
-                strokeWidth: 4,
-                fillColor: lxColor.withOpacity(.3),
-                strokeColor: lxColor));
+                  
+                  },
+                  consumeTapEvents: true,
+                  polygonId: PolygonId(name.dailyDetailsID),
+                  points: polygonCoords,
+                  strokeWidth: 4,
+                  fillColor: lxColor.withOpacity(.9),
+                  strokeColor: lxColor));
+              print('color: $lxColor');
+              // polygons.add();
+            }
           }
-          dailyProvider.setPolygonDaiy(polygons);
-        }
-      });
-    } catch (e) {
-      print('error $e');
+        });
+      } catch (e) {
+        print('error $e');
+      }
     }
     setState(() {
       isRefresh = false;
@@ -280,60 +345,112 @@ class _MyWidgetState extends State<MainNav> {
           IconButton(
             iconSize: 70,
             color: kColorBlue,
-            onPressed: () => {
-              setState(() {
-                selectedDate = DateTime.now();
-                final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
-                polygons.clear();
-                title = 'Philippines';
-                selectIndex = 1;
-              })
+            onPressed: () {
+              // setState(() {
+              //   selectedDate = DateTime.now();
+              //   final dailyProvider = context.read<DailyProvider>();
+              //   dailyProvider.setDateSelect(selectedDate);
+              //   polygons.clear();
+              //   title = 'Philippines';
+              //   selectIndex = 1;
+              // })
+              final snackBar = SnackBar(
+                content: const Text('Sorry, this module is under development.'),
+                // action: SnackBarAction(
+                //   label: 'Undo',
+                //   onPressed: () {
+                //     // Some code to undo the change.
+                //   },
+                // ),
+              );
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             icon: const Icon(Icons.cloud_done, size: 35),
           ),
           IconButton(
             iconSize: 70,
             color: kColorBlue,
-            onPressed: () => {
-              setState(() {
-                selectedDate = DateTime.now();
-                final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
-                polygons.clear();
-                title = 'Philippines';
-                selectIndex = 2;
-              })
+            onPressed: () {
+              // setState(() {
+              //   selectedDate = DateTime.now();
+              //   final dailyProvider = context.read<DailyProvider>();
+              //   dailyProvider.setDateSelect(selectedDate);
+              //   polygons.clear();
+              //   title = 'Philippines';
+              //   selectIndex = 2;
+              // })
+              final snackBar = SnackBar(
+                content: const Text('Sorry, this module is under development.'),
+                // action: SnackBarAction(
+                //   label: 'Undo',
+                //   onPressed: () {
+                //     // Some code to undo the change.
+                //   },
+                // ),
+              );
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             icon: const Icon(Icons.cloud_queue, size: 35),
           ),
           IconButton(
             iconSize: 70,
             color: kColorBlue,
-            onPressed: () => {
-              setState(() {
-                selectedDate = DateTime.now();
-                final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
-                polygons.clear();
-                title = 'Philippines';
-                selectIndex = 3;
-              })
+            onPressed: () {
+              // setState(() {
+              //   selectedDate = DateTime.now();
+              //   final dailyProvider = context.read<DailyProvider>();
+              //   dailyProvider.setDateSelect(selectedDate);
+              //   polygons.clear();
+              //   title = 'Philippines';
+              //   selectIndex = 3;
+              // })
+              final snackBar = SnackBar(
+                content: const Text('Sorry, this module is under development.'),
+                // action: SnackBarAction(
+                //   label: 'Undo',
+                //   onPressed: () {
+                //     // Some code to undo the change.
+                //   },
+                // ),
+              );
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
           ),
           IconButton(
             iconSize: 70,
             color: kColorBlue,
-            onPressed: () => {
-              setState(() {
-                selectedDate = DateTime.now();
-                final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
-                polygons.clear();
-                title = 'Philippines';
-                selectIndex = 4;
-              })
+            onPressed: () {
+              // setState(() {
+              //   selectedDate = DateTime.now();
+              //   final dailyProvider = context.read<DailyProvider>();
+              //   dailyProvider.setDateSelect(selectedDate);
+              //   polygons.clear();
+              //   title = 'Philippines';
+              //   selectIndex = 4;
+              // })
+              final snackBar = SnackBar(
+                content: const Text('Sorry, this module is under development.'),
+                // action: SnackBarAction(
+                //   label: 'Undo',
+                //   onPressed: () {
+                //     // Some code to undo the change.
+                //   },
+                // ),
+              );
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
           ),
@@ -846,9 +963,21 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Widget map10Wid() {
-    final dailyProvider = context.read<DailyProvider>().polygons;
+    final dailyProviderPolygon = context.read<Daily10Provider>().polygons;
     return Stack(
       children: [
+        GoogleMap(
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          mapType: mapType,
+          polygons: dailyProviderPolygon!,
+          initialCameraPosition: _kGooglePlex,
+          zoomGesturesEnabled: true,
+          tiltGesturesEnabled: false,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
         Align(
           child: Column(children: [
             Padding(
@@ -857,8 +986,18 @@ class _MyWidgetState extends State<MainNav> {
                 style: TextStyle(color: Colors.black),
                 onChanged: (value) async {
                   final dailyProvider = context.read<Daily10Provider>();
+                  print(value);
+                  if(value.isNotEmpty){
+                    print('ansldkjalksdjlaksjd');
+                    dailyProvider.setShowList(true);
+                  }else{
+                    print('mnv,mzn,mcnv,m');
+                    dailyProvider.setShowList(false);
+                  }
+                  
                   dailyProvider.setSearchString(value);
                   await Daily10Services.get10DaysSearch(context, value);
+                  
                 },
                 decoration: InputDecoration(
                   hintText: "Search Location",
@@ -1074,6 +1213,8 @@ class _MyWidgetState extends State<MainNav> {
 
   Widget mapWid() {
     final dailyProvider = context.read<DailyProvider>().polygons;
+    final List<DailyLegendModel> dailyLegends =
+        context.select((DailyProvider p) => p.dailyLegend);
     return Stack(
       children: [
         GoogleMap(
@@ -1262,7 +1403,7 @@ class _MyWidgetState extends State<MainNav> {
               padding: const EdgeInsets.fromLTRB(20, 00, 20, 180),
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 80,
+                height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.black.withOpacity(.2),
@@ -1274,23 +1415,34 @@ class _MyWidgetState extends State<MainNav> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Legends'),
-                      SizedBox(height: 12,),
-                      Row(
-                        children: [
-                          ColoredBox(color: Colors.green, child: SizedBox(width: 14, height: 14,)),
-                          Text('No Rain'),
-                          SizedBox(width: 12,),
-                           ColoredBox(color: Colors.blueGrey, child: SizedBox(width: 14, height: 14,)),
-                          Text('Rain'),
-                          SizedBox(width: 12,),
-                           ColoredBox(color: Colors.red, child: SizedBox(width: 14, height: 14,)),
-                          Text('Heavy Rain'),
-                          SizedBox(width: 12,),
-                           ColoredBox(color: Colors.blue, child: SizedBox(width: 14, height: 14,)),
-                          Text('Cloudy'),
-                          SizedBox(width: 12,),
-                        ],
-                      )
+                      SizedBox(
+                        height: 8,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: ListView.builder(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: dailyLegends.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              child: Row(children: [  
+                                ColoredBox(
+                                  color: dailyLegends[index].color.toColor(),
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                ),
+                                SizedBox(width: 12,),
+                                Text(dailyLegends[index].title, style: TextStyle(color: Colors.white),)
+                              ],),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),

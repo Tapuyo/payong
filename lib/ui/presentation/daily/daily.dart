@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:payong/models/daily_legend_model.dart';
 import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
@@ -51,21 +52,26 @@ class DailyWidget extends HookWidget {
     }
 
     final bool isRefresh = context.select((DailyProvider p) => p.isRefresh);
+
     final String id = context.select((DailyProvider p) => p.dailyIDSelected);
     final String? locId = context.select((InitProvider p) => p.myLocationId);
     final DailyModel? dailyDetails =
         context.select((DailyProvider p) => p.dailyDetails);
     final DailyModel? dailyDetails1 =
-        context.select((DailyProvider p) => p.dailyDetails);
+        context.select((DailyProvider p) => p.dailyDetails1);
     final DailyModel? dailyDetails2 =
-        context.select((DailyProvider p) => p.dailyDetails);
+        context.select((DailyProvider p) => p.dailyDetails2);
 
     final DailyModel? dailyDetails3 =
-        context.select((DailyProvider p) => p.dailyDetails);
+        context.select((DailyProvider p) => p.dailyDetails3);
+    final accumulatedRainFall = useState('0');
+    String title = 'Area';
+
     useEffect(() {
       Future.microtask(() async {
         final dailyProvider = context.read<DailyProvider>();
-        String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
+        String dt = DateFormat('yyyy-MM-dd')
+            .format(dailyProvider.selectedDate.subtract(Duration(days: 1)));
         if (id.isEmpty) {
           await DailyServices.getDailyDetails(context, locId!, dt);
           // ignore: use_build_context_synchronously
@@ -73,18 +79,37 @@ class DailyWidget extends HookWidget {
           await DailyServices.getDailyDetails(context, id, dt);
         }
 
-        lowTemp.value = dailyDetails != null ? dailyDetails.lowTemp : '0';
-        highTemp.value = dailyDetails != null ? dailyDetails.highTemp : '0';
-        meanTemp.value = dailyDetails != null
-            ? ((double.parse(dailyDetails.lowTemp) +
-                        double.parse(dailyDetails.highTemp)) /
-                    2)
-                .toStringAsFixed(2)
-            : '0';
-         print( meanTemp.value);
+          meanTemp.value = dailyDetails != null ? dailyDetails.overAllMeannTemp : '0';
+        highTemp.value = dailyDetails != null ?  dailyDetails.overAllMaxTemp:'0';
+        lowTemp.value = dailyDetails != null ?  dailyDetails.overAllMinTemp:'0';
+        if (dailyProvider.option == 'MinTemp') {
+          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+        } else if (dailyProvider.option == 'NormalRainfall') {
+          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+        } else if (dailyProvider.option == 'MaxTemp') {
+          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+        } else if (dailyProvider.option == 'ActualRainfall') {
+          accumulatedRainFall.value = dailyDetails!.totalActualRainFall;
+        } else if (dailyProvider.option == 'RainfallPercent') {
+          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+        } else {
+          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+        }
+        print('Accumulated: ${accumulatedRainFall.value}');
+      
 
+        
+        // lowTemp.value = dailyDetails != null ? dailyDetails.lowTemp : '0';
+        // highTemp.value = dailyDetails != null ? dailyDetails.highTemp : '0';
+        // meanTemp.value = dailyDetails != null
+        //     ? ((double.parse(dailyDetails.lowTemp) +
+        //                 double.parse(dailyDetails.highTemp)) /
+        //             2)
+        //         .toStringAsFixed(2)
+        //     : '0';
+        // print(meanTemp.value);
 
-         lowTemp1.value = dailyDetails1 != null ? dailyDetails1.lowTemp : '0';
+        lowTemp1.value = dailyDetails1 != null ? dailyDetails1.lowTemp : '0';
         highTemp1.value = dailyDetails1 != null ? dailyDetails1.highTemp : '0';
         meanTemp1.value = dailyDetails1 != null
             ? ((double.parse(dailyDetails1.lowTemp) +
@@ -92,7 +117,7 @@ class DailyWidget extends HookWidget {
                     2)
                 .toStringAsFixed(2)
             : '0';
-         lowTemp2.value = dailyDetails2 != null ? dailyDetails2.lowTemp : '0';
+        lowTemp2.value = dailyDetails2 != null ? dailyDetails2.lowTemp : '0';
         highTemp2.value = dailyDetails2 != null ? dailyDetails2.highTemp : '0';
         meanTemp2.value = dailyDetails2 != null
             ? ((double.parse(dailyDetails2.lowTemp) +
@@ -100,7 +125,7 @@ class DailyWidget extends HookWidget {
                     2)
                 .toStringAsFixed(2)
             : '0';
-         lowTemp3.value = dailyDetails3 != null ? dailyDetails3.lowTemp : '0';
+        lowTemp3.value = dailyDetails3 != null ? dailyDetails3.lowTemp : '0';
         highTemp3.value = dailyDetails3 != null ? dailyDetails3.highTemp : '0';
         meanTemp3.value = dailyDetails3 != null
             ? ((double.parse(dailyDetails3.lowTemp) +
@@ -109,9 +134,10 @@ class DailyWidget extends HookWidget {
                 .toStringAsFixed(2)
             : '0';
       });
+      
       return;
     }, [id]);
-   
+
     return Container(
       height: MediaQuery.of(context).size.height - 150,
       decoration: BoxDecoration(
@@ -154,15 +180,17 @@ class DailyWidget extends HookWidget {
             dailyDetails != null
                 ? dailyDetails.locationDescription != ''
                     ? dailyDetails.locationDescription
-                    : 'Bohol'
-                : 'Pilar Bohol',
+                    : 'Area'
+                : 'Area',
             style: kTextStyleSubtitle4,
           ),
         ),
         // cloudIcons('CLOUDY'),
         Text(
-          DateFormat.MMMEd().format(DateTime.now()).toString(),
-          style: kTextStyleWeather2,
+          'Accumulated report as of ${DateFormat.MMMEd()
+              .format(DateTime.now().subtract(Duration(days: 1)))
+              .toString()}',
+          style: kTextStyleSubTitle,
         ),
         SizedBox(
           height: 20,
@@ -174,7 +202,7 @@ class DailyWidget extends HookWidget {
             Column(
               children: [
                 Text(
-                  'Rainfall',
+                  'Accumulated Rainfall',
                   style: kTextStyleWeather2,
                 ),
                 SizedBox(
@@ -183,12 +211,7 @@ class DailyWidget extends HookWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      dailyDetails != null
-                          ? dailyDetails.rainFallActual != ''
-                              ? dailyDetails.rainFallActual
-                              : '0'
-                          : '0',
+                    Text(double.parse(accumulatedRainFall.value).toStringAsFixed(2),
                       style: kTextStyleWeather,
                     ),
                     Text(
@@ -199,9 +222,7 @@ class DailyWidget extends HookWidget {
                 ),
               ],
             ),
-            SizedBox(
-              width: 30,
-            ),
+            
             Column(
               children: [
                 Text(
@@ -215,37 +236,45 @@ class DailyWidget extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      meanTemp.value,
+                      double.parse(meanTemp.value).toStringAsFixed(2),
                       style: kTextStyleWeather,
                     ),
                     Text(
                       '°',
                       style: kTextStyleDeg,
                     ),
-                    SizedBox(width: 4,),
+                    Text(
+                      'C',
+                      style: kTextStyleWeather,
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
                     Column(
                       children: [
                         Row(
                           children: [
                             Text(
-                              lowTemp.value,
+                              'High ${double.parse(highTemp.value).toStringAsFixed(2)}',
                               style: TextStyle(fontSize: 12),
                             ),
                             Text(
-                              '°',
+                              '°C',
                               style: TextStyle(fontSize: 12),
                             ),
                           ],
                         ),
-                        Divider(thickness: 3,),
-                         Row(
+                        Divider(
+                          thickness: 3,
+                        ),
+                        Row(
                           children: [
                             Text(
-                              highTemp.value,
+                              'Low ${double.parse(lowTemp.value).toStringAsFixed(2)}',
                               style: TextStyle(fontSize: 12),
                             ),
                             Text(
-                              '°',
+                              '°C',
                               style: TextStyle(fontSize: 12),
                             ),
                           ],
@@ -281,46 +310,49 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails1 != null ? dailyDetails1.rainFallActual : ''} mm',
+                      '${dailyDetails1 != null ? dailyDetails1.totalActualRainFall : ''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${meanTemp1.value}°',
+                      '${meanTemp1.value}°C',
                       style: kTextStyleWeather2,
                     ),
                   ),
+                  // SizedBox(width: 3,),
                   Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              lowTemp1.value,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              '°',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Divider(thickness: 3,),
-                         Row(
-                          children: [
-                            Text(
-                              highTemp1.value,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              '°',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'High ${highTemp1.value}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            '°C',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        thickness: 3,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Low ${lowTemp1.value}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            '°C',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
@@ -342,46 +374,48 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails2 != null ? dailyDetails2.rainFallActual : ''} mm',
+                      '${dailyDetails2 != null ? dailyDetails2.totalActualRainFall : ''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${meanTemp2.value}°',
+                      '${meanTemp2.value}°C',
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              lowTemp2.value,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              '°',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Divider(thickness: 3,),
-                         Row(
-                          children: [
-                            Text(
-                              highTemp2.value,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              '°',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'High ${highTemp2.value}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            '°C',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        thickness: 3,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Low ${lowTemp2.value}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            '°C',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
@@ -403,46 +437,48 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails3 != null ? dailyDetails3.rainFallActual : ''} mm',
+                      '${dailyDetails3 != null ? dailyDetails3.totalActualRainFall : ''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${meanTemp3.value}°',
+                      '${meanTemp3.value}°c',
                       style: kTextStyleWeather2,
                     ),
                   ),
                   Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              lowTemp3.value,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              '°',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Divider(thickness: 3,),
-                         Row(
-                          children: [
-                            Text(
-                              highTemp3.value,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              '°',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'High ${highTemp3.value}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            '°C',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        thickness: 3,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Low ${lowTemp3.value}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            '°C',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
                 ],
               ),
             ),

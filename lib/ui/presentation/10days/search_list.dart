@@ -32,42 +32,56 @@ class SearchList extends HookWidget {
     ValueNotifier searchString =  useState(context.read<Daily10Provider>().daily10Search);
     final List<Daily10SearchModel>? dailyDetails =
         context.select((Daily10Provider p) => p.daily10Search);
+    final bool showList =
+        context.select((Daily10Provider p) => p.showList);
+    
 
     useEffect(() {
       Future.microtask(() async {
-        await Daily10Services.get10DaysSearch(context, searchString.value);
-        print('asdasdasd');
-        print(dailyDetails!.length);
+        // await Daily10Services.get10DaysSearch(context, searchString.value);
+        // print('asdasdasd');
+        // print(dailyDetails!.length);
       });
       return;
     }, [searchString.value]);
-
-    return dailyDetails != null
-        ? SizedBox(
-            height: MediaQuery.of(context).size.height - 250,
+    print(showList);
+    if (dailyDetails != null) {
+      return SizedBox(
+            height: showList ? MediaQuery.of(context).size.height - 250:0,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      
-                      SizedBox(
-                           height: MediaQuery.of(context).size.height - 200,
-                        child: ListView.builder(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
-                          scrollDirection: Axis.vertical,
-                          itemCount: dailyDetails.length,
-                          itemBuilder: (context, index) {
-                            return searchList(context,dailyDetails[index]);
-                          },
-                        ),
-                      ),
-                    ]),
+                padding:  EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: ColoredBox(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          
+                          Visibility(
+                            visible: showList,
+                            child: SizedBox(
+                                 height:  MediaQuery.of(context).size.height - 200,
+                              child: ListView.builder(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
+                                scrollDirection: Axis.vertical,
+                                itemCount: dailyDetails.length,
+                                itemBuilder: (context, index) {
+                                  return searchList(context,dailyDetails[index]);
+                                },
+                              ),
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
               ),
             ),
-          )
-        : SizedBox();
+          );
+    } else {
+      return SizedBox();
+    }
   }
 
   Widget searchList(BuildContext context, Daily10SearchModel? dailyMods) {
@@ -80,6 +94,7 @@ class SearchList extends HookWidget {
               onTap: (){
                  final dailyProvider = context.read<Daily10Provider>();
                   dailyProvider.setDailyId(dailyMods.locationId);
+                  dailyProvider.setShowList(false);
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

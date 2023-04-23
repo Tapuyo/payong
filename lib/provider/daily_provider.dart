@@ -2,8 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_model.dart';
 
+import '../models/daily_legend_model.dart';
+
 class DailyProvider with ChangeNotifier{
   List<DailyModel> dailyList = [];
+  List<DailyLegendModel> _dailyLegend = [];
   DailyModel? daily;
   DailyModel? daily1;
   DailyModel? daily2;
@@ -20,6 +23,7 @@ class DailyProvider with ChangeNotifier{
 
   String  get dailyIDSelected => dailyID; 
 
+  List<DailyLegendModel> get dailyLegend => _dailyLegend;
   DailyModel?  get dailyDetails => daily; 
   DailyModel?  get dailyDetails1 => daily1; 
   DailyModel?  get dailyDetails2 => daily2; 
@@ -41,9 +45,21 @@ class DailyProvider with ChangeNotifier{
     notifyListeners();
   }
 
+   void setListDailyLegend(List<DailyLegendModel> value) {
+    _dailyLegend = value;
+    notifyListeners();
+  }
 
-  void setPolygonDaiy(Set<Polygon> value) {
-    polygon = value;
+
+  void setPolygonDaiy(Polygon value) {
+    // polygon = value;
+    polygon.add(value);
+    notifyListeners();
+  }
+
+  void setPolygonDaiyClear() {
+    // polygon = value;
+    polygon.clear();
     notifyListeners();
   }
 

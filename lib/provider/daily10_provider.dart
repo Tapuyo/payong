@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_10_model.dart';
 import 'package:payong/models/daily_10_search_model.dart';
 
@@ -9,6 +10,7 @@ class Daily10Provider with ChangeNotifier{
   bool refresh = false;
   DateTime selectedDate = DateTime.now();
   String _searchString = '';
+  bool _showList = false;
 
   List<Daily10SearchModel> _daily10Search = [];
 
@@ -18,6 +20,8 @@ class Daily10Provider with ChangeNotifier{
 
   bool  get isRefresh => refresh; 
 
+  bool  get showList => _showList; 
+
   String  get dailyIDSelected => dailyID; 
 
   String  get searchString => _searchString; 
@@ -25,6 +29,27 @@ class Daily10Provider with ChangeNotifier{
   DailyModel10?  get dailyDetails => daily; 
 
   List<DailyModel10> get myDailyList => dailyList;
+
+  Set<Polygon> polygon = {};
+
+  Set<Polygon>?  get polygons => polygon; 
+
+  void setPolygonDaiy(Polygon value) {
+    // polygon = value;
+    polygon.add(value);
+    notifyListeners();
+  }
+
+   void setPolygonDaiyClear() {
+    // polygon = value;
+    polygon.clear();
+    notifyListeners();
+  }
+
+  void setShowList(bool value) {
+    _showList = value;
+    notifyListeners();
+  }
 
   void setSearchString(String value) {
     _searchString = value;

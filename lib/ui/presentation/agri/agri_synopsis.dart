@@ -113,7 +113,7 @@ class AgriSynopsisWidget extends HookWidget {
                 height: MediaQuery.of(context).size.height - 350,
                 child: Html(
                   shrinkWrap: false,
-                  data: asd,
+                  data: agriSypnosis.content,
                 ),
               ),
             ),
