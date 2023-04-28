@@ -9,6 +9,7 @@ import 'package:payong/models/agri_forecast_temperature_model.dart';
 import 'package:payong/models/agri_forecast_weather_model.dart';
 import 'package:payong/models/agri_forecast_wind_model.dart';
 import 'package:payong/models/agri_model.dart';
+import 'package:payong/models/daily_10_map.dart';
 import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/utils/strings.dart';
 import 'package:provider/provider.dart';
@@ -91,12 +92,15 @@ abstract class AgriServices {
 
   static Future<void> getAgriAdvisory(
       BuildContext context, String id, bool daily) async {
+        final dailyProvider = context.read<AgriProvider>();
+        dailyProvider.clearAdvisory();
      final responseParent = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/agri_info.php'));
     var jsondataParent = json.decode(responseParent.body);
-  
+    
     String agriID = jsondataParent[0]['AgriInfoID'];
-    var response;
+    print(agriID);
+    var response ;
     if (daily) {
       print('Agri  daily');
       response = await http.get(
@@ -107,20 +111,20 @@ abstract class AgriServices {
       response = await http.get(Uri.parse(
           'http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID'));
     }
-
+    print(response.body);
     var jsondata = json.decode(response.body);
 
     List<AgriAdvModel> newDailyList = [];
 
     for (var u in jsondata) {
       AgriAdvModel daily = AgriAdvModel(
-        u['Title'] ?? '',
+        u['Titles'] ?? '',
         u['Content'] ?? '',
       );
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
-    final dailyProvider = context.read<AgriProvider>();
+    
     dailyProvider.setAdvisory(newDailyList);
   }
 
@@ -133,7 +137,7 @@ abstract class AgriServices {
     var jsondataParent = json.decode(responseParent.body);
   
     String agriID = jsondataParent[0]['AgriInfoID'];
-    
+    print('http://18.139.91.35/payong/API/agri_FORECAST.php?AgriInfoID=$agriID');
     final response = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/agri_FORECAST.php?AgriInfoID=$agriID'));
 
@@ -244,6 +248,7 @@ abstract class AgriServices {
     var jsondataParent = json.decode(responseParent.body);
   
     String agriID = jsondataParent[0]['AgriDailyID'];
+    print('$agriForecastHumidityApi$agriID&option=Humidity');
     final response = await http.get(Uri.parse('$agriForecastHumidityApi$agriID&option=Humidity'));
 
     var jsondata = json.decode(response.body);
@@ -288,5 +293,26 @@ abstract class AgriServices {
     // ignore: use_build_context_synchronously
     final dailyProvider = context.read<AgriProvider>();
     dailyProvider.setAgriForecastLeafwetness(newDailyList);
+  }
+
+   static Future<List<Daily10MapModel>> getRegionMap(
+      BuildContext context, String page) async {
+        print('http://18.139.91.35/payong/API/regioncoordinates.php?page=1');
+    final response = await http
+        .get(Uri.parse('http://18.139.91.35/payong/API/regioncoordinates.php?page=1'));
+    var jsondata = json.decode(response.body);
+
+    List<Daily10MapModel> newDailyList = [];
+    print(jsondata.toString());
+    for (var u in jsondata) {
+      Daily10MapModel daily = Daily10MapModel(
+        u['RegionID'] ?? '',
+        u['RegionDescription'] ?? '',
+        u['coordinates'] ?? []
+      );
+      newDailyList.add(daily);
+    }
+    // ignore: use_build_context_synchronously
+    return newDailyList;
   }
 }

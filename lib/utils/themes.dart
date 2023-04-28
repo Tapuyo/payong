@@ -15,7 +15,7 @@ const kInputTextStyle = TextStyle(
 
 const kColorPrimary = Color(0xff1A61FF);
 const kColorPrimaryDark = Color.fromARGB(255, 253, 252, 252);
-const kColorSecondary = Color.fromARGB(250, 241, 244, 62);
+const kColorSecondary = Color(0xff1A61FF);
 
 final kTextStyleButton = GoogleFonts.roboto(textStyle: const TextStyle(
   color: kColorPrimary,

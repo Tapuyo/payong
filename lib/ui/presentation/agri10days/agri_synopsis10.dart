@@ -41,6 +41,7 @@ class AgriSynopsis10Widget extends HookWidget {
     return Container(
       height: MediaQuery.of(context).size.height - 200,
       decoration: BoxDecoration(
+        
         gradient: LinearGradient(
             // ignore: prefer_const_literals_to_create_immutables
             colors: [
@@ -63,15 +64,14 @@ class AgriSynopsis10Widget extends HookWidget {
          SizedBox(height: 20,),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(agriSypnosis != null ? agriSypnosis.title : 'No Data',
+          child: Text('8AM, Tuesday, 14 March 2023',
             style: kTextStyleSubtitle2,
           ),
         ),
          SizedBox(height: 20,),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(agriSypnosis != null ?
-            agriSypnosis.content : '',
+          child: Text('Northeast Monsoon affecting Luzon. Meanwhile, at 3:00 AM today, the Low Pressure Area (LPA) wasestimated based on all available data at 340 km Southeast of Hinatuan, Surigao del Sur or 320 km East Southeast ofDavao City (6.0°N, 128.3°E).',
             style: kTextStyleSubtitle2b,
           ),
         ),

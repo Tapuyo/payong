@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -44,40 +45,107 @@ class AgriForecastTempWidget extends HookWidget {
                 scrollDirection: Axis.vertical,
                 itemCount: dailyAgriDetails.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                      child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 3,
-                            child: Text(
-                              dailyAgriDetails[index].locations,
-                              style: kTextStyleSubtitle4b,
-                            )),
-                        Spacer(),
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              'High Land \n${dailyAgriDetails[index].highLandMaxTemp} - ${dailyAgriDetails[index].highLandMinTemp}',
-                              style: kTextStyleSubtitle4b,
-                            )),
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              'Low Land \n${dailyAgriDetails[index].lowLandMaxTemp} - ${dailyAgriDetails[index].lowLandMinTemp}',
-                              style: kTextStyleSubtitle4b,
-                            )),
-                        Expanded(
-                            flex: 1,
+                  // return Card(
+                  //     child: Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Row(
+                  //     children: [
+                  //       Expanded(
+                  //           flex: 2,
+                  //           child: Text(
+                  //             dailyAgriDetails[index].locations,
+                  //             style: kTextStyleSubtitle4b,
+                  //           )),
+                  //       Spacer(),
+                  //      Expanded(
+                  //       flex: 2,
+                  //        child: Column(children: [
+                  //          Text(
+                  //            'High Land \n${dailyAgriDetails[index].highLandMaxTemp}°C - ${dailyAgriDetails[index].highLandMinTemp}°C',
+                  //            style: kTextStyleSubtitle4b,
+                  //          ),
+                  //         Text(
+                  //           'Low Land \n${dailyAgriDetails[index].lowLandMaxTemp}°C - ${dailyAgriDetails[index].lowLandMinTemp}°C',
+                  //           style: kTextStyleSubtitle4b,
+                  //         ),
+                  //        ],),
+                  //      ),
+                  //       Expanded(
+                  //           flex: 2,
+                  //           child: SizedBox(
+                  //               width: 50,
+                  //               height: 50,
+                  //               child:
+                  //                   Image.asset('assets/temperaturelow.jpg'))),
+                  //     ],
+                  //   ),
+                  // ));
+                  return Padding(
+                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white60,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black)),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(177, 169, 10, 1),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10)),
+                            ),
                             child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child:
-                                    Image.asset('assets/temperaturelow.jpg'))),
-                      ],
+                              height: 40,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'High Land: ${dailyAgriDetails[index].highLandMaxTemp}°C - ${dailyAgriDetails[index].highLandMinTemp}°C',
+                                    style: kTextStyleSubtitle4b,
+                                  ),
+                                  VerticalDivider(),
+                                  Text(
+                                    'Low Land: ${dailyAgriDetails[index].lowLandMaxTemp}°C - ${dailyAgriDetails[index].lowLandMinTemp}°C',
+                                    style: kTextStyleSubtitle4b,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 0, 8, 10),
+                                      child: Text(
+                                        dailyAgriDetails[index].locations,
+                                        style: kTextStyleSubtitle4b,
+                                      ),
+                                    )
+                                  ],
+                                )),
+                                Expanded(
+                                  child: SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child:
+                                          Image.asset('assets/temperaturelow.jpg')),
+                                )
+                              ]),
+                        ],
+                      ),
                     ),
-                  ));
+                  );
                 },
               ),
             ),

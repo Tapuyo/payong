@@ -84,6 +84,11 @@ class AgriProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearAdvisory() {
+    agriAdvModel = [];
+    notifyListeners();
+  }
+
   void setForecast(List<AgriForecastModel> value) {
     agriForecastModel = value;
     notifyListeners();

@@ -47,7 +47,7 @@ class AgriAdvisory10Widget extends HookWidget {
 
     return dailyAgriDetails != null
         ? SizedBox(
-            height: MediaQuery.of(context).size.height - 250,
+            height: MediaQuery.of(context).size.height - 180,
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -69,11 +69,12 @@ class AgriAdvisory10Widget extends HookWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height + 100,
                         child: ListView.builder(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 400),
                           scrollDirection: Axis.vertical,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
-                            return advisoryWidget(context,dailyAgriDetails[index]);
+                            return advisoryWidget(
+                                context, dailyAgriDetails[index]);
                           },
                         ),
                       ),
@@ -84,7 +85,7 @@ class AgriAdvisory10Widget extends HookWidget {
         : SizedBox();
   }
 
-  Widget advisoryWidget(BuildContext context,AgriAdvModel? agriAdsModel) {
+  Widget advisoryWidget(BuildContext context, AgriAdvModel? agriAdsModel) {
     return agriAdsModel != null
         ? Column(children: [
             Divider(
@@ -113,7 +114,7 @@ class AgriAdvisory10Widget extends HookWidget {
                         width: MediaQuery.of(context).size.width - 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                           gradient: LinearGradient(
+                          gradient: LinearGradient(
                               // ignore: prefer_const_literals_to_create_immutables
                               colors: [
                                 // if (dayNow) ...[
@@ -130,9 +131,22 @@ class AgriAdvisory10Widget extends HookWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Html(
-                            shrinkWrap: false,
-                            data: agriAdsModel.content,
+                          child: Column(
+                            children: [
+                               SizedBox(
+                                  width: 250,
+                                  height: 250,
+                                  child: Image.asset('assets/advisorysamp.png')),
+                                    SizedBox(
+                                height: 12,
+                              ),
+                             
+                              Html(
+                                shrinkWrap: false,
+                                data: agriAdsModel.content,
+                              ),
+                            
+                            ],
                           ),
                         ),
                       )

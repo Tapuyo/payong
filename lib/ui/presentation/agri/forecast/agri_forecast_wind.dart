@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -45,32 +46,95 @@ class AgriForecastWindWidget extends HookWidget {
                 scrollDirection: Axis.vertical,
                 itemCount: dailyAgriDetails.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    dailyAgriDetails[index].locations,
-                                    style: kTextStyleSubtitle4b,
-                                  )),
-                              Spacer(),
-                              Expanded(
-                                  flex: 3,
-                                  child: Text(
+                  //   return Card(
+                  //       child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Row(
+                  //             children: [
+                  //               Expanded(
+                  //                   flex: 2,
+                  //                   child: Text(
+                  //                     dailyAgriDetails[index].locations,
+                  //                     style: kTextStyleSubtitle4b,
+                  //                   )),
+                  //               Spacer(),
+                  //               Expanded(
+                  //                   flex: 2,
+                  //                   child: Text(
+                  //                     dailyAgriDetails[index].windCondition,
+                  //                     style: kTextStyleSubtitle4b,
+                  //                   )),
+                  //               Expanded(
+                  //             flex: 2,
+                  //             child: SizedBox(
+                  // width: 100,
+                  // height: 100,
+                  // child: Image.asset('assets/lightmoderate.png'))),
+                  //             ],
+                  //           )));
+
+                  return Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white60,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black)),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(10, 155, 177, 1),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
                                     dailyAgriDetails[index].windCondition,
-                                    style: kTextStyleSubtitle4b,
-                                  )),
-                              Expanded(
-                            flex: 1,
-                            child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/lightmoderate.png'))),
-                            ],
-                          )));
+                                    style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'NunitoSans',
+                                    )),
+                                  ),
+                            ),
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 0, 8, 10),
+                                      child: Text(
+                                        dailyAgriDetails[index].locations,
+                                        style: kTextStyleSubtitle4b,
+                                      ),
+                                    )
+                                  ],
+                                )),
+                                Expanded(
+                                  child: SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: Image.asset(
+                                          'assets/lightmoderate.png')),
+                                )
+                              ]),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             ),

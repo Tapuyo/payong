@@ -15,6 +15,7 @@ import 'package:payong/services/agri_service.dart';
 import 'package:payong/services/daily_services.dart';
 import 'package:payong/ui/presentation/agri/forecast/agri_forecast_humidity.dart';
 import 'package:payong/ui/presentation/agri/forecast/agri_forecast_leaf_wetness.dart';
+import 'package:payong/ui/presentation/agri/forecast/agri_forecast_soil_moisture.dart';
 import 'package:payong/ui/presentation/agri/forecast/agri_forecast_temp.dart';
 import 'package:payong/ui/presentation/agri/forecast/agri_forecast_weather.dart';
 import 'package:payong/ui/presentation/agri/forecast/agri_forecast_wind.dart';
@@ -29,7 +30,7 @@ class AgriForecastWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final agriTab = useState(0);
+    final agriTab = useState(4);
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
       dayNow = false;
@@ -45,26 +46,99 @@ class AgriForecastWidget extends HookWidget {
             height: MediaQuery.of(context).size.height - 200,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 100,
+                        height: 50,
                         width: MediaQuery.of(context).size.width,
-                        child: ListView(
+                        child: Column(
                           children: <Widget>[
+                            SizedBox(height: 20,),
                             SizedBox(
-                              height: 40.0,
+                              height: 30.0,
                               child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        agriTab.value = 0;
+                                        agriTab.value = 4;
                                       },
                                       child: Container(
                                         width: 80,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: agriTab.value == 4
+                                              ? dayNow
+                                                  ? kColorSecondary
+                                                  : kColorBlue
+                                              : Colors.white,
+                                        ),
+                                        height: 35,
+                                        child: Center(
+                                          child: Text(
+                                            'Weather',
+                                            style: kTextStyleSubtitle4b,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        agriTab.value = 3;
+                                      },
+                                      child: Container(
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: agriTab.value == 3
+                                              ? dayNow
+                                                  ? kColorSecondary
+                                                  : kColorBlue
+                                              : Colors.white,
+                                        ),
+                                        height: 35,
+                                        child: Center(
+                                          child: Text(
+                                            'Wind',
+                                            style: kTextStyleSubtitle4b,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                     GestureDetector(
+                                      onTap: () {
+                                        agriTab.value = 2;
+                                      },
+                                      child: Container(
+                                        width: 110,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: agriTab.value == 2
+                                              ? dayNow
+                                                  ? kColorSecondary
+                                                  : kColorBlue
+                                              : Colors.white,
+                                        ),
+                                        height: 35,
+                                        child: Center(
+                                          child: Text(
+                                            'Temperature',
+                                            style: kTextStyleSubtitle4b,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        agriTab.value = 0;
+                                      },
+                                      child: Container(
+                                        width: 150,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -77,7 +151,7 @@ class AgriForecastWidget extends HookWidget {
                                         height: 35,
                                         child: Center(
                                           child: Text(
-                                            'Humidity',
+                                            'Relative Humidity',
                                             style: kTextStyleSubtitle4b,
                                           ),
                                         ),
@@ -109,14 +183,14 @@ class AgriForecastWidget extends HookWidget {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        agriTab.value = 2;
+                                        agriTab.value = 5;
                                       },
                                       child: Container(
-                                        width: 110,
+                                        width: 150,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: agriTab.value == 2
+                                          color: agriTab.value == 5
                                               ? dayNow
                                                   ? kColorSecondary
                                                   : kColorBlue
@@ -125,60 +199,14 @@ class AgriForecastWidget extends HookWidget {
                                         height: 35,
                                         child: Center(
                                           child: Text(
-                                            'Temperature',
+                                            'Soil Moisture',
                                             style: kTextStyleSubtitle4b,
                                           ),
                                         ),
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 3;
-                                      },
-                                      child: Container(
-                                        width: 60,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 3
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Wind',
-                                            style: kTextStyleSubtitle4b,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 4;
-                                      },
-                                      child: Container(
-                                        width: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 4
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Weather',
-                                            style: kTextStyleSubtitle4b,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    
+                                    
                                   ]),
                             ),
                           ],
@@ -205,6 +233,11 @@ class AgriForecastWidget extends HookWidget {
                         SizedBox(
                           height: MediaQuery.of(context).size.height - 200,
                           child: AgriForecastWeatherWidget())
+                        // AgriForecastWeatherWidget()
+                      ]else  if(agriTab.value == 5)...[
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height - 200,
+                          child: AgriForecastSoilMoistWidget())
                         // AgriForecastWeatherWidget()
                       ]
                     ]),

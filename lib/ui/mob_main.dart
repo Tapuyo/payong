@@ -614,26 +614,26 @@ class _MainPageState extends State<MainPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => const MainNav(index: 3)),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainNav(index: 3)),
+                          );
 
-                          final snackBar = SnackBar(
-                              content: const Text('Sorry, this module is under development.'),
-                              // action: SnackBarAction(
-                              //   label: 'Undo',
-                              //   onPressed: () {
-                              //     // Some code to undo the change.
-                              //   },
-                              // ),
-                            );
+                          // final snackBar = SnackBar(
+                          //     content: const Text('Sorry, this module is under development.'),
+                          //     // action: SnackBarAction(
+                          //     //   label: 'Undo',
+                          //     //   onPressed: () {
+                          //     //     // Some code to undo the change.
+                          //     //   },
+                          //     // ),
+                          //   );
 
-                            // Find the ScaffoldMessenger in the widget tree
-                            // and use it to show a SnackBar.
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                          //   // Find the ScaffoldMessenger in the widget tree
+                          //   // and use it to show a SnackBar.
+                          //   ScaffoldMessenger.of(context)
+                          //       .showSnackBar(snackBar);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

@@ -115,7 +115,7 @@ class DailyWidget extends HookWidget {
             ? ((double.parse(dailyDetails1.lowTemp) +
                         double.parse(dailyDetails1.highTemp)) /
                     2)
-                .toStringAsFixed(2)
+                .toStringAsFixed(1)
             : '0';
         lowTemp2.value = dailyDetails2 != null ? dailyDetails2.lowTemp : '0';
         highTemp2.value = dailyDetails2 != null ? dailyDetails2.highTemp : '0';
@@ -123,7 +123,7 @@ class DailyWidget extends HookWidget {
             ? ((double.parse(dailyDetails2.lowTemp) +
                         double.parse(dailyDetails2.highTemp)) /
                     2)
-                .toStringAsFixed(2)
+                .toStringAsFixed(1)
             : '0';
         lowTemp3.value = dailyDetails3 != null ? dailyDetails3.lowTemp : '0';
         highTemp3.value = dailyDetails3 != null ? dailyDetails3.highTemp : '0';
@@ -131,7 +131,7 @@ class DailyWidget extends HookWidget {
             ? ((double.parse(dailyDetails3.lowTemp) +
                         double.parse(dailyDetails3.highTemp)) /
                     2)
-                .toStringAsFixed(2)
+                .toStringAsFixed(1)
             : '0';
       });
       
@@ -211,7 +211,7 @@ class DailyWidget extends HookWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(double.parse(accumulatedRainFall.value).toStringAsFixed(2),
+                    Text(double.parse(accumulatedRainFall.value).toStringAsFixed(1),
                       style: kTextStyleWeather,
                     ),
                     Text(
@@ -236,7 +236,7 @@ class DailyWidget extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      double.parse(meanTemp.value).toStringAsFixed(2),
+                      double.parse(meanTemp.value).toStringAsFixed(1),
                       style: kTextStyleWeather,
                     ),
                     Text(
@@ -255,7 +255,7 @@ class DailyWidget extends HookWidget {
                         Row(
                           children: [
                             Text(
-                              'High ${double.parse(highTemp.value).toStringAsFixed(2)}',
+                              'High ${double.parse(highTemp.value).toStringAsFixed(1)}',
                               style: TextStyle(fontSize: 12),
                             ),
                             Text(
@@ -270,7 +270,7 @@ class DailyWidget extends HookWidget {
                         Row(
                           children: [
                             Text(
-                              'Low ${double.parse(lowTemp.value).toStringAsFixed(2)}',
+                              'Low ${double.parse(lowTemp.value).toStringAsFixed(1)}',
                               style: TextStyle(fontSize: 12),
                             ),
                             Text(
@@ -310,7 +310,7 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails1 != null ? dailyDetails1.totalActualRainFall : ''} mm',
+                      '${dailyDetails1 != null ? double.parse(dailyDetails1.totalActualRainFall).toStringAsFixed(1) : ''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -374,7 +374,7 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${dailyDetails2 != null ? dailyDetails2.totalActualRainFall : ''} mm',
+                      '${dailyDetails2 != null ? double.parse(dailyDetails2.totalActualRainFall).toStringAsFixed(1) : ''} mm',
                       style: kTextStyleWeather2,
                     ),
                   ),

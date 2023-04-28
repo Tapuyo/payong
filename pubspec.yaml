@@ -37,7 +37,7 @@ dependencies:
   http: ^0.13.5
 
   sliding_up_panel: ^2.0.0+1
-
+  photo_view: ^0.14.0
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
 

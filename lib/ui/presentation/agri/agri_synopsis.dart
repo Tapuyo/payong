@@ -4,9 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parallax_rain/parallax_rain.dart';
 import 'package:payong/models/agri_model.dart';
 import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
@@ -39,7 +41,7 @@ class AgriSynopsisWidget extends HookWidget {
     final AgriModel? agriSypnosis =
         context.select((AgriProvider p) => p.dailyDetails);
     DateTime pubDate =
-         DateFormat("yyyy-MM-dd").parse(agriSypnosis!.validityDate);
+        DateFormat("yyyy-MM-dd").parse(agriSypnosis!.validityDate);
     final String publishDate = DateFormat.yMMMMd('en_US').format(pubDate);
 
     return Container(
@@ -61,65 +63,76 @@ class AgriSynopsisWidget extends HookWidget {
       //       tileMode: TileMode.clamp),
       // ),
       width: MediaQuery.of(context).size.width,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            agriSypnosis != null
-                ? 'Publish Date ${publishDate.toString()}'
-                : 'No Data',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            agriSypnosis != null ? agriSypnosis.title : 'No Data',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            //  color: Colors.grey.withOpacity(.8),
-             gradient: LinearGradient(
-              // ignore: prefer_const_literals_to_create_immutables
-              colors: [
-                // if (dayNow) ...[
-                //   Color(0xFFF2E90B),
-                //   Color(0xFF762917),
-                // ] else ...[
-                   Color(0xFF005EEB),
-                    Color(0xFF489E59),
-                // ]
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              tileMode: TileMode.clamp),
-            
+      height: MediaQuery.of(context).size.height - 150,
+      color: Colors.blue,
+      child: Stack(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 150,
+            child: FittedBox(
+              child: Image.asset('assets/manila.jpeg'),
+              fit: BoxFit.fitHeight,
             ),
-            
-            child: Padding(
+          ),
+          Container(
+              width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 150,
+            child: ColoredBox(color: Colors.white54),),
+          // ParallaxRain(
+          //       // ignore: prefer_const_literals_to_create_immutables
+          //       dropColors: [Colors.white],
+          //       trail: true,
+          //       dropFallSpeed: 5,
+          //     ),
+          Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                agriSypnosis != null
+                    ? 'Publish Date ${publishDate.toString()}'
+                    : 'No Data',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                agriSypnosis != null ? agriSypnosis.title : 'No Data',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
               padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height - 350,
-                child: Html(
-                  shrinkWrap: false,
-                  data: agriSypnosis.content,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white60,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.black)),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
+                  child: Text(
+                    'Northeast Monsoon affecting Luzon. Meanwhile, at 3:00 AM today, the Low Pressure Area (LPA) wasestimated based on all available data at 340 km Southeast of Hinatuan, Surigao del Sur or 320 km East Southeast ofDavao City (6.0°N, 128.3°E).',
+                    style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'NunitoSans',
+                            wordSpacing: 2)),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ]),
+          ]),
+        ],
+      ),
     );
   }
 }

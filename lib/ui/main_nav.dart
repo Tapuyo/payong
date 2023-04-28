@@ -32,6 +32,7 @@ import 'package:payong/ui/presentation/daily/daily.dart';
 import 'package:payong/ui/presentation/mcao/mcao.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:intl/intl.dart';
@@ -61,6 +62,9 @@ class _MyWidgetState extends State<MainNav> {
   int agriTab = 0;
   bool dayNow = true;
   bool showLegends = false;
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  LatLng _center = LatLng(11.051436, 122.880019);
+  LatLng mapMarker = LatLng(11.051436, 122.880019);
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
@@ -101,8 +105,9 @@ class _MyWidgetState extends State<MainNav> {
       get10DaysList();
     } else if (selectIndex == 3) {
       // getAgriList();
+       getPrognosissMapList();
     } else if (selectIndex == 4) {
-      // getDailyList('month');
+     getPrognosissMapList();
     } else {
       // getDailyList('daily');
     }
@@ -112,17 +117,17 @@ class _MyWidgetState extends State<MainNav> {
     await AgriServices.getAgriSypnosis(context);
   }
 
-
-  Future<void> get10DaysList() async {
+  Future<void> getPrognosissMapList() async {
     setState(() {
       isRefresh = false;
     });
+    print('asdasd');
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 15; i++) {
-      final result = await Daily10Services.get10DaysMap(context,i.toString());
-     
+    for (var i = 1; i < 2; i++) {
+      final result = await AgriServices.getRegionMap(context, i.toString());
+
       try {
         setState(() {
           polygons.clear();
@@ -138,16 +143,11 @@ class _MyWidgetState extends State<MainNav> {
 
                 polygonCoords.add(LatLng(longitude, latitude));
               }
-             
 
               dailyProvider.setPolygonDaiy(Polygon(
                   onTap: () async {
-                     
-                      print(name.dailyDetailsID);
-                      final dailyProvider = context.read<Daily10Provider>();
-                  dailyProvider.setDailyId(name.dailyDetailsID);
-                  dailyProvider.setShowList(false);
-                  
+                    
+                    
                   },
                   consumeTapEvents: true,
                   polygonId: PolygonId(name.dailyDetailsID),
@@ -155,7 +155,57 @@ class _MyWidgetState extends State<MainNav> {
                   strokeWidth: 4,
                   fillColor: Colors.transparent,
                   strokeColor: Colors.transparent));
-           
+            }
+          }
+        });
+      } catch (e) {
+        print('error $e');
+      }
+    }
+    setState(() {
+      isRefresh = false;
+    });
+  }
+
+  Future<void> get10DaysList() async {
+    setState(() {
+      isRefresh = false;
+    });
+    final dailyProvider = context.read<Daily10Provider>();
+    dailyProvider.setPolygonDaiyClear();
+    Set<Polygon> polygons = {};
+    for (var i = 1; i < 15; i++) {
+      final result = await Daily10Services.get10DaysMap(context, i.toString());
+
+      try {
+        setState(() {
+          polygons.clear();
+
+          for (var name in result) {
+            List<dynamic> coordinates = name.locationCoordinate;
+            List<LatLng> polygonCoords = [];
+            if (coordinates.isNotEmpty) {
+              for (var coor in coordinates) {
+                var latLng = coor['coordinate'].toString().split(",");
+                double latitude = double.parse(latLng[0]);
+                double longitude = double.parse(latLng[1]);
+
+                polygonCoords.add(LatLng(longitude, latitude));
+              }
+
+              dailyProvider.setPolygonDaiy(Polygon(
+                  onTap: () async {
+                    print(name.dailyDetailsID);
+                    final dailyProvider = context.read<Daily10Provider>();
+                    dailyProvider.setDailyId(name.dailyDetailsID);
+                    dailyProvider.setShowList(false);
+                  },
+                  consumeTapEvents: true,
+                  polygonId: PolygonId(name.dailyDetailsID),
+                  points: polygonCoords,
+                  strokeWidth: 4,
+                  fillColor: Colors.transparent,
+                  strokeColor: Colors.transparent));
             }
           }
         });
@@ -229,9 +279,9 @@ class _MyWidgetState extends State<MainNav> {
 
               dailyProvider.setPolygonDaiy(Polygon(
                   onTap: () async {
-                      dailyProvider.setDailyId(name.dailyDetailsID);
+                    dailyProvider.setDailyId(name.dailyDetailsID);
                     await DailyServices.getDailyLegend(context);
-                    
+
                     setState(() {
                       showLegends = true;
                     });
@@ -240,8 +290,6 @@ class _MyWidgetState extends State<MainNav> {
                         showLegends = false;
                       });
                     });
-
-                  
                   },
                   consumeTapEvents: true,
                   polygonId: PolygonId(name.dailyDetailsID),
@@ -743,6 +791,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Widget mapWidAgri10Days() {
+    //Prognosis map
     return Stack(
       children: [
         //tab
@@ -779,6 +828,31 @@ class _MyWidgetState extends State<MainNav> {
               GestureDetector(
                 onTap: () {
                   setState(() {
+                    agriTab = 2;
+                  });
+                },
+                child: Container(
+                  width: 130,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: agriTab == 2
+                        ? dayNow
+                            ? kColorSecondary
+                            : kColorBlue
+                        : Colors.white,
+                  ),
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      'Crop phenology',
+                      style: kTextStyleSubtitle4b,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
                     agriTab = 1;
                   });
                 },
@@ -801,31 +875,7 @@ class _MyWidgetState extends State<MainNav> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 2;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 2
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Croponology',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ),
@@ -833,28 +883,10 @@ class _MyWidgetState extends State<MainNav> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
-            child: Column(children: [
-              if (agriTab == 2) ...[
-                // AgriPrognosis10Widget()
-                Container(
-                  height: MediaQuery.of(context).size.height - 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: GoogleMap(
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    mapType: mapType,
-                    polygons: polygons,
-                    initialCameraPosition: _kGooglePlex,
-                    zoomGesturesEnabled: true,
-                    tiltGesturesEnabled: false,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller.complete(controller);
-                    },
-                  ),
-                )
-              ] else if (agriTab == 1) ...[
+            child: agriTab == 2 ? prognosisMap():Column(children: [
+              if (agriTab == 1) ...[
                 AgriAdvisory10Widget()
-              ] else ...[
+              ] else if(agriTab == 0)...[
                 AgriForecast10Widget()
               ]
             ]),
@@ -962,11 +994,46 @@ class _MyWidgetState extends State<MainNav> {
     );
   }
 
+  void _onCameraMove(CameraPosition position) {
+    mapMarker = position.target;
+    final marker = Marker(
+      markerId: MarkerId('area'),
+      position: mapMarker,
+      // icon: BitmapDescriptor.,
+      infoWindow: InfoWindow(
+        title: 'title',
+        snippet: 'address',
+      ),
+    );
+
+    setState(() {
+      markers[MarkerId('area')] = marker;
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    final marker = Marker(
+      markerId: MarkerId('area'),
+      position: LatLng(11.051436, 122.880019),
+      // icon: BitmapDescriptor.,
+      infoWindow: InfoWindow(
+        title: 'title',
+        snippet: 'address',
+      ),
+    );
+
+    setState(() {
+      markers[MarkerId('place_name')] = marker;
+    });
+  }
+
   Widget map10Wid() {
     final dailyProviderPolygon = context.read<Daily10Provider>().polygons;
     return Stack(
       children: [
         GoogleMap(
+          // onCameraMove: _onCameraMove,
+          // markers: markers.values.toSet(),
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           mapType: mapType,
@@ -974,9 +1041,7 @@ class _MyWidgetState extends State<MainNav> {
           initialCameraPosition: _kGooglePlex,
           zoomGesturesEnabled: true,
           tiltGesturesEnabled: false,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
+          onMapCreated: _onMapCreated,
         ),
         Align(
           child: Column(children: [
@@ -987,17 +1052,16 @@ class _MyWidgetState extends State<MainNav> {
                 onChanged: (value) async {
                   final dailyProvider = context.read<Daily10Provider>();
                   print(value);
-                  if(value.isNotEmpty){
+                  if (value.isNotEmpty) {
                     print('ansldkjalksdjlaksjd');
                     dailyProvider.setShowList(true);
-                  }else{
+                  } else {
                     print('mnv,mzn,mcnv,m');
                     dailyProvider.setShowList(false);
                   }
-                  
+
                   dailyProvider.setSearchString(value);
                   await Daily10Services.get10DaysSearch(context, value);
-                  
                 },
                 decoration: InputDecoration(
                   hintText: "Search Location",
@@ -1428,17 +1492,24 @@ class _MyWidgetState extends State<MainNav> {
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Row(children: [  
-                                ColoredBox(
-                                  color: dailyLegends[index].color.toColor(),
-                                  child: SizedBox(
-                                    width: 20,
-                                    height: 20,
+                              child: Row(
+                                children: [
+                                  ColoredBox(
+                                    color: dailyLegends[index].color.toColor(),
+                                    child: SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 12,),
-                                Text(dailyLegends[index].title, style: TextStyle(color: Colors.white),)
-                              ],),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(
+                                    dailyLegends[index].title,
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -1568,6 +1639,110 @@ class _MyWidgetState extends State<MainNav> {
               child: display10DaysWidget(),
             ),
           )
+      ],
+    );
+  }
+
+  //prognosismap
+  Widget prognosisMap() {
+    final dailyProvider = context.read<Daily10Provider>().polygons;
+    return Stack(
+      children: [
+        GoogleMap(
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          mapType: mapType,
+          polygons: dailyProvider!,
+          initialCameraPosition: _kGooglePlex,
+          zoomGesturesEnabled: true,
+          tiltGesturesEnabled: false,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
+        
+    
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: selectIndex != 0
+                ? EdgeInsets.fromLTRB(20, 0, 0, 230)
+                : EdgeInsets.fromLTRB(20, 0, 0, 140),
+            child:
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mapType = MapType.normal;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: mapType == MapType.normal
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        'Normal',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                width: 12,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mapType = MapType.hybrid;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: mapType == MapType.hybrid
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        'Hybrid',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                width: 12,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mapType = MapType.satellite;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: mapType == MapType.satellite
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        'Satellite',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )),
+            ]),
+          ),
+        ),
+      
       ],
     );
   }
