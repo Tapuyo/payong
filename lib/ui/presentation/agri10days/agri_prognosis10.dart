@@ -121,20 +121,7 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'Actual Soil Moisture: Dry',
-                // style: kTextStyleWeather3,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              Text(
-                'Condition: Moist – Aparri and Basco; Dry – rest of the region',
+                '  No. of Rainy Days: 0-3',
                 // style: kTextStyleWeather3,
               ),
             ],
@@ -160,11 +147,28 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                '  No. of Rainy Days: 0-3',
+                'Actual Soil Moisture: Dry',
                 // style: kTextStyleWeather3,
               ),
             ],
           ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              Text(
+                'Condition: Moist – Aparri and Basco; Dry – rest of the region',
+                // style: kTextStyleWeather3,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
+
           // cloudIcons('CLOUDY'),
           SizedBox(
             height: 20,
@@ -209,13 +213,13 @@ class AgriPrognosis10Widget extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '18-33',
+                        '18-33°C',
                         style: kTextStyleWeather,
                       ),
-                      Text(
-                        '°',
-                        style: kTextStyleDeg,
-                      ),
+                      // Text(
+                      //   '°',
+                      //   style: kTextStyleDeg,
+                      // ),
                     ],
                   ),
                 ],
@@ -249,52 +253,73 @@ class AgriPrognosis10Widget extends HookWidget {
                       builder: (context) {
                         return FractionallySizedBox(
                           heightFactor: 0.9,
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height - 150,
+                                child: FittedBox(
+                                  child: Image.asset('assets/manila.jpeg'),
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                              Container(
+                                child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 50, 0, 0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(18),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.white,
-                                                  spreadRadius: 3),
-                                            ],
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20, 50, 0, 0),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(18),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.white,
+                                                      spreadRadius: 3),
+                                                ],
+                                              ),
+                                              height: 40,
+                                              width: 40,
+                                              child: Center(
+                                                child:
+                                                    Icon(Icons.arrow_back_ios),
+                                              ),
+                                            ),
                                           ),
-                                          height: 40,
-                                          width: 40,
-                                          child: Center(
-                                            child: Icon(Icons.arrow_back_ios),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20, 20, 20, 20),
+                                          child: Text(
+                                            'Upland and rainfed rice are still in harvesting stage. Some lowland and irrigated farms are still transplanting rice for third cropping while others are in harvesting stage. Other rice are still in vegetative stage. Corn are still in reproductive and harvesting stages while some corn are in vegetative stage. Planting of ampalaya, cowpea, eggplant, kangkong, lettuce, mustard, okra, pechay, string bean, patola, mungbean, and peanut is being done. Growing of tobacco continues. Harvesting of sweet corn, pepper, tomato, carrot, garlic, chili, mushroom, cabbage, onion, carrot, Chinese cabbage, tomato, pechay, squash, string bean, okra, tobacco, peanut, banana, mango, and other seasonal fruits and leafy vegetables is in progress. Fertilizer application and land preparation are still ongoing.',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black87),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                                  child: Text(
-                                    'Upland and rainfed rice are still in harvesting stage. Some lowland and irrigated farms are still transplanting rice for third cropping while others are in harvesting stage. Other rice are still in vegetative stage. Corn are still in reproductive and harvesting stages while some corn are in vegetative stage. Planting of ampalaya, cowpea, eggplant, kangkong, lettuce, mustard, okra, pechay, string bean, patola, mungbean, and peanut is being done. Growing of tobacco continues. Harvesting of sweet corn, pepper, tomato, carrot, garlic, chili, mushroom, cabbage, onion, carrot, Chinese cabbage, tomato, pechay, squash, string bean, okra, tobacco, peanut, banana, mango, and other seasonal fruits and leafy vegetables is in progress. Fertilizer application and land preparation are still ongoing.',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black87),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         );
                       });

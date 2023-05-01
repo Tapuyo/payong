@@ -1,23 +1,10 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:convert';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:payong/models/agri_forecast_model.dart';
-import 'package:payong/models/agri_forecast_temperature_model.dart';
 import 'package:payong/models/agri_forecast_weather_model.dart';
-import 'package:payong/models/agri_forecast_wind_model.dart';
-import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
-import 'package:payong/provider/daily_provider.dart';
-import 'package:payong/provider/init_provider.dart';
 import 'package:payong/services/agri_service.dart';
-import 'package:payong/services/daily_services.dart';
-import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
 

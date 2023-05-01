@@ -121,7 +121,6 @@ class _MyWidgetState extends State<MainNav> {
     setState(() {
       isRefresh = false;
     });
-    print('asdasd');
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
@@ -133,11 +132,13 @@ class _MyWidgetState extends State<MainNav> {
           polygons.clear();
 
           for (var name in result) {
+            print(name.locationCoordinate);
             List<dynamic> coordinates = name.locationCoordinate;
             List<LatLng> polygonCoords = [];
             if (coordinates.isNotEmpty) {
               for (var coor in coordinates) {
                 var latLng = coor['coordinate'].toString().split(",");
+                print(double.parse(latLng[0]).toString());
                 double latitude = double.parse(latLng[0]);
                 double longitude = double.parse(latLng[1]);
 
@@ -146,8 +147,7 @@ class _MyWidgetState extends State<MainNav> {
 
               dailyProvider.setPolygonDaiy(Polygon(
                   onTap: () async {
-                    
-                    
+                   
                   },
                   consumeTapEvents: true,
                   polygonId: PolygonId(name.dailyDetailsID),
@@ -369,140 +369,143 @@ class _MyWidgetState extends State<MainNav> {
       //   )
       // ]),
       body: mainTab(context),
-      floatingActionButton: ExpandableFabClass(
-        distanceBetween: 150.0,
-        subChildren: [
-          IconButton(
-            iconSize: 70,
-            color: kColorBlue,
-            onPressed: () => {
-              setState(() {
-                selectedDate = DateTime.now();
-                final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
-                polygons.clear();
-                title = 'Philippines';
-                selectIndex = 0;
-              })
-            },
-            icon: const Icon(
-              Icons.cloud_circle,
-              size: 35,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 00, 50),
+        child: ExpandableFabClass(
+          distanceBetween: 150.0,
+          subChildren: [
+            IconButton(
+              iconSize: 70,
+              color: kColorBlue,
+              onPressed: () => {
+                setState(() {
+                  selectedDate = DateTime.now();
+                  final dailyProvider = context.read<DailyProvider>();
+                  dailyProvider.setDateSelect(selectedDate);
+                  polygons.clear();
+                  title = 'Philippines';
+                  selectIndex = 0;
+                })
+              },
+              icon: const Icon(
+                Icons.cloud_circle,
+                size: 35,
+              ),
             ),
-          ),
-          IconButton(
-            iconSize: 70,
-            color: kColorBlue,
-            onPressed: () {
-              // setState(() {
-              //   selectedDate = DateTime.now();
-              //   final dailyProvider = context.read<DailyProvider>();
-              //   dailyProvider.setDateSelect(selectedDate);
-              //   polygons.clear();
-              //   title = 'Philippines';
-              //   selectIndex = 1;
-              // })
-              final snackBar = SnackBar(
-                content: const Text('Sorry, this module is under development.'),
-                // action: SnackBarAction(
-                //   label: 'Undo',
-                //   onPressed: () {
-                //     // Some code to undo the change.
-                //   },
-                // ),
-              );
-
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            icon: const Icon(Icons.cloud_done, size: 35),
-          ),
-          IconButton(
-            iconSize: 70,
-            color: kColorBlue,
-            onPressed: () {
-              // setState(() {
-              //   selectedDate = DateTime.now();
-              //   final dailyProvider = context.read<DailyProvider>();
-              //   dailyProvider.setDateSelect(selectedDate);
-              //   polygons.clear();
-              //   title = 'Philippines';
-              //   selectIndex = 2;
-              // })
-              final snackBar = SnackBar(
-                content: const Text('Sorry, this module is under development.'),
-                // action: SnackBarAction(
-                //   label: 'Undo',
-                //   onPressed: () {
-                //     // Some code to undo the change.
-                //   },
-                // ),
-              );
-
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            icon: const Icon(Icons.cloud_queue, size: 35),
-          ),
-          IconButton(
-            iconSize: 70,
-            color: kColorBlue,
-            onPressed: () {
-              // setState(() {
-              //   selectedDate = DateTime.now();
-              //   final dailyProvider = context.read<DailyProvider>();
-              //   dailyProvider.setDateSelect(selectedDate);
-              //   polygons.clear();
-              //   title = 'Philippines';
-              //   selectIndex = 3;
-              // })
-              final snackBar = SnackBar(
-                content: const Text('Sorry, this module is under development.'),
-                // action: SnackBarAction(
-                //   label: 'Undo',
-                //   onPressed: () {
-                //     // Some code to undo the change.
-                //   },
-                // ),
-              );
-
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
-          ),
-          IconButton(
-            iconSize: 70,
-            color: kColorBlue,
-            onPressed: () {
-              // setState(() {
-              //   selectedDate = DateTime.now();
-              //   final dailyProvider = context.read<DailyProvider>();
-              //   dailyProvider.setDateSelect(selectedDate);
-              //   polygons.clear();
-              //   title = 'Philippines';
-              //   selectIndex = 4;
-              // })
-              final snackBar = SnackBar(
-                content: const Text('Sorry, this module is under development.'),
-                // action: SnackBarAction(
-                //   label: 'Undo',
-                //   onPressed: () {
-                //     // Some code to undo the change.
-                //   },
-                // ),
-              );
-
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
-          ),
-        ],
+            IconButton(
+              iconSize: 70,
+              color: kColorBlue,
+              onPressed: () {
+                // setState(() {
+                //   selectedDate = DateTime.now();
+                //   final dailyProvider = context.read<DailyProvider>();
+                //   dailyProvider.setDateSelect(selectedDate);
+                //   polygons.clear();
+                //   title = 'Philippines';
+                //   selectIndex = 1;
+                // })
+                final snackBar = SnackBar(
+                  content: const Text('Sorry, this module is under development.'),
+                  // action: SnackBarAction(
+                  //   label: 'Undo',
+                  //   onPressed: () {
+                  //     // Some code to undo the change.
+                  //   },
+                  // ),
+                );
+      
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              icon: const Icon(Icons.cloud_done, size: 35),
+            ),
+            IconButton(
+              iconSize: 70,
+              color: kColorBlue,
+              onPressed: () {
+                // setState(() {
+                //   selectedDate = DateTime.now();
+                //   final dailyProvider = context.read<DailyProvider>();
+                //   dailyProvider.setDateSelect(selectedDate);
+                //   polygons.clear();
+                //   title = 'Philippines';
+                //   selectIndex = 2;
+                // })
+                final snackBar = SnackBar(
+                  content: const Text('Sorry, this module is under development.'),
+                  // action: SnackBarAction(
+                  //   label: 'Undo',
+                  //   onPressed: () {
+                  //     // Some code to undo the change.
+                  //   },
+                  // ),
+                );
+      
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              icon: const Icon(Icons.cloud_queue, size: 35),
+            ),
+            IconButton(
+              iconSize: 70,
+              color: kColorBlue,
+              onPressed: () {
+                // setState(() {
+                //   selectedDate = DateTime.now();
+                //   final dailyProvider = context.read<DailyProvider>();
+                //   dailyProvider.setDateSelect(selectedDate);
+                //   polygons.clear();
+                //   title = 'Philippines';
+                //   selectIndex = 3;
+                // })
+                final snackBar = SnackBar(
+                  content: const Text('Sorry, this module is under development.'),
+                  // action: SnackBarAction(
+                  //   label: 'Undo',
+                  //   onPressed: () {
+                  //     // Some code to undo the change.
+                  //   },
+                  // ),
+                );
+      
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
+            ),
+            IconButton(
+              iconSize: 70,
+              color: kColorBlue,
+              onPressed: () {
+                // setState(() {
+                //   selectedDate = DateTime.now();
+                //   final dailyProvider = context.read<DailyProvider>();
+                //   dailyProvider.setDateSelect(selectedDate);
+                //   polygons.clear();
+                //   title = 'Philippines';
+                //   selectIndex = 4;
+                // })
+                final snackBar = SnackBar(
+                  content: const Text('Sorry, this module is under development.'),
+                  // action: SnackBarAction(
+                  //   label: 'Undo',
+                  //   onPressed: () {
+                  //     // Some code to undo the change.
+                  //   },
+                  // ),
+                );
+      
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1288,7 +1291,7 @@ class _MyWidgetState extends State<MainNav> {
           polygons: dailyProvider!,
           initialCameraPosition: _kGooglePlex,
           zoomGesturesEnabled: true,
-          tiltGesturesEnabled: false,
+          tiltGesturesEnabled: true,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },

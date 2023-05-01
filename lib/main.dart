@@ -5,6 +5,7 @@ import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
+import 'package:payong/provider/mcao_provider.dart';
 import 'package:payong/routes/route_generator.dart';
 import 'package:payong/routes/routes.dart';
 import 'package:payong/ui/mob_main.dart';
@@ -20,6 +21,7 @@ void main() async{
       ChangeNotifierProvider(create: (_) => DailyProvider()),
       ChangeNotifierProvider(create: (_) => AgriProvider()),
        ChangeNotifierProvider(create: (_) => Daily10Provider()),
+       ChangeNotifierProvider(create: (_) => McaoProvider()),
     ],
     child:  MyApp(),
   ));

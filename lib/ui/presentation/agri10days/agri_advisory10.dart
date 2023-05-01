@@ -40,7 +40,7 @@ class AgriAdvisory10Widget extends HookWidget {
         context.select((AgriProvider p) => p.agriAdvModels);
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgriAdvisory(context, id, false);
+        await AgriServices.getAgriAdvisory(context, id, false, true);
       });
       return;
     }, [id]);
@@ -69,8 +69,9 @@ class AgriAdvisory10Widget extends HookWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height + 100,
                         child: ListView.builder(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 400),
-                          scrollDirection: Axis.vertical,
+
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 200),
+                          scrollDirection: Axis.horizontal,
                           itemCount: dailyAgriDetails.length,
                           itemBuilder: (context, index) {
                             return advisoryWidget(

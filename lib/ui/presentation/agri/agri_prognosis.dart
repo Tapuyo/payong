@@ -194,7 +194,7 @@ class AgriPrognosisWidget extends HookWidget {
                               style: kTextStyleWeather,
                             ),
                             Text(
-                              '°',
+                              '°C',
                               style: kTextStyleDeg,
                             ),
                           ],

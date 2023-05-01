@@ -44,29 +44,35 @@ class AgriAdvisoryWidget extends HookWidget {
         context.select((AgriProvider p) => p.agriAdvModels);
     ValueNotifier titleChoose = useState('');
     ValueNotifier contentChoose = useState('');
+    ValueNotifier carouselInt = useState(0);
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgriAdvisory(context, id, true);
+        if (agriTab.value == 0) {
+          await AgriServices.getAgriAdvisory(context, id, true, true);
+        } else {
+          await AgriServices.getAgriAdvisory(context, id, true, false);
+        }
       });
       return;
-    }, [id]);
+    }, [id, agriTab.value]);
 
     return dailyAgriDetails != null
         ? Stack(
-          children: [
-            SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 150,
-            child: FittedBox(
-              child: Image.asset('assets/manila.jpeg'),
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-           Container(
-              width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 150,
-            child: ColoredBox(color: Colors.white54),),
-            SizedBox(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 150,
+                child: FittedBox(
+                  child: Image.asset('assets/manila.jpeg'),
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 150,
+                child: ColoredBox(color: Colors.white54),
+              ),
+              SizedBox(
                 height: MediaQuery.of(context).size.height - 180,
                 child: SingleChildScrollView(
                   child: Padding(
@@ -92,9 +98,10 @@ class AgriAdvisoryWidget extends HookWidget {
                                 flex: 1,
                                 child: GestureDetector(
                                   onTap: () async {
+                                    contentChoose.value = '';
                                     agriTab.value = 0;
                                     await AgriServices.getAgriAdvisory(
-                                        context, id, true);
+                                        context, id, true, true);
                                     buttonCarouselController.nextPage(
                                         duration: Duration(milliseconds: 300),
                                         curve: Curves.linear);
@@ -119,14 +126,17 @@ class AgriAdvisoryWidget extends HookWidget {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 8,),
+                              SizedBox(
+                                width: 8,
+                              ),
                               Expanded(
                                 flex: 1,
                                 child: GestureDetector(
                                   onTap: () async {
+                                    contentChoose.value = '';
                                     agriTab.value = 1;
                                     await AgriServices.getAgriAdvisory(
-                                        context, id, true);
+                                        context, id, true, false);
                                   },
                                   child: Container(
                                     // width: 120,
@@ -156,6 +166,10 @@ class AgriAdvisoryWidget extends HookWidget {
                           CarouselSlider(
                             carouselController: buttonCarouselController,
                             options: CarouselOptions(
+                              onPageChanged: (value,val){
+                                carouselInt.value = value;
+                                  contentChoose.value = dailyAgriDetails[value].content;
+                              },
                                 height: 100.0,
                                 viewportFraction: .9,
                                 autoPlay: false,
@@ -174,14 +188,14 @@ class AgriAdvisoryWidget extends HookWidget {
                               margin: const EdgeInsets.all(15.0),
                               padding: const EdgeInsets.all(3.0),
                               decoration: BoxDecoration(
-                                color: Colors.white30,
+                                  color: Colors.white60,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.black)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   contentChoose.value,
-                                  style: kTextStyleSubtitle4b,
+                                  style: TextStyle(color: Colors.black),
                                 ),
                               ),
                             ),
@@ -190,9 +204,13 @@ class AgriAdvisoryWidget extends HookWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
+                                  
                                   buttonCarouselController.nextPage(
-                                      duration: Duration(milliseconds: 300),
+                                      duration: Duration(milliseconds: 100),
                                       curve: Curves.linear);
+                                  
+                                    titleChoose.value  = dailyAgriDetails[carouselInt.value].title;
+
                                 },
                                 child: Container(
                                   width: 120,
@@ -215,8 +233,8 @@ class AgriAdvisoryWidget extends HookWidget {
                   ),
                 ),
               ),
-          ],
-        )
+            ],
+          )
         : SizedBox();
   }
 
@@ -235,17 +253,18 @@ class AgriAdvisoryWidget extends HookWidget {
             // width: 120,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.black),
-              color: titleChoose.value == agriAdsModel!.title
-                  ? kColorBlue
-                  : Colors.white,
+              border: Border.all(color: Colors.black),
+              color: Colors.white,
             ),
             height: 35,
             child: Center(
-              child: Text(
-                agriAdsModel.title,
-                style: kTextStyleSubtitle4b,
-                textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  agriAdsModel!.title,
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

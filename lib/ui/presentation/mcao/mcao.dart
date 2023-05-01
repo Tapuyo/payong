@@ -4,9 +4,13 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:payong/provider/mcao_provider.dart';
+import 'package:payong/services/mcao_services.dart';
 import 'package:payong/ui/presentation/mcao/components/assessment.dart';
 import 'package:payong/ui/presentation/mcao/components/outlook.dart';
+import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class mCaOPage extends StatefulWidget {
@@ -41,6 +45,54 @@ class _mCaOPageState extends State<mCaOPage>
     }
   }
 
+  getMapAll(BuildContext context)async{
+       await getMap(context);
+  }
+
+  Future<void> getMap(BuildContext context) async {
+  
+    final dailyProvider = context.read<McaoProvider>();
+    dailyProvider.setPolygonDaiyClear();
+    Set<Polygon> polygons = {};
+    for (var i = 1; i < 2; i++) {
+      final result = await McaoService.getAssessment(context);
+
+      try {
+          polygons.clear();
+
+          for (var name in result) {
+            print(name.provinceID);
+            List<dynamic> coordinates = name.coordinates;
+            List<LatLng> polygonCoords = [];
+            if (coordinates.isNotEmpty) {
+              for (var coor in coordinates) {
+                var latLng = coor['coordinate'].toString().split(",");
+                print(double.parse(latLng[0]).toString());
+                double latitude = double.parse(latLng[0]);
+                double longitude = double.parse(latLng[1]);
+
+                polygonCoords.add(LatLng(longitude, latitude));
+              }
+               Color lxColor = name.color.toColor();
+              dailyProvider.setPolygonDaiy(Polygon(
+                  onTap: () async {
+                   
+                  },
+                  consumeTapEvents: true,
+                  polygonId: PolygonId(name.provinceID),
+                  points: polygonCoords,
+                  strokeWidth: 4,
+                  fillColor: lxColor,
+                  strokeColor: lxColor));
+            }
+          }
+      } catch (e) {
+        print('error $e');
+      }
+    }
+   
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -49,6 +101,7 @@ class _mCaOPageState extends State<mCaOPage>
 
   @override
   Widget build(BuildContext context) {
+    getMapAll(context);
     return Container(
       child: Column(children: [
         Padding(

@@ -91,8 +91,10 @@ abstract class AgriServices {
   }
 
   static Future<void> getAgriAdvisory(
-      BuildContext context, String id, bool daily) async {
+      BuildContext context, String id, bool daily, bool farm) async {
+
         final dailyProvider = context.read<AgriProvider>();
+        
         dailyProvider.clearAdvisory();
      final responseParent = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/agri_info.php'));
@@ -102,12 +104,15 @@ abstract class AgriServices {
     print(agriID);
     var response ;
     if (daily) {
-      print('Agri  daily');
-      response = await http.get(
-          Uri.parse('http://18.139.91.35/payong/API/agri_daily_advisory.php'));
+      if(farm){
+  response = await http.get(
+          Uri.parse('http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm'));
+      }else{
+  response = await http.get(
+          Uri.parse('http://18.139.91.35/payong/API/agri_daily_advisory.php?category=fishing'));
+      }
+    
     } else {
-      print('Agri 10  days');
-      print('http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID');
       response = await http.get(Uri.parse(
           'http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID'));
     }
@@ -303,7 +308,7 @@ abstract class AgriServices {
     var jsondata = json.decode(response.body);
 
     List<Daily10MapModel> newDailyList = [];
-    print(jsondata.toString());
+
     for (var u in jsondata) {
       Daily10MapModel daily = Daily10MapModel(
         u['RegionID'] ?? '',

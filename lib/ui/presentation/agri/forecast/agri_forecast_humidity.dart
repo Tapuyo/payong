@@ -95,7 +95,7 @@ class AgriForecastHumidityWidget extends HookWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${dailyAgriDetails[index].minHumidity}% - ${dailyAgriDetails[index].maxHumidity}%',
+                                    '${dailyAgriDetails[index].minHumidity}%',
                                     style: GoogleFonts.roboto(
                                         textStyle: const TextStyle(
                                       color: Colors.white,

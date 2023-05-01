@@ -111,6 +111,7 @@ class AgriSynopsisWidget extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Container(
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Colors.white60,
                     borderRadius: BorderRadius.circular(10),
@@ -118,7 +119,7 @@ class AgriSynopsisWidget extends HookWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
                   child: Text(
-                    'Northeast Monsoon affecting Luzon. Meanwhile, at 3:00 AM today, the Low Pressure Area (LPA) wasestimated based on all available data at 340 km Southeast of Hinatuan, Surigao del Sur or 320 km East Southeast ofDavao City (6.0°N, 128.3°E).',
+                    agriSypnosis.content,
                     style: GoogleFonts.roboto(
                         textStyle: const TextStyle(
                             color: Colors.black54,

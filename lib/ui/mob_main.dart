@@ -540,7 +540,7 @@ class _MainPageState extends State<MainPage> {
                                 height: 12,
                               ),
                               Text(
-                                'Monthly \nCAO',
+                                'Monthly Climate \nAssessment \n& Outlook',
                                 style: kTextStyleSubtitle12,
                                 textAlign: TextAlign.center,
                               )
