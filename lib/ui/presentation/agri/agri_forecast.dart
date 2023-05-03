@@ -56,158 +56,170 @@ class AgriForecastWidget extends HookWidget {
                         child: Column(
                           children: <Widget>[
                             SizedBox(height: 20,),
-                            SizedBox(
-                              height: 30.0,
-                              child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 4;
-                                      },
-                                      child: Container(
-                                        width: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 4
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Weather',
-                                            style: kTextStyleSubtitle4b,
+                            Stack(
+                              children: [
+                                SizedBox(
+                                  height: 30.0,
+                                  child: Padding(
+                                     padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                    child: ListView(
+                                     
+                                        scrollDirection: Axis.horizontal,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              agriTab.value = 4;
+                                            },
+                                            child: Container(
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: agriTab.value == 4
+                                                    ? dayNow
+                                                        ? kColorSecondary
+                                                        : kColorBlue
+                                                    : Colors.white,
+                                              ),
+                                              height: 35,
+                                              child: Center(
+                                                child: Text(
+                                                  'Weather',
+                                                  style: kTextStyleSubtitle4b,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 3;
-                                      },
-                                      child: Container(
-                                        width: 60,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 3
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Wind',
-                                            style: kTextStyleSubtitle4b,
+                                          GestureDetector(
+                                            onTap: () {
+                                              agriTab.value = 3;
+                                            },
+                                            child: Container(
+                                              width: 60,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: agriTab.value == 3
+                                                    ? dayNow
+                                                        ? kColorSecondary
+                                                        : kColorBlue
+                                                    : Colors.white,
+                                              ),
+                                              height: 35,
+                                              child: Center(
+                                                child: Text(
+                                                  'Wind',
+                                                  style: kTextStyleSubtitle4b,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                     GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 2;
-                                      },
-                                      child: Container(
-                                        width: 110,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 2
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Temperature',
-                                            style: kTextStyleSubtitle4b,
+                                           GestureDetector(
+                                            onTap: () {
+                                              agriTab.value = 2;
+                                            },
+                                            child: Container(
+                                              width: 110,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: agriTab.value == 2
+                                                    ? dayNow
+                                                        ? kColorSecondary
+                                                        : kColorBlue
+                                                    : Colors.white,
+                                              ),
+                                              height: 35,
+                                              child: Center(
+                                                child: Text(
+                                                  'Temperature',
+                                                  style: kTextStyleSubtitle4b,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 0;
-                                      },
-                                      child: Container(
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 0
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Relative Humidity',
-                                            style: kTextStyleSubtitle4b,
+                                          GestureDetector(
+                                            onTap: () {
+                                              agriTab.value = 0;
+                                            },
+                                            child: Container(
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: agriTab.value == 0
+                                                    ? dayNow
+                                                        ? kColorSecondary
+                                                        : kColorBlue
+                                                    : Colors.white,
+                                              ),
+                                              height: 35,
+                                              child: Center(
+                                                child: Text(
+                                                  'Relative Humidity',
+                                                  style: kTextStyleSubtitle4b,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 1;
-                                      },
-                                      child: Container(
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 1
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Leaf Wetness',
-                                            style: kTextStyleSubtitle4b,
+                                          GestureDetector(
+                                            onTap: () {
+                                              agriTab.value = 1;
+                                            },
+                                            child: Container(
+                                              width: 120,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: agriTab.value == 1
+                                                    ? dayNow
+                                                        ? kColorSecondary
+                                                        : kColorBlue
+                                                    : Colors.white,
+                                              ),
+                                              height: 35,
+                                              child: Center(
+                                                child: Text(
+                                                  'Leaf Wetness',
+                                                  style: kTextStyleSubtitle4b,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        agriTab.value = 5;
-                                      },
-                                      child: Container(
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: agriTab.value == 5
-                                              ? dayNow
-                                                  ? kColorSecondary
-                                                  : kColorBlue
-                                              : Colors.white,
-                                        ),
-                                        height: 35,
-                                        child: Center(
-                                          child: Text(
-                                            'Soil Moisture',
-                                            style: kTextStyleSubtitle4b,
+                                          GestureDetector(
+                                            onTap: () {
+                                              agriTab.value = 5;
+                                            },
+                                            child: Container(
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: agriTab.value == 5
+                                                    ? dayNow
+                                                        ? kColorSecondary
+                                                        : kColorBlue
+                                                    : Colors.white,
+                                              ),
+                                              height: 35,
+                                              child: Center(
+                                                child: Text(
+                                                  'Soil Moisture',
+                                                  style: kTextStyleSubtitle4b,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    
-                                    
-                                  ]),
+                                          
+                                          
+                                        ]),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Icon(Icons.arrow_forward_ios, color: Colors.grey,)
+                                )
+                              ],
                             ),
                           ],
                         ),

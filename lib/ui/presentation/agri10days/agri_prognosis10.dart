@@ -6,9 +6,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:payong/models/agri_10_prognosis.dart';
 import 'package:payong/models/daily_model.dart';
+import 'package:payong/provider/agri_provider.dart';
+import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
+import 'package:payong/services/agri_service.dart';
 import 'package:payong/services/daily_services.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
@@ -29,33 +33,21 @@ class AgriPrognosis10Widget extends HookWidget {
     final highTempColorCode = useState('#3d85c6');
     final selectIndex = useState<int>(0);
     final showExpand = useState<bool>(false);
-
-    if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
-      //evening
-      dayNow = false;
-    } else {
-      //day
-      dayNow = false;
-    }
+    // final dailyDetails = useState<List<Agri10Prognosis>>([]);
 
     final bool isRefresh = context.select((DailyProvider p) => p.isRefresh);
-    final String id = context.select((DailyProvider p) => p.dailyIDSelected);
+    final id = useState(context.select((AgriProvider p) => p.progID));
     final String? locId = context.select((InitProvider p) => p.myLocationId);
-    final DailyModel? dailyDetails =
-        context.select((DailyProvider p) => p.dailyDetails);
+    final List<Agri10Prognosis> dailyDetails =
+        context.select((AgriProvider p) => p.progList);
     useEffect(() {
       Future.microtask(() async {
-        final dailyProvider = context.read<DailyProvider>();
-        String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
-        // if (id.isEmpty) {
-        //   print(locId);
-        //   await DailyServices.getDailyDetails(context, locId!, dt);
-        // } else {
-        //   await DailyServices.getDailyDetails(context, id, dt);
-        // }
+        await AgriServices.getProgDetails(context, id.value);
       });
       return;
     }, [id]);
+
+    print(dailyDetails.last.regionDescription.toString());
 
     return Container(
       height: MediaQuery.of(context).size.height - 200,
@@ -89,14 +81,15 @@ class AgriPrognosis10Widget extends HookWidget {
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Divider(),
         ),
-        Expanded(child: listPrognosis(context, 'Region 1', showExpand)),
+        if (dailyDetails.isNotEmpty && dailyDetails != [])
+          Expanded(child: listPrognosis(context, dailyDetails, showExpand)),
         // Expanded(child: listPrognosis('Region 2', showExpand))
       ]),
     );
   }
 
-  Widget listPrognosis(
-      BuildContext context, String title, ValueNotifier showExpand) {
+  Widget listPrognosis(BuildContext context, List<Agri10Prognosis> dailyDetails,
+      ValueNotifier showExpand) {
     return ListView(
       // physics: NeverScrollableScrollPhysics(),
       children: [
@@ -106,7 +99,7 @@ class AgriPrognosis10Widget extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                title,
+                dailyDetails.last.regionDescription,
                 style: kTextStyleSubtitle4,
               ),
             ],
@@ -121,7 +114,7 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                '  No. of Rainy Days: 0-3',
+                '  No. of Rainy Days: ${ dailyDetails.last.rainyDays}',
                 // style: kTextStyleWeather3,
               ),
             ],
@@ -134,7 +127,7 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                ' Relative Humidity (%): 45 – 96',
+                ' Relative Humidity (%): ${ dailyDetails.last.relativeHumidity}',
                 // style: kTextStyleWeather3,
               ),
             ],
@@ -190,7 +183,7 @@ class AgriPrognosis10Widget extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '0-10mm',
+                        '${ dailyDetails.last.rainFall}mm',
                         style: kTextStyleWeather,
                       ),
                     ],
@@ -228,7 +221,7 @@ class AgriPrognosis10Widget extends HookWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Row(
               children: [
                 Text(
@@ -239,7 +232,7 @@ class AgriPrognosis10Widget extends HookWidget {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 20,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -307,8 +300,7 @@ class AgriPrognosis10Widget extends HookWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               20, 20, 20, 20),
-                                          child: Text(
-                                            'Upland and rainfed rice are still in harvesting stage. Some lowland and irrigated farms are still transplanting rice for third cropping while others are in harvesting stage. Other rice are still in vegetative stage. Corn are still in reproductive and harvesting stages while some corn are in vegetative stage. Planting of ampalaya, cowpea, eggplant, kangkong, lettuce, mustard, okra, pechay, string bean, patola, mungbean, and peanut is being done. Growing of tobacco continues. Harvesting of sweet corn, pepper, tomato, carrot, garlic, chili, mushroom, cabbage, onion, carrot, Chinese cabbage, tomato, pechay, squash, string bean, okra, tobacco, peanut, banana, mango, and other seasonal fruits and leafy vegetables is in progress. Fertilizer application and land preparation are still ongoing.',
+                                          child: Text(dailyDetails.last.content,
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.black87),

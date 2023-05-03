@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:convert';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:payong/models/agri_10_days_forecast.dart';
+import 'package:payong/models/agri_10_forecast_model.dart';
 import 'package:payong/models/agri_forecast_model.dart';
 import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
@@ -21,6 +23,8 @@ import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
 
 bool dayNow = true;
+CarouselController buttonCarouselController = CarouselController();
+List<String> tb = ['Weather', 'Wind', 'Enso'];
 
 class AgriForecast10Widget extends HookWidget {
   const AgriForecast10Widget({Key? key}) : super(key: key);
@@ -42,826 +46,581 @@ class AgriForecast10Widget extends HookWidget {
     final String id = context.select((AgriProvider p) => p.dailyIDSelected);
     final List<Agri10DaysForecastvModel>? dailyAgriDetails =
         context.select((AgriProvider p) => p.agri10Forecasts);
+    final agri = useState<List<AgriRegionalForecast>>([]);
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgri10Days(context, id);
+        agri.value = await AgriServices.getAgri10DaysRegional(context, id);
+        // await AgriServices.getAgri10Days(context, id);
       });
       return;
     }, const []);
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
+    return agri.value.isNotEmpty
+        ? loadDetails(context, isScrollControlled, agriTab, agri.value)
+        : Center(
+            child: CircularProgressIndicator(),
+          );
+  }
+
+  loadDetails(BuildContext context, ValueNotifier isScrollControlled,
+      ValueNotifier agriTab, List<AgriRegionalForecast> agri) {
+    print(agri.last.content);
+    return SingleChildScrollView(
+      child: Container(
+        child: Stack(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () async {
-                    agriTab.value = 0;
-                    mapAsset.value = 'assets/map11.png';
-                  },
-                  child: Container(
-                    // width: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: agriTab.value == 0
-                          ? dayNow
-                              ? kColorSecondary
-                              : kColorBlue
-                          : Colors.white,
-                    ),
-                    height: 35,
-                    child: Center(
-                      child: Text(
-                        'Actual Rainfall',
-                        style: kTextStyleSubtitle4b,
-                      ),
-                    ),
-                  ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 150,
+                child: FittedBox(
+                  child: Image.asset('assets/manila.jpeg'),
+                  fit: BoxFit.fitHeight,
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () async {
-                    agriTab.value = 1;
-                    mapAsset.value = 'assets/map11.png';
-                  },
-                  child: Container(
-                    // width: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: agriTab.value == 1
-                          ? dayNow
-                              ? kColorSecondary
-                              : kColorBlue
-                          : Colors.white,
+              SizedBox(
+                 width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 150,
+                child: ListView(
+                  children: [
+                    CarouselSlider(
+                      carouselController: buttonCarouselController,
+                      options: CarouselOptions(
+                          onPageChanged: (value, val) {
+                            // carouselInt.value = value;
+                          },
+                          height: MediaQuery.of(context).size.height - 300,
+                          viewportFraction: .9,
+                          autoPlay: false,
+                          enlargeFactor: .4),
+                      items: tb.map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              child: Column(
+                                children: [
+                                  if (i == 'Weather') ...{
+                                    weatherWidget(context, isScrollControlled,
+                                        agriTab, agri)
+                                  } else if (i == 'Wind') ...{
+                                    windWidget(context, agri),
+                                    galeWidget(context, agri)
+                                  } else if (i == 'Enso') ...{
+                                    ensoWidget(context)
+                                  } else ...{
+                                    weatherWidget(context, isScrollControlled,
+                                        agriTab, agri)
+                                  }
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
                     ),
-                    height: 35,
-                    child: Center(
-                      child: Text(
-                        'Normal Rainfall',
-                        style: kTextStyleSubtitle4b,
-                      ),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            buttonCarouselController.nextPage(
+                                duration: Duration(milliseconds: 100),
+                                curve: Curves.linear);
+                          },
+                          child: Container(
+                            width: 300,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: kColorBlue,
+                            ),
+                            height: 35,
+                            child: Center(
+                              child: Text(
+                                'Next',
+                                style: kTextStyleSubtitle4b,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
               ),
+            ]),
+      ),
+    );
+    //   },
+    // );
+  }
+
+  Container weatherWidget(
+      BuildContext context,
+      ValueNotifier<dynamic> isScrollControlled,
+      ValueNotifier<dynamic> agriTab,
+      List<AgriRegionalForecast> agri) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height - 300,
+      child: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 30, 10),
+                  child: InkResponse(
+                    onTap: () {
+                      loadMap(context, '', isScrollControlled, agriTab);
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        FontAwesomeIcons.mapLocation,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )),
             ],
           ),
-        ),
-        Container(
-          child: GestureDetector(
-            onTap: () {
-              loadDetails(context, isScrollControlled);
-            },
-            child: Center(child: Image.asset(mapAsset.value)),
-          ),
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                loadDetails(context, isScrollControlled);
-              },
-              child: Container(
-                // width: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: kColorBlue,
-                ),
-                height: 35,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                  child: Center(
-                    child: Text(
-                      'See details',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 200,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12), color: Colors.white70
+                  // gradient: LinearGradient(
+                  //     // ignore: prefer_const_literals_to_create_immutables
+                  //     colors: [
+                  //       Color(0xFF005EEB),
+                  //       Color(0xFF489E59),
+                  //     ],
+                  //     begin: Alignment.topCenter,
+                  //     end: Alignment.bottomCenter,
+                  //     tileMode: TileMode.clamp),
+                  ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 10,),
+                  Text(
+                    'Weather systems that will likely affected the whole country',
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 2.5,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: agri.last.weatherSystem.length,
+                      itemBuilder: (context, i) {
+                        return Column(
+                          children: [
+                            SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Image.network(
+                                    agri.last.weatherSystem[i].icon)),
+                            SizedBox(
+                              width: 200,
+                              child: Text(
+                                agri.last.weatherSystem[i].name,
+                                style: TextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
+                                // overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
-                ),
+                  
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return FractionallySizedBox(
+                                  heightFactor: 0.9,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                20, 20, 0, 0),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                isScrollControlled.value =
+                                                    false;
+                                                Navigator.pop(context);
+                                                isScrollControlled.value = true;
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.white,
+                                                        spreadRadius: 3),
+                                                  ],
+                                                ),
+                                                height: 40,
+                                                width: 40,
+                                                child: Center(
+                                                  child: Icon(Icons
+                                                      .arrow_downward_rounded),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 10),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white60,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: Colors.black)),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                decoration: BoxDecoration(
+                                                  color: Color.fromRGBO(
+                                                      165, 70, 238, 1),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    agri.last.title,
+                                                    style: GoogleFonts.roboto(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily: 'NunitoSans',
+                                                    )),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  agri.last.title,
+                                                  style: GoogleFonts.roboto(
+                                                      textStyle:
+                                                          const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'NunitoSans',
+                                                  )),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                        child: Container(
+                          // width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          height: 35,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                            child: Center(
+                              child: Text(
+                                'Read more',
+                                style:
+                                    TextStyle(color: kColorBlue, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ],
+            ),
+          ),
+          // windWidget(context),
+          // galeWidget(context),
+          // ensoWidget(context),
+        ],
+      ),
     );
   }
 
-  loadDetails(BuildContext context, ValueNotifier isScrollControlled) {
-    return showModalBottomSheet<void>(
-      isScrollControlled: isScrollControlled.value,
-      context: context,
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Container(
-            child: Stack(
-                // crossAxisAlignment: CrossAxisAlignment.start,
+  Padding ensoWidget(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 150,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white70),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height + 200,
-                    child: FittedBox(
-                      child: Image.asset('assets/manila.jpeg'),
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
-                        child: GestureDetector(
-                          onTap: () {
-                            isScrollControlled.value = false;
-                            Navigator.pop(context);
-                            isScrollControlled.value = true;
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(color: Colors.white, spreadRadius: 3),
-                              ],
-                            ),
-                            height: 40,
-                            width: 40,
-                            child: Center(
-                              child: Icon(Icons.arrow_back_ios),
-                            ),
-                          ),
-                        ),
+                      SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.asset('assets/windicon.png')),
+                      Text(
+                        'ENSO Alert',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 300,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                                // ignore: prefer_const_literals_to_create_immutables
-                                colors: [
-                                  Color(0xFF005EEB),
-                                  Color(0xFF489E59),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'Weather systems that will likely affected the whole country',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                              Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: Image.asset(
-                                              'assets/waetherforecast1.png')),
-                                      Text(
-                                        'NORTHEAST\nMONSOON',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: Image.asset(
-                                              'assets/weatherforecast2.png')),
-                                      Text(
-                                        'SHEARLINE',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: Image.asset(
-                                              'assets/weatherforecast3.png')),
-                                      Text(
-                                        'LOW\nPREASURE\nAREA(LPA)',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          builder: (context) {
-                                            return FractionallySizedBox(
-                                              heightFactor: 0.9,
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                20, 20, 0, 0),
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            isScrollControlled
-                                                                .value = false;
-                                                            Navigator.pop(
-                                                                context);
-                                                            isScrollControlled
-                                                                .value = true;
-                                                          },
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          18),
-                                                              color:
-                                                                  Colors.white,
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    spreadRadius:
-                                                                        3),
-                                                              ],
-                                                            ),
-                                                            height: 40,
-                                                            width: 40,
-                                                            child: Center(
-                                                              child: Icon(Icons
-                                                                  .arrow_downward_rounded),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .fromLTRB(
-                                                        20, 10, 20, 10),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white60,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .black)),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      165,
-                                                                      70,
-                                                                      238,
-                                                                      1),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10)),
-                                                            ),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Text(
-                                                                'Cloudy Skies with light rains due to NE monsoon',
-                                                                style: GoogleFonts
-                                                                    .roboto(
-                                                                        textStyle:
-                                                                            const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontFamily:
-                                                                      'NunitoSans',
-                                                                )),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Expanded(
-                                                                    child:
-                                                                        Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.fromLTRB(
-                                                                              8,
-                                                                              0,
-                                                                              8,
-                                                                              10),
-                                                                      child:
-                                                                          Text(
-                                                                        'Cagayan Valley Aurora, Rizal',
-                                                                        style:
-                                                                            kTextStyleSubtitle4b,
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                )),
-                                                                Expanded(
-                                                                  child: SizedBox(
-                                                                      width:
-                                                                          100,
-                                                                      height:
-                                                                          100,
-                                                                      child: Image
-                                                                          .asset(
-                                                                              'assets/cloudy_rain.png')),
-                                                                )
-                                                              ]),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .fromLTRB(
-                                                        20, 10, 20, 10),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white60,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .black)),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      165,
-                                                                      70,
-                                                                      238,
-                                                                      1),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10)),
-                                                            ),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Text(
-                                                                'Cloudy with scattered rain',
-                                                                style: GoogleFonts
-                                                                    .roboto(
-                                                                        textStyle:
-                                                                            const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontFamily:
-                                                                      'NunitoSans',
-                                                                )),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Expanded(
-                                                                    child:
-                                                                        Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.fromLTRB(
-                                                                              8,
-                                                                              0,
-                                                                              8,
-                                                                              10),
-                                                                      child:
-                                                                          Text(
-                                                                        'Eastern Visayas',
-                                                                        style:
-                                                                            kTextStyleSubtitle4b,
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                )),
-                                                                Expanded(
-                                                                  child: SizedBox(
-                                                                      width:
-                                                                          100,
-                                                                      height:
-                                                                          100,
-                                                                      child: Image
-                                                                          .asset(
-                                                                              'assets/cloudy.png')),
-                                                                )
-                                                              ]),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          });
-                                    },
-                                    child: Container(
-                                      // width: 80,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                      ),
-                                      height: 35,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            20, 8, 20, 8),
-                                        child: Center(
-                                          child: Text(
-                                            'Read more',
-                                            style: TextStyle(
-                                                color: kColorBlue,
-                                                fontSize: 16),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                                // ignore: prefer_const_literals_to_create_immutables
-                                colors: [
-                                  Color(0xFF005EEB),
-                                  Color(0xFF489E59),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                            width: 100,
-                                            height: 100,
-                                            child: Image.asset(
-                                                'assets/windicon.png')),
-                                        Text(
-                                          'WIND',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Generally northeast to east over \nthe rest of the country during \nthe forecast period',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        GestureDetector(
-                                          onTap: (){
-                                            loadReadmore(context, 'Generally northeast to east over the rest of the country during the forecast period');
-                                          },
-                                          child: Container(
-                                            // width: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.white,
-                                            ),
-                                            height: 35,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 8, 20, 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Read more',
-                                                  style: TextStyle(
-                                                      color: kColorBlue,
-                                                      fontSize: 16),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                                // ignore: prefer_const_literals_to_create_immutables
-                                colors: [
-                                  Color(0xFF005EEB),
-                                  Color(0xFF489E59),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                            width: 100,
-                                            height: 100,
-                                            child: Image.asset(
-                                                'assets/galeicon.png')),
-                                        Text(
-                                          'GALE',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'moderate \nto \nrough',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          'slight \nto \nrough',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Western and northern \nseaboard  of northern\n luzon and the\n eastern seaboard\n of the country',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          'The rest of the country',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        GestureDetector(
-                                          onTap: (){
-                                            loadReadmore(context, 'Western and northern seaboard  of northern luzon and the eastern seaboard of the country');
-                                          },
-                                          child: Container(
-                                            // width: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.white,
-                                            ),
-                                            height: 35,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 8, 20, 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Read more',
-                                                  style: TextStyle(
-                                                      color: kColorBlue,
-                                                      fontSize: 16),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: LinearGradient(
-                                // ignore: prefer_const_literals_to_create_immutables
-                                colors: [
-                                  Color(0xFF005EEB),
-                                  Color(0xFF489E59),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                tileMode: TileMode.clamp),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                            width: 100,
-                                            height: 100,
-                                            child: Image.asset(
-                                                'assets/windicon.png')),
-                                        Text(
-                                          'ENSO Alert System Status',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: (){
-                                            loadReadmore(context, 'La Niña still continues to weaken and transition to ENSO-neutral conditions during February-March-April (FMA) 2023 season is expected. La Nina increases the likelihood of having above normal rainfall conditions that could lead to potential adverse impacts (such as heavy rainfall,floods, flashfloods and landslides) over highly vulnerable areas.');
-                                          },
-                                          child: Container(
-                                            // width: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.white,
-                                            ),
-                                            height: 35,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 8, 20, 8),
-                                              child: Center(
-                                                child: Text(
-                                                  'Read more',
-                                                  style: TextStyle(
-                                                      color: kColorBlue,
-                                                      fontSize: 16),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // WidgetBody(context, dailyAgriDetails!)
                     ],
                   ),
-                ]),
-          ),
-        );
-      },
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          loadReadmore(context,
+                              'La Niña still continues to weaken and transition to ENSO-neutral conditions during February-March-April (FMA) 2023 season is expected. La Nina increases the likelihood of having above normal rainfall conditions that could lead to potential adverse impacts (such as heavy rainfall,floods, flashfloods and landslides) over highly vulnerable areas.');
+                        },
+                        child: Container(
+                          // width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          height: 35,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                            child: Center(
+                              child: Text(
+                                'Read more',
+                                style:
+                                    TextStyle(color: kColorBlue, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding galeWidget(BuildContext context, List<AgriRegionalForecast> agri) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 200,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white70),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                 Column(
+                    children: [
+                      SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.network(agri.last.galeWarning.last.icon)),
+                      Text(
+                        'Gale',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  
+                  Column(
+                    children: [
+                      Text(agri.last.galeWarning.last.location,
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                      
+                      SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          loadReadmore(context,agri.last.galeWarning.last.description);
+                        },
+                        child: Container(
+                          // width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          height: 35,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                            child: Center(
+                              child: Text(
+                                'Read more',
+                                style:
+                                    TextStyle(color: kColorBlue, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding windWidget(BuildContext context, List<AgriRegionalForecast> agri) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 150,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white70),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.network(agri.last.windCondition.last.icon)),
+                      Text(
+                        'Wind',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        agri.last.windCondition.last.location,
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          loadReadmore(context,
+                              agri.last.windCondition.last.description);
+                        },
+                        child: Container(
+                          // width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          height: 35,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                            child: Center(
+                              child: Text(
+                                'Read more',
+                                style:
+                                    TextStyle(color: kColorBlue, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -921,11 +680,162 @@ class AgriForecast10Widget extends HookWidget {
                 width: MediaQuery.of(context).size.width,
                 child: ColoredBox(
                   color: Colors.white54,
-                  child: Text(content, style: TextStyle(color: Colors.black),),
+                  child: Text(
+                    content,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
             ),
           ]),
+        );
+      },
+    );
+  }
+
+  loadMap(BuildContext context, String content,
+      ValueNotifier isScrollControlled, ValueNotifier agriTab) {
+    return showModalBottomSheet<void>(
+      isScrollControlled: isScrollControlled.value,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context,
+              StateSetter setState /*You can rename this!*/) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+              child: SingleChildScrollView(
+                child: Stack(children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: FittedBox(
+                      child: Image.asset('assets/manila.jpeg'),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: ColoredBox(color: Colors.white54),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                        child: GestureDetector(
+                          onTap: () {
+                            isScrollControlled.value = false;
+                            Navigator.pop(context);
+                            isScrollControlled.value = true;
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(color: Colors.white, spreadRadius: 3),
+                              ],
+                            ),
+                            height: 40,
+                            width: 40,
+                            child: Center(
+                              child: Icon(Icons.arrow_downward_rounded),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 100, 20, 0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: ColoredBox(
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      agriTab.value = 0;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: agriTab.value == 0
+                                          ? dayNow
+                                              ? kColorSecondary
+                                              : kColorBlue
+                                          : Colors.white,
+                                    ),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        'Actual Rainfall',
+                                        style: kTextStyleSubtitle4b,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      agriTab.value = 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: agriTab.value == 1
+                                          ? dayNow
+                                              ? kColorSecondary
+                                              : kColorBlue
+                                          : Colors.white,
+                                    ),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        'Forecast Rainfall',
+                                        style: kTextStyleSubtitle4b,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            agriTab.value == 1
+                                ? Container(
+                                    color: Colors.white70,
+                                    child: Image.asset('assets/map1.png',
+                                        width:
+                                            MediaQuery.of(context).size.width),
+                                  )
+                                : Container(
+                                    color: Colors.white70,
+                                    child: Image.asset('assets/map2.png',
+                                        width:
+                                            MediaQuery.of(context).size.width),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            );
+          },
         );
       },
     );

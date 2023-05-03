@@ -20,7 +20,7 @@ class  outlookPage extends HookWidget {
   Widget build(BuildContext context) {
     final dailyProviderPolygon = useState(context.read<McaoProvider>().polygons);
     final agriTab = useState(0);
-
+    final onLoad = useState(true);
 
     // useEffect(() {
     //   Future.microtask(() async {
@@ -35,9 +35,12 @@ class  outlookPage extends HookWidget {
       child: Stack(children: [
         SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: agriTab.value == 0 ? const WebView(
+            child: agriTab.value == 0 ?  WebView(
                 initialUrl:
-                    'http://18.139.91.35/payong/outlook.php?fdate=APRIL%202023'):SizedBox(
+                    'http://18.139.91.35/payong/outlook.php?fdate=APRIL%202023',
+                    onPageFinished:(url){
+                    onLoad.value = false;
+                  },):SizedBox(
                         height: 
                            MediaQuery.of(context).size.height - 150 ,
                         width: MediaQuery.of(context).size.width,
@@ -57,7 +60,10 @@ class  outlookPage extends HookWidget {
                           ),
                         ),
                       ),),
-        
+        if(onLoad.value) Align(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(),
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(

@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:payong/models/agri_10_prognosis.dart';
 import 'package:payong/models/daily_10_model.dart';
 import 'package:payong/models/daily_10_search_model.dart';
 
@@ -12,9 +14,12 @@ class Daily10Provider with ChangeNotifier{
   String _searchString = '';
   bool _showList = false;
 
+  
+
   List<Daily10SearchModel> _daily10Search = [];
 
   List<Daily10SearchModel> get daily10Search => _daily10Search;
+
 
   DateTime  get dateSelect => selectedDate; 
 
@@ -26,6 +31,8 @@ class Daily10Provider with ChangeNotifier{
 
   String  get searchString => _searchString; 
 
+  
+
   DailyModel10?  get dailyDetails => daily; 
 
   List<DailyModel10> get myDailyList => dailyList;
@@ -34,9 +41,20 @@ class Daily10Provider with ChangeNotifier{
 
   Set<Polygon>?  get polygons => polygon; 
 
+
+ 
+
+
+
   void setPolygonDaiy(Polygon value) {
     // polygon = value;
     polygon.add(value);
+    notifyListeners();
+  }
+
+  void removePolygonDaiy(PolygonId value) {
+    // polygon = value;
+    polygon.removeWhere((element) => element.fillColor == Colors.blueAccent);
     notifyListeners();
   }
 

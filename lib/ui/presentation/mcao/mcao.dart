@@ -43,54 +43,60 @@ class _mCaOPageState extends State<mCaOPage>
       //day
       dayNow = false;
     }
+    Future.delayed(Duration.zero, () {
+      getMapAll(context);
+    });
   }
 
-  getMapAll(BuildContext context)async{
-       await getMap(context);
+  getMapAll(BuildContext context) async {
+     await getMap(context);
   }
 
   Future<void> getMap(BuildContext context) async {
-  
     final dailyProvider = context.read<McaoProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
     for (var i = 1; i < 2; i++) {
       final result = await McaoService.getAssessment(context);
 
-      try {
-          polygons.clear();
+      polygons.clear();
 
-          for (var name in result) {
-            print(name.provinceID);
-            List<dynamic> coordinates = name.coordinates;
-            List<LatLng> polygonCoords = [];
-            if (coordinates.isNotEmpty) {
-              for (var coor in coordinates) {
-                var latLng = coor['coordinate'].toString().split(",");
-                print(double.parse(latLng[0]).toString());
-                double latitude = double.parse(latLng[0]);
-                double longitude = double.parse(latLng[1]);
+      for (var name in result) {
+        print(name.locationDescription);
+        List<dynamic> coordinates = name.coordinates;
+        List<LatLng> polygonCoords = [];
+        if (coordinates.isNotEmpty) {
 
-                polygonCoords.add(LatLng(longitude, latitude));
-              }
-               Color lxColor = name.color.toColor();
-              dailyProvider.setPolygonDaiy(Polygon(
-                  onTap: () async {
-                   
-                  },
-                  consumeTapEvents: true,
-                  polygonId: PolygonId(name.provinceID),
-                  points: polygonCoords,
-                  strokeWidth: 4,
-                  fillColor: lxColor,
-                  strokeColor: lxColor));
-            }
+          for (var coor in coordinates) {
+            try {
+              var latLng = coor['coordinate'].toString().split(",");
+              
+              double latitude = double.parse(latLng[0]);
+              double longitude = double.parse(latLng[1]);
+              // print(longitude.toString() + ',' + latitude.toString());
+              polygonCoords.add(LatLng(longitude, latitude));
+            } catch (e) {}
           }
-      } catch (e) {
-        print('error $e');
+          Color lxColor = Colors.blue.shade50;
+
+          try{
+            lxColor = name.color.toColor();
+          }catch(e){
+
+          }
+          dailyProvider.setPolygonDaiy(Polygon(
+              onTap: () async {
+                print(name.provinceID);
+              },
+              consumeTapEvents: true,
+              polygonId: PolygonId(name.provinceID),
+              points: polygonCoords,
+              strokeWidth: 4,
+              fillColor: lxColor,
+              strokeColor: lxColor));
+        }
       }
     }
-   
   }
 
   @override
@@ -101,75 +107,79 @@ class _mCaOPageState extends State<mCaOPage>
 
   @override
   Widget build(BuildContext context) {
-    getMapAll(context);
-    return Container(
-      child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    myTabs = 0;
-                  });
-                },
-                child: Container(
-                  width: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: myTabs == 0
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 50,
-                  child: Center(
-                    child: Text(
-                      'Assessment',
-                      style: kTextStyleSubtitle4b,
-                      textAlign: TextAlign.center,
+    // getMapAll(context);
+    return Stack(
+      children: [
+        Container(
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        myTabs = 0;
+                      });
+                    },
+                    child: Container(
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: myTabs == 0
+                            ? dayNow
+                                ? kColorSecondary
+                                : kColorBlue
+                            : Colors.white,
+                      ),
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Assessment',
+                          style: kTextStyleSubtitle4b,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    myTabs = 1;
-                  });
-                },
-                child: Container(
-                  width: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: myTabs == 1
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 50,
-                  child: Center(
-                    child: Text(
-                      'Outlook',
-                      style: kTextStyleSubtitle4b,
-                      textAlign: TextAlign.center,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        myTabs = 1;
+                      });
+                    },
+                    child: Container(
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: myTabs == 1
+                            ? dayNow
+                                ? kColorSecondary
+                                : kColorBlue
+                            : Colors.white,
+                      ),
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Outlook',
+                          style: kTextStyleSubtitle4b,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+            if (myTabs == 0) ...[
+              assessmentPage(),
+            ] else ...[
+              outlookPage(),
+            ]
+          ]),
         ),
-        if (myTabs == 0) ...[
-          assessmentPage(),
-        ] else ...[
-          outlookPage(),
-        ]
-      ]),
+      ],
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:payong/models/agri_10_days_forecast.dart';
+import 'package:payong/models/agri_10_prognosis.dart';
 import 'package:payong/models/agri_advisory_model.dart';
 import 'package:payong/models/agri_forecast_humidity_model.dart';
 import 'package:payong/models/agri_forecast_leafwetness_model.dart';
@@ -8,6 +9,7 @@ import 'package:payong/models/agri_forecast_temperature_model.dart';
 import 'package:payong/models/agri_forecast_weather_model.dart';
 import 'package:payong/models/agri_forecast_wind_model.dart';
 import 'package:payong/models/agri_model.dart';
+import 'package:payong/models/agri_soil_condition.dart';
 
 class AgriProvider with ChangeNotifier {
   AgriModel? daily;
@@ -20,11 +22,17 @@ class AgriProvider with ChangeNotifier {
 
   List<Agri10DaysForecastvModel> agri10Forecast = [];
 
+  List<Agri10Prognosis> get progList => _progList;
+
   List<AgriForecastTempModel> _agriForecastTemp = [];
   List<AgriForecastWindModel> _agriForecastWind = [];
   List<AgriForecastWeatherModel> _agriForecastWeather = [];
   List<AgriForecastHumidityModel> _agriForecastHumidity = [];
   List<AgriForecastLeafWetnessModel> _agriForecastLeafWetness = [];
+  List<AgriForecastSoilConditionModel> _agriForecastSoilCondition = [];
+  List<Agri10Prognosis> _progList = [];
+    String _progID = '';
+  String  get progID => _progID; 
 
   List<AgriForecastTempModel> get agriForecastTemp => _agriForecastTemp;
   List<AgriForecastWindModel> get agriForecastWind => _agriForecastWind;
@@ -34,9 +42,28 @@ class AgriProvider with ChangeNotifier {
       _agriForecastHumidity;
   List<AgriForecastLeafWetnessModel> get agriForecastLeafWetness =>
       _agriForecastLeafWetness;
+  List<AgriForecastSoilConditionModel> get agriForecastSoilCondition =>
+      _agriForecastSoilCondition;
+  
+    void setProgID(String value) {
+
+    _progID = value;
+    notifyListeners();
+  }
+  
+  void setProg(List<Agri10Prognosis> value) {
+    _progList = value;
+    notifyListeners();
+  }
 
   void setAgriForecastTemp(List<AgriForecastTempModel> value) {
     _agriForecastTemp = value;
+    notifyListeners();
+  }
+
+  void setAgriForecastSoilCondition(
+      List<AgriForecastSoilConditionModel> value) {
+    _agriForecastSoilCondition = value;
     notifyListeners();
   }
 

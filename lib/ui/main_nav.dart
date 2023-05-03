@@ -65,6 +65,7 @@ class _MyWidgetState extends State<MainNav> {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   LatLng _center = LatLng(11.051436, 122.880019);
   LatLng mapMarker = LatLng(11.051436, 122.880019);
+  String prognosisColorMap = '';
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
@@ -105,9 +106,9 @@ class _MyWidgetState extends State<MainNav> {
       get10DaysList();
     } else if (selectIndex == 3) {
       // getAgriList();
-       getPrognosissMapList();
+      getPrognosissMapList();
     } else if (selectIndex == 4) {
-     getPrognosissMapList();
+      // getPrognosissMapList();
     } else {
       // getDailyList('daily');
     }
@@ -122,45 +123,66 @@ class _MyWidgetState extends State<MainNav> {
       isRefresh = false;
     });
     final dailyProvider = context.read<Daily10Provider>();
+    final prod = context.read<AgriProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
     for (var i = 1; i < 2; i++) {
       final result = await AgriServices.getRegionMap(context, i.toString());
 
-      try {
-        setState(() {
-          polygons.clear();
+      // try {
+      setState(() {
+        polygons.clear();
 
-          for (var name in result) {
-            print(name.locationCoordinate);
-            List<dynamic> coordinates = name.locationCoordinate;
-            List<LatLng> polygonCoords = [];
-            if (coordinates.isNotEmpty) {
-              for (var coor in coordinates) {
+        for (var name in result) {
+          // print(name.locationCoordinate);
+          List<dynamic> coordinates = name.locationCoordinate;
+          List<LatLng> polygonCoords = [];
+          if (coordinates.isNotEmpty) {
+            for (var coor in coordinates) {
+              try {
+                // print(coor['coordinate']);
                 var latLng = coor['coordinate'].toString().split(",");
                 print(double.parse(latLng[0]).toString());
                 double latitude = double.parse(latLng[0]);
                 double longitude = double.parse(latLng[1]);
-
+                ;
                 polygonCoords.add(LatLng(longitude, latitude));
-              }
-
-              dailyProvider.setPolygonDaiy(Polygon(
-                  onTap: () async {
-                   
-                  },
-                  consumeTapEvents: true,
-                  polygonId: PolygonId(name.dailyDetailsID),
-                  points: polygonCoords,
-                  strokeWidth: 4,
-                  fillColor: Colors.transparent,
-                  strokeColor: Colors.transparent));
+              } catch (e) {}
             }
+
+            dailyProvider.setPolygonDaiy(Polygon(
+                onTap: () async {
+                  prod.setProgID(name.dailyDetailsID);
+                  await AgriServices.getProgDetails(context, name.dailyDetailsID);
+                  dailyProvider.removePolygonDaiy(PolygonId(prognosisColorMap));
+                  setState(() {
+                    prognosisColorMap = name.dailyDetailsID;
+                  });
+                  print(name.dailyDetailsID);
+                  dailyProvider.setPolygonDaiy(Polygon(
+                      onTap: () async {
+                        print(name.dailyDetailsID);
+                        prod.setProgID(name.dailyDetailsID);
+                      },
+                      consumeTapEvents: true,
+                      polygonId: PolygonId(name.dailyDetailsID),
+                      points: polygonCoords,
+                      strokeWidth: 4,
+                      fillColor: Colors.blueAccent,
+                      strokeColor: Colors.transparent));
+                },
+                consumeTapEvents: true,
+                polygonId: PolygonId(name.dailyDetailsID),
+                points: polygonCoords,
+                strokeWidth: 4,
+                fillColor: Colors.transparent,
+                strokeColor: Colors.transparent));
           }
-        });
-      } catch (e) {
-        print('error $e');
-      }
+        }
+      });
+      // } catch (e) {
+      //   print('error $e');
+      // }
     }
     setState(() {
       isRefresh = false;
@@ -405,7 +427,8 @@ class _MyWidgetState extends State<MainNav> {
                 //   selectIndex = 1;
                 // })
                 final snackBar = SnackBar(
-                  content: const Text('Sorry, this module is under development.'),
+                  content:
+                      const Text('Sorry, this module is under development.'),
                   // action: SnackBarAction(
                   //   label: 'Undo',
                   //   onPressed: () {
@@ -413,7 +436,7 @@ class _MyWidgetState extends State<MainNav> {
                   //   },
                   // ),
                 );
-      
+
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -433,7 +456,8 @@ class _MyWidgetState extends State<MainNav> {
                 //   selectIndex = 2;
                 // })
                 final snackBar = SnackBar(
-                  content: const Text('Sorry, this module is under development.'),
+                  content:
+                      const Text('Sorry, this module is under development.'),
                   // action: SnackBarAction(
                   //   label: 'Undo',
                   //   onPressed: () {
@@ -441,7 +465,7 @@ class _MyWidgetState extends State<MainNav> {
                   //   },
                   // ),
                 );
-      
+
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -461,7 +485,8 @@ class _MyWidgetState extends State<MainNav> {
                 //   selectIndex = 3;
                 // })
                 final snackBar = SnackBar(
-                  content: const Text('Sorry, this module is under development.'),
+                  content:
+                      const Text('Sorry, this module is under development.'),
                   // action: SnackBarAction(
                   //   label: 'Undo',
                   //   onPressed: () {
@@ -469,7 +494,7 @@ class _MyWidgetState extends State<MainNav> {
                   //   },
                   // ),
                 );
-      
+
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -489,7 +514,8 @@ class _MyWidgetState extends State<MainNav> {
                 //   selectIndex = 4;
                 // })
                 final snackBar = SnackBar(
-                  content: const Text('Sorry, this module is under development.'),
+                  content:
+                      const Text('Sorry, this module is under development.'),
                   // action: SnackBarAction(
                   //   label: 'Undo',
                   //   onPressed: () {
@@ -497,7 +523,7 @@ class _MyWidgetState extends State<MainNav> {
                   //   },
                   // ),
                 );
-      
+
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -878,7 +904,6 @@ class _MyWidgetState extends State<MainNav> {
                   ),
                 ),
               ),
-              
             ],
           ),
         ),
@@ -886,13 +911,15 @@ class _MyWidgetState extends State<MainNav> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
-            child: agriTab == 2 ? prognosisMap():Column(children: [
-              if (agriTab == 1) ...[
-                AgriAdvisory10Widget()
-              ] else if(agriTab == 0)...[
-                AgriForecast10Widget()
-              ]
-            ]),
+            child: agriTab == 2
+                ? prognosisMap()
+                : Column(children: [
+                    if (agriTab == 1) ...[
+                      AgriAdvisory10Widget()
+                    ] else if (agriTab == 0) ...[
+                      AgriForecast10Widget()
+                    ]
+                  ]),
           ),
         ),
         Align(
@@ -1663,8 +1690,6 @@ class _MyWidgetState extends State<MainNav> {
             _controller.complete(controller);
           },
         ),
-        
-    
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
@@ -1745,7 +1770,6 @@ class _MyWidgetState extends State<MainNav> {
             ]),
           ),
         ),
-      
       ],
     );
   }
