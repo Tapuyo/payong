@@ -55,201 +55,204 @@ class AgriPrognosisWidget extends HookWidget {
       return;
     }, [id]);
 
-    return Container(
-       height: MediaQuery.of(context).size.height - 200,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            // ignore: prefer_const_literals_to_create_immutables
-            colors: [
-              // if (dayNow) ...[
-              //   Color(0xFFF2E90B),
-              //   Color(0xFF762917),
-              // ] else ...[
-                 Color(0xFF005EEB),
-                    Color(0xFF489E59),
-              // ]
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            tileMode: TileMode.clamp),
-      ),
-      width: MediaQuery.of(context).size.width,
-      child: Column(children: [
-      
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Agri Prognosis",
-            style: kTextStyleSubtitle4b,
-          ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+      child: Container(
+         height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              // ignore: prefer_const_literals_to_create_immutables
+              colors: [
+                // if (dayNow) ...[
+                //   Color(0xFFF2E90B),
+                //   Color(0xFF762917),
+                // ] else ...[
+                   Color(0xFF005EEB),
+                      Color(0xFF489E59),
+                // ]
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              tileMode: TileMode.clamp),
         ),
-
-        SizedBox(height: 20,),
-        Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    dailyDetails != null
-                        ? dailyDetails.locationDescription != ''
-                            ? dailyDetails.locationDescription
-                            : 'Bohol'
-                        : 'Pilar Bohol',
-                    style: kTextStyleSubtitle4,
-                  ),
-                ],
-              ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(children: [
+        
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Agri Prognosis",
+              style: kTextStyleSubtitle4b,
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView(children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Text(
-                        'Humidity 82',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'WindSpeed 15 NE',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'No Rain',
-                        style: kTextStyleWeather3,
-                      ),
-                    ],
-                  ),
-                 SizedBox(
-                  height: 8,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Text(
-                        'Low Temp 26',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'High Temp 26',
-                        style: kTextStyleWeather3,
-                      ),
-                      Text(
-                        'MeanTemp 26',
-                        style: kTextStyleWeather3,
-                      ),
-                    ],
-                  ),
-                  cloudIcons('CLOUDY'),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
+          ),
+    
+          SizedBox(height: 20,),
+          Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          'Rain Fall',
-                          style: kTextStyleWeather2,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text( '10',
-                              style: kTextStyleWeather,
-                            ),
-                            Text(
-                              '%',
-                              style: kTextStyleWeather1,
-                            ),
-                          ],
-                        ),
-                      ],
+                    Text(
+                      dailyDetails != null
+                          ? dailyDetails.locationDescription != ''
+                              ? dailyDetails.locationDescription
+                              : 'Bohol'
+                          : 'Pilar Bohol',
+                      style: kTextStyleSubtitle4,
                     ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'Temperature',
-                          style: kTextStyleWeather2,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('26',
-                              style: kTextStyleWeather,
-                            ),
-                            Text(
-                              '°C',
-                              style: kTextStyleDeg,
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Divider(),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                //   child: Row(
-                //     // ignore: prefer_const_literals_to_create_immutables
-                //     children: [
-                //       Expanded(
-                //         flex: 2,
-                //         child: Text(
-                //           'Date',
-                //           style: kTextStyleWeather2,
-                //         ),
-                //       ),
-                //       Expanded(
-                //         flex: 2,
-                //         child: Text(
-                //           'Rain Fall',
-                //           style: kTextStyleWeather2,
-                //         ),
-                //       ),
-                //       Expanded(
-                //         flex: 2,
-                //         child: Text(
-                //           'Temp',
-                //           style: kTextStyleWeather2,
-                //         ),
-                //       ),
-                //       Expanded(
-                //         flex: 1,
-                //         child: Text(
-                //           'Cloud',
-                //           style: kTextStyleWeather2,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                //   child: Divider(),
-                // ),
-              ]),
-            ),
-      ]),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: ListView(children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Text(
+                          'Humidity 82',
+                          style: kTextStyleWeather3,
+                        ),
+                        Text(
+                          'WindSpeed 15 NE',
+                          style: kTextStyleWeather3,
+                        ),
+                        Text(
+                          'No Rain',
+                          style: kTextStyleWeather3,
+                        ),
+                      ],
+                    ),
+                   SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Text(
+                          'Low Temp 26',
+                          style: kTextStyleWeather3,
+                        ),
+                        Text(
+                          'High Temp 26',
+                          style: kTextStyleWeather3,
+                        ),
+                        Text(
+                          'MeanTemp 26',
+                          style: kTextStyleWeather3,
+                        ),
+                      ],
+                    ),
+                    cloudIcons('CLOUDY'),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            'Rain Fall',
+                            style: kTextStyleWeather2,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text( '10',
+                                style: kTextStyleWeather,
+                              ),
+                              Text(
+                                '%',
+                                style: kTextStyleWeather1,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'Temperature',
+                            style: kTextStyleWeather2,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('26',
+                                style: kTextStyleWeather,
+                              ),
+                              Text(
+                                '°C',
+                                style: kTextStyleDeg,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Divider(),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  //   child: Row(
+                  //     // ignore: prefer_const_literals_to_create_immutables
+                  //     children: [
+                  //       Expanded(
+                  //         flex: 2,
+                  //         child: Text(
+                  //           'Date',
+                  //           style: kTextStyleWeather2,
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         flex: 2,
+                  //         child: Text(
+                  //           'Rain Fall',
+                  //           style: kTextStyleWeather2,
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         flex: 2,
+                  //         child: Text(
+                  //           'Temp',
+                  //           style: kTextStyleWeather2,
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         flex: 1,
+                  //         child: Text(
+                  //           'Cloud',
+                  //           style: kTextStyleWeather2,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  //   child: Divider(),
+                  // ),
+                ]),
+              ),
+        ]),
+      ),
     );
   }
 

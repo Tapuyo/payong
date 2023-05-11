@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parallax_rain/parallax_rain.dart';
 import 'package:payong/models/agri_10_days_forecast.dart';
 import 'package:payong/models/agri_10_forecast_model.dart';
 import 'package:payong/models/agri_forecast_model.dart';
@@ -47,6 +48,9 @@ class AgriForecast10Widget extends HookWidget {
     final List<Agri10DaysForecastvModel>? dailyAgriDetails =
         context.select((AgriProvider p) => p.agri10Forecasts);
     final agri = useState<List<AgriRegionalForecast>>([]);
+    final String backImg =
+        context.select((InitProvider p) => p.backImgAssetUrl);
+        final bool withRain = context.select((InitProvider p) => p.withRain);
     useEffect(() {
       Future.microtask(() async {
         agri.value = await AgriServices.getAgri10DaysRegional(context, id);
@@ -56,14 +60,17 @@ class AgriForecast10Widget extends HookWidget {
     }, const []);
 
     return agri.value.isNotEmpty
-        ? loadDetails(context, isScrollControlled, agriTab, agri.value)
-        : Center(
-            child: CircularProgressIndicator(),
-          );
+        ? loadDetails(context, isScrollControlled, agriTab, agri.value, backImg,withRain)
+        : SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+              child: CircularProgressIndicator(),
+            ),
+        );
   }
 
   loadDetails(BuildContext context, ValueNotifier isScrollControlled,
-      ValueNotifier agriTab, List<AgriRegionalForecast> agri) {
+      ValueNotifier agriTab, List<AgriRegionalForecast> agri, String backImg, bool withRain) {
     print(agri.last.content);
     return SingleChildScrollView(
       child: Container(
@@ -74,10 +81,16 @@ class AgriForecast10Widget extends HookWidget {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height - 150,
                 child: FittedBox(
-                  child: Image.asset('assets/manila.jpeg'),
                   fit: BoxFit.fitHeight,
+                  child: Image.asset(backImg),
                 ),
               ),
+              if(withRain) ParallaxRain(
+                  // ignore: prefer_const_literals_to_create_immutables
+                  dropColors: [Colors.white],
+                  trail: true,
+                  dropFallSpeed: 5,
+                ),
               SizedBox(
                  width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height - 150,
@@ -174,7 +187,7 @@ class AgriForecast10Widget extends HookWidget {
                   padding: const EdgeInsets.fromLTRB(0, 0, 30, 10),
                   child: InkResponse(
                     onTap: () {
-                      loadMap(context, '', isScrollControlled, agriTab);
+                      loadMap(context, '', isScrollControlled, agriTab, agri);
                     },
                     child: Container(
                       width: 50,
@@ -665,8 +678,8 @@ class AgriForecast10Widget extends HookWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: FittedBox(
-                child: Image.asset('assets/manila.jpeg'),
                 fit: BoxFit.fitHeight,
+                child: Image.asset('assets/manila.jpeg'),
               ),
             ),
             Container(
@@ -694,7 +707,23 @@ class AgriForecast10Widget extends HookWidget {
   }
 
   loadMap(BuildContext context, String content,
-      ValueNotifier isScrollControlled, ValueNotifier agriTab) {
+      ValueNotifier isScrollControlled, ValueNotifier agriTab,List<AgriRegionalForecast> agri) {
+    String normalRainfallImage = '';
+    String actualRainfallImage = '';
+
+    print(agri.last.map.last.description);
+
+    for (var i = 0; i < agri.last.map.length; i++) {
+      print(agri.last.map[i].map);
+        if(agri.last.map[i].description == 'NORMAL RAINFALL'){
+          normalRainfallImage = agri.last.map[i].map;
+        }else{
+          actualRainfallImage = agri.last.map[i].map;
+        }
+    }
+
+    print('asdasd $normalRainfallImage');
+
     return showModalBottomSheet<void>(
       isScrollControlled: isScrollControlled.value,
       context: context,
@@ -710,8 +739,8 @@ class AgriForecast10Widget extends HookWidget {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: FittedBox(
-                      child: Image.asset('assets/manila.jpeg'),
                       fit: BoxFit.fitHeight,
+                      child: Image.asset('assets/manila.jpeg'),
                     ),
                   ),
                   Container(
@@ -817,13 +846,13 @@ class AgriForecast10Widget extends HookWidget {
                             agriTab.value == 1
                                 ? Container(
                                     color: Colors.white70,
-                                    child: Image.asset('assets/map1.png',
+                                    child: Image.network(actualRainfallImage,
                                         width:
                                             MediaQuery.of(context).size.width),
                                   )
                                 : Container(
                                     color: Colors.white70,
-                                    child: Image.asset('assets/map2.png',
+                                    child: Image.network(normalRainfallImage,
                                         width:
                                             MediaQuery.of(context).size.width),
                                   ),

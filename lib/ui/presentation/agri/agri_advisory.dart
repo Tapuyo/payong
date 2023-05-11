@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parallax_rain/parallax_rain.dart';
 import 'package:payong/models/agri_advisory_model.dart';
 import 'package:payong/models/agri_forecast_model.dart';
 import 'package:payong/models/daily_model.dart';
@@ -42,6 +43,9 @@ class AgriAdvisoryWidget extends HookWidget {
     final String id = context.select((AgriProvider p) => p.dailyIDSelected);
     final List<AgriAdvModel>? dailyAgriDetails =
         context.select((AgriProvider p) => p.agriAdvModels);
+    final String backImg =
+        context.select((InitProvider p) => p.backImgAssetUrl);
+        final bool withRain = context.select((InitProvider p) => p.withRain);
     ValueNotifier titleChoose = useState('');
     ValueNotifier contentChoose = useState('');
     ValueNotifier carouselInt = useState(0);
@@ -61,22 +65,29 @@ class AgriAdvisoryWidget extends HookWidget {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 150,
+                height: MediaQuery.of(context).size.height,
                 child: FittedBox(
-                  child: Image.asset('assets/manila.jpeg'),
+                  child: Image.asset(backImg),
                   fit: BoxFit.fitHeight,
                 ),
               ),
+              
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 150,
-                child: ColoredBox(color: Colors.white54),
+                height: MediaQuery.of(context).size.height,
+                child: ColoredBox(color: Colors.white30),
               ),
+               if(withRain) ParallaxRain(
+                  // ignore: prefer_const_literals_to_create_immutables
+                  dropColors: [Colors.white],
+                  trail: true,
+                  dropFallSpeed: 5,
+                ),
               SizedBox(
-                height: MediaQuery.of(context).size.height - 180,
+                height: MediaQuery.of(context).size.height,
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -92,73 +103,76 @@ class AgriAdvisoryWidget extends HookWidget {
                               ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    contentChoose.value = '';
-                                    agriTab.value = 0;
-                                    await AgriServices.getAgriAdvisory(
-                                        context, id, true, true);
-                                    buttonCarouselController.nextPage(
-                                        duration: Duration(milliseconds: 300),
-                                        curve: Curves.linear);
-                                  },
-                                  child: Container(
-                                    // width: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: agriTab.value == 0
-                                          ? dayNow
-                                              ? kColorSecondary
-                                              : kColorBlue
-                                          : Colors.white,
-                                    ),
-                                    height: 35,
-                                    child: Center(
-                                      child: Text(
-                                        'Farm',
-                                        style: kTextStyleSubtitle4b,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      contentChoose.value = '';
+                                      agriTab.value = 0;
+                                      await AgriServices.getAgriAdvisory(
+                                          context, id, true, true);
+                                      buttonCarouselController.nextPage(
+                                          duration: Duration(milliseconds: 300),
+                                          curve: Curves.linear);
+                                    },
+                                    child: Container(
+                                      // width: 80,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: agriTab.value == 0
+                                            ? dayNow
+                                                ? kColorSecondary
+                                                : kColorBlue
+                                            : Colors.white,
+                                      ),
+                                      height: 35,
+                                      child: Center(
+                                        child: Text(
+                                          'Farm',
+                                          style: kTextStyleSubtitle4b,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    contentChoose.value = '';
-                                    agriTab.value = 1;
-                                    await AgriServices.getAgriAdvisory(
-                                        context, id, true, false);
-                                  },
-                                  child: Container(
-                                    // width: 120,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: agriTab.value == 1
-                                          ? dayNow
-                                              ? kColorSecondary
-                                              : kColorBlue
-                                          : Colors.white,
-                                    ),
-                                    height: 35,
-                                    child: Center(
-                                      child: Text(
-                                        'Fishing',
-                                        style: kTextStyleSubtitle4b,
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      contentChoose.value = '';
+                                      agriTab.value = 1;
+                                      await AgriServices.getAgriAdvisory(
+                                          context, id, true, false);
+                                    },
+                                    child: Container(
+                                      // width: 120,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: agriTab.value == 1
+                                            ? dayNow
+                                                ? kColorSecondary
+                                                : kColorBlue
+                                            : Colors.white,
+                                      ),
+                                      height: 35,
+                                      child: Center(
+                                        child: Text(
+                                          'Fishing',
+                                          style: kTextStyleSubtitle4b,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           SizedBox(
                             height: 20,
@@ -166,10 +180,11 @@ class AgriAdvisoryWidget extends HookWidget {
                           CarouselSlider(
                             carouselController: buttonCarouselController,
                             options: CarouselOptions(
-                              onPageChanged: (value,val){
-                                carouselInt.value = value;
-                                  contentChoose.value = dailyAgriDetails[value].content;
-                              },
+                                onPageChanged: (value, val) {
+                                  carouselInt.value = value;
+                                  contentChoose.value =
+                                      dailyAgriDetails[value].content;
+                                },
                                 height: 100.0,
                                 viewportFraction: .9,
                                 autoPlay: false,
@@ -204,13 +219,12 @@ class AgriAdvisoryWidget extends HookWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  
                                   buttonCarouselController.nextPage(
                                       duration: Duration(milliseconds: 100),
                                       curve: Curves.linear);
-                                  
-                                    titleChoose.value  = dailyAgriDetails[carouselInt.value].title;
 
+                                  titleChoose.value =
+                                      dailyAgriDetails[carouselInt.value].title;
                                 },
                                 child: Container(
                                   width: 120,

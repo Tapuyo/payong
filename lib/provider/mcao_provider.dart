@@ -12,6 +12,15 @@ class McaoProvider with ChangeNotifier{
   String _searchString = '';
   bool _showList = false;
 
+  int _mCaoTab = 0;
+
+  int get mCaoTab => _mCaoTab;
+
+    void setMcaoTab(int value) {
+    _mCaoTab = value;
+    notifyListeners();
+  }
+
   List<Daily10SearchModel> _daily10Search = [];
 
   List<Daily10SearchModel> get daily10Search => _daily10Search;

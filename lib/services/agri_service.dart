@@ -4,6 +4,7 @@ import 'package:payong/models/agri_10_days_forecast.dart';
 import 'package:payong/models/agri_10_forecast_model.dart';
 import 'package:payong/models/agri_10_prognosis.dart';
 import 'package:payong/models/agri_advisory_model.dart';
+import 'package:payong/models/agri_advisory_model.dart';
 import 'package:payong/models/agri_forecast_humidity_model.dart';
 import 'package:payong/models/agri_forecast_leafwetness_model.dart';
 import 'package:payong/models/agri_forecast_model.dart';
@@ -27,7 +28,7 @@ abstract class AgriServices {
 
     for (var u in jsondata) {
       AgriModel daily = AgriModel(u['AgriDailyID'] ?? '', u['DateIssue'] ?? '',
-          u['ValidityDate'] ?? '', u['Title'] ?? '', u['Content'] ?? '');
+          u['ValidityDate'] ?? DateTime.now().toString(), u['Title'] ?? '', u['Content'] ?? '');
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -123,9 +124,18 @@ abstract class AgriServices {
     List<AgriAdvModel> newDailyList = [];
 
     for (var u in jsondata) {
+      List<AgriAdImgvModel> imgList = [];
+     
+     if(u['img'] != null){
+      for (var image in u['img']) {
+         AgriAdImgvModel img = AgriAdImgvModel(image['Img']);
+         imgList.add(img);
+      }}
+
       AgriAdvModel daily = AgriAdvModel(
         u['Titles'] ?? '',
         u['Content'] ?? '',
+        imgList
       );
       newDailyList.add(daily);
     }
@@ -174,6 +184,8 @@ abstract class AgriServices {
     var jsondata = json.decode(response.body);
 
     List<AgriRegionalForecast> newDailyList = [];
+
+    print(jsondata);
 
     for (var u in jsondata) {
       List<AgriRegionalForecastWeatherSystem> weatherSystem = [];
@@ -262,6 +274,8 @@ abstract class AgriServices {
         u['HighLandMinTemp'] ?? '',
         u['HighLandMaxTemp'] ?? '',
         u['Locations'] ?? '',
+         u['LowLandMinTempIcon'] ?? '',
+          u['HighLandMinTempIcon'] ?? '',
       );
       newDailyList.add(daily);
     }
@@ -289,6 +303,7 @@ abstract class AgriServices {
       AgriForecastWindModel daily = AgriForecastWindModel(
         u['WindCondition'] ?? '',
         u['Locations'] ?? '',
+        u['WindConditionIcon'] ?? ''
       );
       newDailyList.add(daily);
     }
@@ -343,6 +358,7 @@ abstract class AgriServices {
       AgriForecastWeatherModel daily = AgriForecastWeatherModel(
         u['WeatherCondition'] ?? '',
         u['Locations'] ?? '',
+        u['WeatherConditionIcon']
       );
       newDailyList.add(daily);
     }
@@ -372,6 +388,7 @@ abstract class AgriServices {
         u['MinHumidity'] ?? '',
         u['MaxHumidity'] ?? '',
         u['Locations'] ?? '',
+        u['HumidityIcon'] ?? '',
       );
       newDailyList.add(daily);
     }
@@ -400,6 +417,7 @@ abstract class AgriServices {
         u['MinLeafWetness'] ?? '',
         u['MaxLeafWetness'] ?? '',
         u['Locations'] ?? '',
+        u['LeafWetnessIcon'] ?? '',
       );
       newDailyList.add(daily);
     }
@@ -426,6 +444,7 @@ abstract class AgriServices {
   }
 
   static Future<List<Agri10Prognosis>> getProgDetails(BuildContext context, String id) async {
+    // id = '7';
     print('http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$id');
     final response = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$id'));

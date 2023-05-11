@@ -2,6 +2,8 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
+import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,6 +15,8 @@ import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
+import 'package:payong/provider/init_provider.dart';
+import 'package:payong/provider/mcao_provider.dart';
 import 'package:payong/routes/routes.dart';
 import 'package:payong/services/agri_service.dart';
 import 'package:payong/services/daily10_service.dart';
@@ -120,13 +124,14 @@ class _MyWidgetState extends State<MainNav> {
 
   Future<void> getPrognosissMapList() async {
     setState(() {
-      isRefresh = false;
+      isRefresh = true;
     });
     final dailyProvider = context.read<Daily10Provider>();
+    context.read<InitProvider>().setIsLoading(true);
     final prod = context.read<AgriProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 2; i++) {
+    for (var i = 1; i < 10; i++) {
       final result = await AgriServices.getRegionMap(context, i.toString());
 
       // try {
@@ -153,7 +158,8 @@ class _MyWidgetState extends State<MainNav> {
             dailyProvider.setPolygonDaiy(Polygon(
                 onTap: () async {
                   prod.setProgID(name.dailyDetailsID);
-                  await AgriServices.getProgDetails(context, name.dailyDetailsID);
+                  await AgriServices.getProgDetails(
+                      context, name.dailyDetailsID);
                   dailyProvider.removePolygonDaiy(PolygonId(prognosisColorMap));
                   setState(() {
                     prognosisColorMap = name.dailyDetailsID;
@@ -184,6 +190,7 @@ class _MyWidgetState extends State<MainNav> {
       //   print('error $e');
       // }
     }
+    context.read<InitProvider>().setIsLoading(false);
     setState(() {
       isRefresh = false;
     });
@@ -191,7 +198,7 @@ class _MyWidgetState extends State<MainNav> {
 
   Future<void> get10DaysList() async {
     setState(() {
-      isRefresh = false;
+      isRefresh = true;
     });
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setPolygonDaiyClear();
@@ -242,7 +249,7 @@ class _MyWidgetState extends State<MainNav> {
 
   Future<void> getDailyList(String mod) async {
     setState(() {
-      isRefresh = false;
+      isRefresh = true;
     });
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setPolygonDaiyClear();
@@ -350,8 +357,62 @@ class _MyWidgetState extends State<MainNav> {
     lastDay.add(DateTime.now());
   }
 
+  List<TabItem> itemsAgri10 = [
+    TabItem(
+      icon: FontAwesomeIcons.cloud,
+      title: 'Forecast',
+    ),
+    TabItem(
+      icon: FontAwesomeIcons.leaf,
+      title: 'Crop Phenology',
+    ),
+    TabItem(
+      icon: FontAwesomeIcons.book,
+      title: 'Advisory',
+    ),
+  ];
+
+  List<TabItem> itemsAgri = [
+    TabItem(
+      icon: Icons.add_chart_rounded,
+      title: 'Synopsis',
+    ),
+    TabItem(
+      icon: FontAwesomeIcons.leaf,
+      title: 'Daily Farm',
+    ),
+    TabItem(
+      icon: FontAwesomeIcons.book,
+      title: 'Advisory',
+    ),
+  ];
+
+  List<TabItem> itemsMcao = [
+    TabItem(
+      icon: Icons.home_repair_service_outlined,
+      title: 'Assessment',
+    ),
+    TabItem(
+      icon: FontAwesomeIcons.telegram,
+      title: 'Outlook',
+    ),
+  ];
+
+  int visit = 0;
+
   @override
   Widget build(BuildContext context) {
+    AgriProvider _agri10provider = context.read<AgriProvider>();
+    McaoProvider _mcaoprovider = context.read<McaoProvider>();
+    final int agri10Tab = context.select((AgriProvider p) => p.agri10Tabs);
+    List<TabItem> myTabs = [];
+    if (selectIndex == 1) {
+      myTabs = itemsAgri;
+    } else if (selectIndex == 3) {
+      myTabs = itemsAgri10;
+    } else if (selectIndex == 4) {
+      myTabs = itemsMcao;
+    }
     return Scaffold(
       // appBar: AppBar(
       // title: Column(
@@ -390,9 +451,75 @@ class _MyWidgetState extends State<MainNav> {
       //     onPressed: () {},
       //   )
       // ]),
-      body: mainTab(context),
+      body: Stack(
+              children: [
+                Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: mainTab(context))),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Visibility(
+                    visible: selectIndex == 1 ||
+                        selectIndex == 3 ||
+                        selectIndex == 4,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.white,
+                      ),
+                      child: BottomBarInspiredOutside(
+                        items: myTabs,
+                        // heightItem: 38,
+                        iconSize: 20,
+                        titleStyle: TextStyle(fontSize: 14),
+                        backgroundColor: kColorBlue,
+                        color: Colors.white,
+                        colorSelected: Colors.white,
+                        indexSelected: visit,
+                        top: -34,
+                        itemStyle: ItemStyle.circle,
+                        chipStyle: const ChipStyle(
+                            background: kColorBlue,
+                            size: 100,
+                            notchSmoothness: NotchSmoothness.defaultEdge),
+                        onTap: (int index) => setState(() {
+                          visit = index;
+                          agriTab = index;
+                          if (selectIndex == 4) {
+                            _mcaoprovider.setMcaoTab(index);
+                          } else {
+                            _agri10provider.setAgri10Tab(index);
+                          }
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+                if(isRefresh)
+                Container(
+                  color: Colors.white30,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 8),
+                        Text('Please wait...', style: TextStyle(color: Colors.black),)
+                      ],
+                    )),
+                  ),
+                )
+              ],
+            ),
+      // bottomNavigationBar:
       floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 00, 50),
+        padding: const EdgeInsets.fromLTRB(0, 0, 00, 150),
         child: ExpandableFabClass(
           distanceBetween: 150.0,
           subChildren: [
@@ -476,28 +603,28 @@ class _MyWidgetState extends State<MainNav> {
               iconSize: 70,
               color: kColorBlue,
               onPressed: () {
-                // setState(() {
-                //   selectedDate = DateTime.now();
-                //   final dailyProvider = context.read<DailyProvider>();
-                //   dailyProvider.setDateSelect(selectedDate);
-                //   polygons.clear();
-                //   title = 'Philippines';
-                //   selectIndex = 3;
-                // })
-                final snackBar = SnackBar(
-                  content:
-                      const Text('Sorry, this module is under development.'),
-                  // action: SnackBarAction(
-                  //   label: 'Undo',
-                  //   onPressed: () {
-                  //     // Some code to undo the change.
-                  //   },
-                  // ),
-                );
+                setState(() {
+                  selectedDate = DateTime.now();
+                  final dailyProvider = context.read<DailyProvider>();
+                  dailyProvider.setDateSelect(selectedDate);
+                  polygons.clear();
+                  title = 'Philippines';
+                  selectIndex = 3;
+                });
+                // final snackBar = SnackBar(
+                //   content:
+                //       const Text('Sorry, this module is under development.'),
+                //   // action: SnackBarAction(
+                //   //   label: 'Undo',
+                //   //   onPressed: () {
+                //   //     // Some code to undo the change.
+                //   //   },
+                //   // ),
+                // );
 
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                // // Find the ScaffoldMessenger in the widget tree
+                // // and use it to show a SnackBar.
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
             ),
@@ -590,7 +717,7 @@ class _MyWidgetState extends State<MainNav> {
           body: map10Wid());
     } else if (selectIndex == 3) {
       return SlidingUpPanel(
-          minHeight: agriTab == 2 ? 120 : 0,
+          minHeight: agriTab == 1 ? 180 : 0,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -599,7 +726,7 @@ class _MyWidgetState extends State<MainNav> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-              if (agriTab == 0 || agriTab == 1) ...[
+              if (agriTab == 0 || agriTab == 2) ...[
                 //sypnosis
                 AgriSynopsis10Widget()
               ] else ...[
@@ -676,112 +803,14 @@ class _MyWidgetState extends State<MainNav> {
     return Stack(
       children: [
         //tab
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 0;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 0
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Synopsis',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 1;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 1
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Daily Farm',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 2;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 2
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Advisory',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Column(children: [
               if (agriTab == 0) ...[
                 AgriSynopsisWidget()
-                //   Container(
-                //   height: MediaQuery.of(context).size.height - 200,
-                //   width: MediaQuery.of(context).size.width,
-                //    child: GoogleMap(
-                //                myLocationEnabled: true,
-                //                myLocationButtonEnabled: true,
-                //                mapType: mapType,
-                //                polygons: polygons,
-                //                initialCameraPosition: _kGooglePlex,
-                //                zoomGesturesEnabled: true,
-                //                tiltGesturesEnabled: false,
-                //                onMapCreated: (GoogleMapController controller) {
-                //     _controller.complete(controller);
-                //                },
-                //          ),
-                //  )
               ] else if (agriTab == 1) ...[
                 AgriForecastWidget()
               ] else ...[
@@ -824,97 +853,97 @@ class _MyWidgetState extends State<MainNav> {
     return Stack(
       children: [
         //tab
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 0;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 0
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Forecast',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 2;
-                  });
-                },
-                child: Container(
-                  width: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 2
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Crop phenology',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    agriTab = 1;
-                  });
-                },
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: agriTab == 1
-                        ? dayNow
-                            ? kColorSecondary
-                            : kColorBlue
-                        : Colors.white,
-                  ),
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      'Advisory',
-                      style: kTextStyleSubtitle4b,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: [
+        //       GestureDetector(
+        //         onTap: () {
+        //           setState(() {
+        //             agriTab = 0;
+        //           });
+        //         },
+        //         child: Container(
+        //           width: 100,
+        //           decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(10),
+        //             color: agriTab == 0
+        //                 ? dayNow
+        //                     ? kColorSecondary
+        //                     : kColorBlue
+        //                 : Colors.white,
+        //           ),
+        //           height: 35,
+        //           child: Center(
+        //             child: Text(
+        //               'Forecast',
+        //               style: kTextStyleSubtitle4b,
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       GestureDetector(
+        //         onTap: () {
+        //           setState(() {
+        //             agriTab = 1;
+        //           });
+        //         },
+        //         child: Container(
+        //           width: 130,
+        //           decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(10),
+        //             color: agriTab == 1
+        //                 ? dayNow
+        //                     ? kColorSecondary
+        //                     : kColorBlue
+        //                 : Colors.white,
+        //           ),
+        //           height: 35,
+        //           child: Center(
+        //             child: Text(
+        //               'Crop phenology',
+        //               style: kTextStyleSubtitle4b,
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       GestureDetector(
+        //         onTap: () {
+        //           setState(() {
+        //             agriTab = 2;
+        //           });
+        //         },
+        //         child: Container(
+        //           width: 100,
+        //           decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(10),
+        //             color: agriTab == 2
+        //                 ? dayNow
+        //                     ? kColorSecondary
+        //                     : kColorBlue
+        //                 : Colors.white,
+        //           ),
+        //           height: 35,
+        //           child: Center(
+        //             child: Text(
+        //               'Advisory',
+        //               style: kTextStyleSubtitle4b,
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
-            child: agriTab == 2
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: agriTab == 1
                 ? prognosisMap()
                 : Column(children: [
-                    if (agriTab == 1) ...[
+                    if (agriTab == 2) ...[
                       AgriAdvisory10Widget()
                     ] else if (agriTab == 0) ...[
                       AgriForecast10Widget()

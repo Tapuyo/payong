@@ -136,10 +136,24 @@ class AgriForecastTempWidget extends HookWidget {
                                 )),
                                 Expanded(
                                   child: SizedBox(
-                                      width: 100,
-                                      height: 100,
+                                      width: 200,
+                                      height: 200,
                                       child:
-                                          Image.asset('assets/temperaturelow.jpg')),
+                                          Column(
+                                            children: [
+                                              if(dailyAgriDetails[index].lowLandMinTempIcon != '')
+                                              SizedBox(
+                                                 width: 80,
+                                                height: 80,
+                                                child: Image.network(dailyAgriDetails[index].lowLandMinTempIcon)),
+                                                SizedBox(height: 12,),
+                                                if(dailyAgriDetails[index].highLandMinTempIcon != '')
+                                              SizedBox(
+                                                 width: 80,
+                                                height: 80,
+                                                child: Image.network(dailyAgriDetails[index].highLandMinTempIcon)),
+                                            ],
+                                          )),
                                 )
                               ]),
                         ],

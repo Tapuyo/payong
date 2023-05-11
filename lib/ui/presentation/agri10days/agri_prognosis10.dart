@@ -38,6 +38,7 @@ class AgriPrognosis10Widget extends HookWidget {
     final bool isRefresh = context.select((DailyProvider p) => p.isRefresh);
     final id = useState(context.select((AgriProvider p) => p.progID));
     final String? locId = context.select((InitProvider p) => p.myLocationId);
+    ValueNotifier soilCondition = useState('');
     final List<Agri10Prognosis> dailyDetails =
         context.select((AgriProvider p) => p.progList);
     useEffect(() {
@@ -47,7 +48,17 @@ class AgriPrognosis10Widget extends HookWidget {
       return;
     }, [id]);
 
-    print(dailyDetails.last.regionDescription.toString());
+
+    if(dailyDetails.isNotEmpty){
+    if (dailyDetails.last.soilCondition.isNotEmpty) {
+      for (var i = 1; i < dailyDetails.last.soilCondition.length; i++) {
+        soilCondition.value = dailyDetails.last.soilCondition[i].soilCondition +
+            ' ' +
+            dailyDetails.last.soilCondition[i].location +
+            ', ';
+      }
+    }}
+
 
     return Container(
       height: MediaQuery.of(context).size.height - 200,
@@ -82,14 +93,16 @@ class AgriPrognosis10Widget extends HookWidget {
           child: Divider(),
         ),
         if (dailyDetails.isNotEmpty && dailyDetails != [])
-          Expanded(child: listPrognosis(context, dailyDetails, showExpand)),
+          Expanded(
+              child: listPrognosis(
+                  context, dailyDetails, showExpand, soilCondition)),
         // Expanded(child: listPrognosis('Region 2', showExpand))
       ]),
     );
   }
 
   Widget listPrognosis(BuildContext context, List<Agri10Prognosis> dailyDetails,
-      ValueNotifier showExpand) {
+      ValueNotifier showExpand, ValueNotifier soilCondition) {
     return ListView(
       // physics: NeverScrollableScrollPhysics(),
       children: [
@@ -114,7 +127,7 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                '  No. of Rainy Days: ${ dailyDetails.last.rainyDays}',
+                '  No. of Rainy Days: ${dailyDetails.last.rainyDays}',
                 // style: kTextStyleWeather3,
               ),
             ],
@@ -127,7 +140,7 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                ' Relative Humidity (%): ${ dailyDetails.last.relativeHumidity}',
+                ' Relative Humidity (%): ${dailyDetails.last.relativeHumidity}',
                 // style: kTextStyleWeather3,
               ),
             ],
@@ -153,7 +166,7 @@ class AgriPrognosis10Widget extends HookWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               Text(
-                'Condition: Moist – Aparri and Basco; Dry – rest of the region',
+                'Condition: ${soilCondition.value}',
                 // style: kTextStyleWeather3,
               ),
             ],
@@ -183,7 +196,7 @@ class AgriPrognosis10Widget extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${ dailyDetails.last.rainFall}mm',
+                        '${dailyDetails.last.rainFall}mm',
                         style: kTextStyleWeather,
                       ),
                     ],
@@ -206,7 +219,7 @@ class AgriPrognosis10Widget extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '18-33°C',
+                        '${dailyDetails.last.temperature}°C',
                         style: kTextStyleWeather,
                       ),
                       // Text(
@@ -300,7 +313,8 @@ class AgriPrognosis10Widget extends HookWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               20, 20, 20, 20),
-                                          child: Text(dailyDetails.last.content,
+                                          child: Text(
+                                            dailyDetails.last.content,
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.black87),

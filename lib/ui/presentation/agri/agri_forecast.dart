@@ -43,10 +43,10 @@ class AgriForecastWidget extends HookWidget {
 
     return 
         SizedBox(
-            height: MediaQuery.of(context).size.height - 200,
+            height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                padding: const EdgeInsets.fromLTRB(8, 100, 8, 0),
                 child: Column(
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

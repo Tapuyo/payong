@@ -123,12 +123,12 @@ class AgriForecastWindWidget extends HookWidget {
                                     )
                                   ],
                                 )),
+                                if(dailyAgriDetails[index].windConditionIcon != '')
                                 Expanded(
                                   child: SizedBox(
                                       width: 100,
                                       height: 100,
-                                      child: Image.asset(
-                                          'assets/lightmoderate.png')),
+                                      child: Image.network(dailyAgriDetails[index].windConditionIcon)),
                                 )
                               ]),
                         ],

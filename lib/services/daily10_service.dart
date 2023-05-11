@@ -51,7 +51,7 @@ abstract class Daily10Services {
     print(dailyDetailsID);
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setRefresh(true);
-    date = '2023-03-16';
+    // date = '2023-03-16';
     // dailyDetailsID = '1';
     final response = await http.get(Uri.parse('$days10Details fdate=$date&location=$dailyDetailsID'));
     // http://18.139.91.35/payong/API/daily_details.php?fdate=2023-03-16&location=12

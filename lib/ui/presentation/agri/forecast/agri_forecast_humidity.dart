@@ -126,12 +126,13 @@ class AgriForecastHumidityWidget extends HookWidget {
                                 )
                               ],
                             )),
+                            if(dailyAgriDetails[index].humidityIcon != '')
                             Expanded(
                               child: SizedBox(
                                   width: 100,
                                   height: 100,
                                   child:
-                                      Image.asset('assets/humidity.png')),
+                                      Image.network(dailyAgriDetails[index].humidityIcon)),
                             )
                           ]),
                         ],

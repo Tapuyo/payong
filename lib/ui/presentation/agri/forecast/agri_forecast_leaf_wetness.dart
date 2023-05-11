@@ -126,12 +126,13 @@ class AgriForecastLeafWidget extends HookWidget {
                                 )
                               ],
                             )),
+                            if(dailyAgriDetails[index].leafWetnessIcon != '')
                             Expanded(
                               child: SizedBox(
                                   width: 100,
                                   height: 100,
                                   child:
-                                      Image.asset('assets/leafwetness.png')),
+                                      Image.network(dailyAgriDetails[index].leafWetnessIcon )),
                             )
                           ]),
                         ],

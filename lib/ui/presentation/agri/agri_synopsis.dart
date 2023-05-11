@@ -38,101 +38,90 @@ class AgriSynopsisWidget extends HookWidget {
     final bool isRefresh = context.select((AgriProvider p) => p.isRefresh);
     final String id = context.select((AgriProvider p) => p.dailyIDSelected);
     final String? locId = context.select((InitProvider p) => p.myLocationId);
+    final String backImg = context.select((InitProvider p) => p.backImgAssetUrl);
+    final bool withRain = context.select((InitProvider p) => p.withRain);
     final AgriModel? agriSypnosis =
         context.select((AgriProvider p) => p.dailyDetails);
     DateTime pubDate =
-        DateFormat("yyyy-MM-dd").parse(agriSypnosis!.validityDate);
+        DateFormat("yyyy-MM-dd").parse(agriSypnosis != null ? agriSypnosis.validityDate:DateTime.now().toString());
     final String publishDate = DateFormat.yMMMMd('en_US').format(pubDate);
-
-    return Container(
-      // height: MediaQuery.of(context).size.height - 200,
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //       // ignore: prefer_const_literals_to_create_immutables
-      //       colors: [
-      //         if (dayNow) ...[
-      //           Color(0xFFF2E90B),
-      //           Color(0xFF762917),
-      //         ] else ...[
-      //           Color(0xFF005EEB),
-      //           Color.fromARGB(255, 74, 133, 222),
-      //         ]
-      //       ],
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter,
-      //       tileMode: TileMode.clamp),
-      // ),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height - 150,
-      color: Colors.blue,
-      child: Stack(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 150,
-            child: FittedBox(
-              child: Image.asset('assets/manila.jpeg'),
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-          Container(
+    print(withRain);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Container(
+        
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.blue,
+        child: Stack(
+          children: [
+            SizedBox(
               width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 150,
-            child: ColoredBox(color: Colors.white54),),
-          // ParallaxRain(
-          //       // ignore: prefer_const_literals_to_create_immutables
-          //       dropColors: [Colors.white],
-          //       trail: true,
-          //       dropFallSpeed: 5,
-          //     ),
-          Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                agriSypnosis != null
-                    ? 'Publish Date ${publishDate.toString()}'
-                    : 'No Data',
-                style: TextStyle(color: Colors.black),
+              height: MediaQuery.of(context).size.height,
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Image.asset(backImg),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                agriSypnosis != null ? agriSypnosis.title : 'No Data',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
+            Container(
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white60,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.black)),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
-                  child: Text(
-                    agriSypnosis.content,
-                    style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'NunitoSans',
-                            wordSpacing: 2)),
+              height: MediaQuery.of(context).size.height,
+              child: ColoredBox(color: Colors.white30),),
+            if(withRain) ParallaxRain(
+                  // ignore: prefer_const_literals_to_create_immutables
+                  dropColors: [Colors.white],
+                  trail: true,
+                  dropFallSpeed: 5,
+                ),
+            Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SizedBox(
+                height: 100,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  agriSypnosis != null
+                      ? 'Publish Date ${publishDate.toString()}'
+                      : 'No Data',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  agriSypnosis != null ? agriSypnosis.title : 'No Data',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white60,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
+                    child: Text(agriSypnosis != null ?
+                      agriSypnosis.content: '',
+                      style: GoogleFonts.roboto(
+                          textStyle: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'NunitoSans',
+                              wordSpacing: 2)),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ]),
-        ],
+            ]),
+          ],
+        ),
       ),
     );
   }

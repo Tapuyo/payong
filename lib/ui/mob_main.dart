@@ -8,9 +8,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_model.dart';
+import 'package:payong/models/system_ads_model.dart';
 import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
+import 'package:payong/services/daily10_service.dart';
 import 'package:payong/services/daily_services.dart';
 import 'package:payong/services/getLocationId.dart';
 import 'package:payong/ui/drawer/drawer.dart';
@@ -20,6 +22,7 @@ import 'package:payong/utils/themes.dart';
 import 'package:payong/routes/routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -79,9 +82,15 @@ class _MainPageState extends State<MainPage> {
     );
 
     FirebaseMessaging.instance.subscribeToTopic("Payong");
+    
+
   }
 
+
+
   getCurrentLocation() async {
+    await SystemService.getAdsSystem(context);
+    
     Position result = await _determinePosition();
     final dailyProvider = context.read<InitProvider>();
     if (result != null) {
@@ -99,9 +108,9 @@ class _MainPageState extends State<MainPage> {
 
       intProv.setLocationId(locID);
     }
-// DateTime selectedDate = DateTime.now();
-//      String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
-//     await DailyServices.getDailyList(context, mod, dt);
+    // ignore: use_build_context_synchronously
+    await SystemService.getInitWeatherBack(context);
+
   }
 
   Future<Position> _determinePosition() async {
@@ -247,6 +256,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget bodyWidget() {
+    final adsList = context.select((InitProvider p) => p.adsList);
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
@@ -670,7 +680,7 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
               const SizedBox(
-                height: 50,
+                height: 20,
               ),
               GestureDetector(
                 child: Column(
@@ -678,42 +688,64 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     CarouselSlider(
                       options: CarouselOptions(
-                          height: 140.0,
+                          height: 180.0,
                           viewportFraction: .9,
                           autoPlay: true,
                           enlargeFactor: .4),
-                      items: [1, 2, 3, 4, 5].map((i) {
+                      items: adsList.map((i) {
                         return Builder(
                           builder: (BuildContext context) {
-                            return Container(
-                              height: 100,
-                              width: MediaQuery.of(context).size.width - 50,
-                              decoration: BoxDecoration(
-                                border: Border.all(
+                            return GestureDetector(
+                              onTap: () async {
+                                if (i.linkDestinationType != 'EXTERNAL LINK') {
+                                  await openlaunchUrl(
+                                      i.linkDestination);
+                                }
+                              },
+                              child: Container(
+                                height: 150,
+                                width: MediaQuery.of(context).size.width - 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width:
+                                        1, //                   <--- border width here
+                                  ),
+                                  borderRadius: BorderRadius.circular(17.0),
                                   color: Colors.white,
-                                  width:
-                                      1, //                   <--- border width here
                                 ),
-                                borderRadius: BorderRadius.circular(17.0),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    // ignore: prefer_const_literals_to_create_immutables
-                                    children: [
-                                      Text(
-                                        'Lorem ipsum dolor sit amet, consectetur \nadipiscing elit,sed do eiusmod tempor \nincididunt ut labore et dolore \nmagna aliqua. Cursus risus at ultrices mi ',
-                                        style: kTextStyleSubtitle3b,
-                                      ),
-                                      const Icon(
-                                        Icons.tips_and_updates,
-                                        color: kColorSecondary,
-                                        size: 70,
-                                      )
-                                    ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        Column(
+                                          children: [
+                                            // Text(
+                                            //   'El Niño Alert',
+                                            //   style: kTextStyleSubtitle2b,
+                                            // ),
+                                            SizedBox(
+                                              width: 200,
+                                              child: Text(
+                                                i.source,
+                                                style: kTextStyleSubtitle3b,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.network(
+                                              i.source),
+                                        )
+                                      ]),
+                                ),
                               ),
                             );
                           },
@@ -726,5 +758,11 @@ class _MainPageState extends State<MainPage> {
             ],
           )),
     );
+  }
+
+  Future<void> openlaunchUrl(String urlLink) async {
+    if (!await launchUrl(Uri.parse(urlLink))) {
+      throw Exception('Could not launch $urlLink');
+    }
   }
 }

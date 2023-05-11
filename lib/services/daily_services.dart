@@ -67,7 +67,7 @@ abstract class DailyServices {
     var jsondata = json.decode(response.body);
 
     List<DailyModel> newDailyList = [];
-
+    print(jsondata);
     for (var u in jsondata) {
       String meanTemp = '';
       try{

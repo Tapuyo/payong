@@ -18,6 +18,11 @@ class AgriProvider with ChangeNotifier {
   DateTime selectedDate = DateTime.now();
   List<AgriForecastModel> agriForecastModel = [];
 
+  int _agri10Tabs = 0;
+
+  int get agri10Tabs => _agri10Tabs;
+
+
   List<AgriAdvModel> agriAdvModel = [];
 
   List<Agri10DaysForecastvModel> agri10Forecast = [];
@@ -44,9 +49,13 @@ class AgriProvider with ChangeNotifier {
       _agriForecastLeafWetness;
   List<AgriForecastSoilConditionModel> get agriForecastSoilCondition =>
       _agriForecastSoilCondition;
-  
-    void setProgID(String value) {
 
+   void setAgri10Tab(int value) {
+    _agri10Tabs = value;
+    notifyListeners();
+  }
+  
+  void setProgID(String value) {
     _progID = value;
     notifyListeners();
   }
