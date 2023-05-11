@@ -185,52 +185,57 @@ abstract class AgriServices {
 
     List<AgriRegionalForecast> newDailyList = [];
 
-    print(jsondata);
+    print('DATA FORECAST' + jsondata.toString());
 
     for (var u in jsondata) {
       List<AgriRegionalForecastWeatherSystem> weatherSystem = [];
+
+      if(u['WeatherSystem'] != null){
       for (var a in u['WeatherSystem']) {
         AgriRegionalForecastWeatherSystem weather =
             AgriRegionalForecastWeatherSystem(
-                a['Name'], a['Description'], a['Icon']);
+                a['Name'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
         weatherSystem.add(weather);
-      }
+      }}
 
       List<AgriRegionalForecastWindCondition> windCondition = [];
 
+       if(u['WindCondition'] != null){
       for (var a in u['WindCondition']) {
         AgriRegionalForecastWindCondition weather =
             AgriRegionalForecastWindCondition(
-                a['Location'], a['Description'], a['Icon']);
+                a['Location'] ?? '', a['Description'] ?? '', a['Icon']?? '');
         windCondition.add(weather);
-      }
+      }}
 
       List<AgriRegionalForecastGaleWarning> galeWarning = [];
 
+       if(u['GaleWarning'] != null){
       for (var a in u['GaleWarning']) {
         AgriRegionalForecastGaleWarning weather =
             AgriRegionalForecastGaleWarning(
-                a['Location'], a['Description'], a['Icon']);
+                a['Location']?? '', a['Description']?? '', a['Icon']?? '');
         galeWarning.add(weather);
-      }
+      }}
 
       List<AgriRegionalForecastEnso> enso = [];
 
-      //  for (var a in u['EnsoWarning']) {
-      //   AgriRegionalForecastEnso weather = AgriRegionalForecastEnso(
-      //     a['Location'],
-      //     a['Description'],
-      //     a['Icon']
-      //   );
-      //   enso.add(weather);
-      // }
+       if(u['EnsoWarning'] != null){
+       for (var a in u['EnsoWarning']) {
+        AgriRegionalForecastEnso weather = AgriRegionalForecastEnso(
+          a['Location']?? '',
+          a['Description'] ?? '',
+          a['Icon']?? ''
+        );
+        enso.add(weather);
+      }}
 
       List<AgriRegionalForecastMap> map = [];
 
       for (var a in u['Maps']) {
         AgriRegionalForecastMap weather = AgriRegionalForecastMap(
-          a['Map'],
-          a['Description'],
+          a['Map']?? '',
+          a['Description']?? '',
         );
         map.add(weather);
       }

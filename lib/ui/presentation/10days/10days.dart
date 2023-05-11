@@ -242,6 +242,7 @@ class Daily10Widget extends HookWidget {
             ),
             Expanded(
               child: ListView(children: [
+                if(dailyDetails1.value != null)
                 LineChartSample1(
                   d0: double.parse(
                     dailyDetails1.value!.rainFall,

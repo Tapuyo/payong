@@ -58,7 +58,7 @@ class AgriForecast10Widget extends HookWidget {
       });
       return;
     }, const []);
-
+    print(agri.value);
     return agri.value.isNotEmpty
         ? loadDetails(context, isScrollControlled, agriTab, agri.value, backImg,withRain)
         : SizedBox(
@@ -79,7 +79,7 @@ class AgriForecast10Widget extends HookWidget {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 150,
+                height: MediaQuery.of(context).size.height,
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
                   child: Image.asset(backImg),
@@ -91,74 +91,77 @@ class AgriForecast10Widget extends HookWidget {
                   trail: true,
                   dropFallSpeed: 5,
                 ),
-              SizedBox(
-                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 150,
-                child: ListView(
-                  children: [
-                    CarouselSlider(
-                      carouselController: buttonCarouselController,
-                      options: CarouselOptions(
-                          onPageChanged: (value, val) {
-                            // carouselInt.value = value;
-                          },
-                          height: MediaQuery.of(context).size.height - 300,
-                          viewportFraction: .9,
-                          autoPlay: false,
-                          enlargeFactor: .4),
-                      items: tb.map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              child: Column(
-                                children: [
-                                  if (i == 'Weather') ...{
-                                    weatherWidget(context, isScrollControlled,
-                                        agriTab, agri)
-                                  } else if (i == 'Wind') ...{
-                                    windWidget(context, agri),
-                                    galeWidget(context, agri)
-                                  } else if (i == 'Enso') ...{
-                                    ensoWidget(context)
-                                  } else ...{
-                                    weatherWidget(context, isScrollControlled,
-                                        agriTab, agri)
-                                  }
-                                ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                child: SizedBox(
+                   width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height - 150,
+                  child: ListView(
+                    children: [
+                      CarouselSlider(
+                        carouselController: buttonCarouselController,
+                        options: CarouselOptions(
+                            onPageChanged: (value, val) {
+                              // carouselInt.value = value;
+                            },
+                            height: MediaQuery.of(context).size.height - 300,
+                            viewportFraction: .9,
+                            autoPlay: false,
+                            enlargeFactor: .4),
+                        items: tb.map((i) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                child: Column(
+                                  children: [
+                                    if (i == 'Weather') ...{
+                                      weatherWidget(context, isScrollControlled,
+                                          agriTab, agri)
+                                    } else if (i == 'Wind') ...{
+                                      windWidget(context, agri),
+                                      galeWidget(context, agri)
+                                    } else if (i == 'Enso') ...{
+                                      ensoWidget(context)
+                                    } else ...{
+                                      weatherWidget(context, isScrollControlled,
+                                          agriTab, agri)
+                                    }
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      ),
+                      SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              buttonCarouselController.nextPage(
+                                  duration: Duration(milliseconds: 100),
+                                  curve: Curves.linear);
+                            },
+                            child: Container(
+                              width: 300,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: kColorBlue,
                               ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            buttonCarouselController.nextPage(
-                                duration: Duration(milliseconds: 100),
-                                curve: Curves.linear);
-                          },
-                          child: Container(
-                            width: 300,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: kColorBlue,
-                            ),
-                            height: 35,
-                            child: Center(
-                              child: Text(
-                                'Next',
-                                style: kTextStyleSubtitle4b,
+                              height: 35,
+                              child: Center(
+                                child: Text(
+                                  'Next',
+                                  style: kTextStyleSubtitle4b,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ]),

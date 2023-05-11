@@ -38,9 +38,10 @@ abstract class SystemService {
 
     for (var u in jsondata) {
       AdsModel daily = AdsModel(
-        u['AdvisoryId'] ?? '',
-        u['SourceType'] ?? '',
-        u['Source'] ?? '',
+        u['Advisory_id'] ?? '',
+        u['title'] ?? '',
+        u['Description'] ?? '',
+        u['IMG'],
          u['link_destination_type'] ?? '',
           u['LinkDestination'] ?? [],
           

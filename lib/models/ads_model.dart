@@ -1,11 +1,12 @@
 class AdsModel {
-  final String advisoryid;
-  final String sourceType;
-  final String source;
+  final String advisoryId;
+  final String title;
+  final String description;
+  final String img;
   final String linkdestinationtype;
   final String linkDestination;
 
   AdsModel(
-      this.advisoryid,
-      this.sourceType, this.source, this.linkdestinationtype,this.linkDestination);
+      this.advisoryId,
+      this.title, this.description, this.img,this.linkdestinationtype,this.linkDestination);
 }

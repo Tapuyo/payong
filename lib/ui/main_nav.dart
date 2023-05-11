@@ -271,7 +271,7 @@ class _MyWidgetState extends State<MainNav> {
 
     for (var i = 1; i < 20; i++) {
       await DailyServices.getDailyList(context, dt, i.toString(), optionFilter);
-
+      print('ajsdkjahskdhakshdkjahsd');
       dailyProvider.setDateSelect(selectedDate);
       try {
         setState(() {
@@ -305,6 +305,8 @@ class _MyWidgetState extends State<MainNav> {
               } else {
                 lxColor = name.rainFallActualColorCode.toColor();
               }
+
+              print(lxColor);
 
               dailyProvider.setPolygonDaiy(Polygon(
                   onTap: () async {

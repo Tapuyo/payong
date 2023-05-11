@@ -38,8 +38,9 @@ abstract class DailyServices {
         u['MinTempColor'] ?? '',
         u['MaxTemp'] ?? '',
         u['MaxTempColor'] ?? '',
+        u['RainfallPercentColor'] ?? '#3d85c6',
         u['TotalNormalRainFall'] ?? '',
-        u['RainfallPercentColor'] ?? '',
+        
         u['TotalActualRainFall'] ?? '',
         meanTemp,
         u['OverAllMinTemp'] ?? '',

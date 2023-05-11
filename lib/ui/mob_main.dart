@@ -725,14 +725,14 @@ class _MainPageState extends State<MainPage> {
                                       children: [
                                         Column(
                                           children: [
-                                            // Text(
-                                            //   'El Niño Alert',
-                                            //   style: kTextStyleSubtitle2b,
-                                            // ),
+                                            Text(
+                                              i.title,
+                                              style: kTextStyleSubtitle2b,
+                                            ),
                                             SizedBox(
                                               width: 200,
                                               child: Text(
-                                                i.source,
+                                                i.description,
                                                 style: kTextStyleSubtitle3b,
                                               ),
                                             ),
@@ -742,7 +742,7 @@ class _MainPageState extends State<MainPage> {
                                           width: 100,
                                           height: 100,
                                           child: Image.network(
-                                              i.source),
+                                              i.img),
                                         )
                                       ]),
                                 ),
