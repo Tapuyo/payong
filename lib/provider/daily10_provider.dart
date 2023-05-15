@@ -89,7 +89,7 @@ class Daily10Provider with ChangeNotifier{
     notifyListeners();
   }
 
-  void setDailyDetails(DailyModel10 value) {
+  void setDailyDetails(DailyModel10? value) {
     daily = value;
     notifyListeners();
   }

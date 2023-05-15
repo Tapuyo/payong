@@ -131,8 +131,8 @@ class _MyWidgetState extends State<MainNav> {
     final prod = context.read<AgriProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 10; i++) {
-      final result = await AgriServices.getRegionMap(context, i.toString());
+    // for (var i = 1; i < 10; i++) {
+      final result = await AgriServices.getRegionMap(context, '1');
 
       // try {
       setState(() {
@@ -189,7 +189,7 @@ class _MyWidgetState extends State<MainNav> {
       // } catch (e) {
       //   print('error $e');
       // }
-    }
+    // }
     context.read<InitProvider>().setIsLoading(false);
     setState(() {
       isRefresh = false;

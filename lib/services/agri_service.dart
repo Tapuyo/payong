@@ -435,6 +435,8 @@ abstract class AgriServices {
       BuildContext context, String page) async {
     final response = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/regioncoordinates.php?page=1'));
+    // final response = await http.get(Uri.parse(
+    //     'http://18.139.91.35/payong/API/regioncoordinates.php?page=1&RegionID=11'));
     var jsondata = json.decode(response.body);
 
     List<Daily10MapModel> newDailyList = [];

@@ -71,7 +71,6 @@ class Daily10Widget extends HookWidget {
         String dt = DateFormat('yyyy-MM-dd').format(dailyProvider.selectedDate);
         if (id.isEmpty) {
           await Daily10Services.getDailyDetails(context, locId!, dt);
-          // ignore: use_build_context_synchronously
           dailyDetails1.value = await Daily10Services.getDailyDetails(
               context,
               locId,
@@ -268,7 +267,6 @@ class Daily10Widget extends HookWidget {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Text(
                       'Humidity ${dailyDetails != null ? dailyDetails!.humidity : ''}',
