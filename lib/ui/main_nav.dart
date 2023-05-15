@@ -271,7 +271,7 @@ class _MyWidgetState extends State<MainNav> {
 
     for (var i = 1; i < 20; i++) {
       await DailyServices.getDailyList(context, dt, i.toString(), optionFilter);
-      print('ajsdkjahskdhakshdkjahsd');
+
       dailyProvider.setDateSelect(selectedDate);
       try {
         setState(() {
@@ -290,7 +290,7 @@ class _MyWidgetState extends State<MainNav> {
 
                 polygonCoords.add(LatLng(longitude, latitude));
               }
-              Color lxColor = name.rainFallNormalColorCode.toColor();
+              Color lxColor = Color(0xFF42A5F5);
 
               if (dailyProvider.option == 'MinTemp') {
                 lxColor = name.lowTempColorCode.toColor();
@@ -500,23 +500,23 @@ class _MyWidgetState extends State<MainNav> {
                     ),
                   ),
                 ),
-                if(isRefresh)
-                Container(
-                  color: Colors.white30,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: Center(child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 8),
-                        Text('Please wait...', style: TextStyle(color: Colors.black),)
-                      ],
-                    )),
-                  ),
-                )
+                // if(isRefresh)
+                // Container(
+                //   color: Colors.white30,
+                //   child: SizedBox(
+                //     width: MediaQuery.of(context).size.width,
+                //     height: MediaQuery.of(context).size.height,
+                //     child: Center(child: Column(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         CircularProgressIndicator(),
+                //         SizedBox(height: 8),
+                //         Text('Please wait...', style: TextStyle(color: Colors.black),)
+                //       ],
+                //     )),
+                //   ),
+                // )
               ],
             ),
       // bottomNavigationBar:
@@ -1327,11 +1327,11 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
-        if (isRefresh)
-          Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          ),
+        // if (isRefresh)
+        //   Align(
+        //     alignment: Alignment.center,
+        //     child: CircularProgressIndicator(),
+        //   ),
       ],
     );
   }

@@ -734,6 +734,7 @@ class _MainPageState extends State<MainPage> {
                                               child: Text(
                                                 i.description,
                                                 style: kTextStyleSubtitle3b,
+                                                maxLines: 10,
                                               ),
                                             ),
                                           ],

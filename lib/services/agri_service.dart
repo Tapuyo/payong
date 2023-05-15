@@ -450,9 +450,14 @@ abstract class AgriServices {
 
   static Future<List<Agri10Prognosis>> getProgDetails(BuildContext context, String id) async {
     // id = '7';
-    print('http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$id');
+    final responseParent = await http
+        .get(Uri.parse('http://18.139.91.35/payong/API/agri_info.php'));
+    var jsondataParent = json.decode(responseParent.body);
+
+    String agriID = jsondataParent[0]['AgriInfoID'];
+    print('http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$agriID&RegionID=$id');
     final response = await http.get(Uri.parse(
-        'http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$id'));
+        'http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$agriID&RegionID=$id'));
     var jsondata = json.decode(response.body);
     final dailyProvider = context.read<AgriProvider>();
     List<Agri10Prognosis> newDailyList = [];
@@ -479,7 +484,7 @@ abstract class AgriServices {
         u['RainyDays'] ?? '',
         u['RelativeHumidity'] ?? '',
         soilCondition,
-        u['Temperature'].toString(),
+        u['Temperature'][0]['TemperatureDetails'].toString(),
       );
       newDailyList.add(daily);
     }

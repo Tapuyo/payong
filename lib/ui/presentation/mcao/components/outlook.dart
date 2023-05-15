@@ -42,7 +42,7 @@ class outlookPage extends HookWidget {
           child: agriTab.value == 0
               ? WebView(
                   initialUrl:
-                      'http://18.139.91.35/payong/outlook.php?fdate=${monthReturn(DateTime.now().month)}%01${DateTime.now().year}',
+                      'http://18.139.91.35/payong/outlook.php?fdate=${monthReturn(DateTime.now().month)}01${DateTime.now().year}',
                   onPageFinished: (url) {
                     onLoad.value = false;
                   },

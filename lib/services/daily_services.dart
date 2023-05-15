@@ -11,7 +11,7 @@ import 'package:payong/provider/daily_provider.dart';
 abstract class DailyServices {
   static Future<void> getDailyList(
       BuildContext context, String date, String page, String option) async {
-    //  date = '2023-04-04';
+    //  date = '2023-05-12';
     print('dasasdasd$dailyMap page=$page&fdate=$date&option=$option');
     final response = await http
         .get(Uri.parse('$dailyMap page=$page&fdate=$date&option=$option'));
@@ -31,7 +31,7 @@ abstract class DailyServices {
         u['LocationDescription'] ?? '',
         u['coordinates'] ?? [],
         u['ActualRainFall'] ?? '',
-        u['ActualRainFallColor'] ?? '',
+        u['ActualRainfallColor'] ?? '',
         u['NormalRainFall'] ?? '',
         u['NormalRainfallColor'] ?? '',
         u['MinTemp'] ?? '',
