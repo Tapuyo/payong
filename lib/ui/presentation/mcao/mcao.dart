@@ -60,8 +60,8 @@ class _mCaOPageState extends State<mCaOPage>
     final dailyProvider = context.read<McaoProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 10; i++) {
-      final result = await McaoService.getAssessment(context);
+    for (var i = 1; i < 116; i++) {
+      final result = await McaoService.getAssessment(context, i.toString());
 
       polygons.clear();
 

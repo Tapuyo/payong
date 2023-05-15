@@ -35,36 +35,36 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                 scrollDirection: Axis.vertical,
                 itemCount: dailyAgriDetails.length,
                 itemBuilder: (context, index) {
-                //   return Card(
-                //       child: Padding(
-                //           padding: const EdgeInsets.all(8.0),
-                //           child: Row(
-                //             children: [
-                //               Expanded(
-                //                   flex: 2,
-                //                   child: Text(
-                //                     dailyAgriDetails[index].locations,
-                //                     style: kTextStyleSubtitle4b,
-                //                   )),
-                //               Spacer(),
-                //               Expanded(
-                //                   flex: 3,
-                //                   child: Text(
-                //                     dailyAgriDetails[index].weatherCondition,
-                //                     style: kTextStyleSubtitle4b,
-                //                   )),
-                //               Expanded(
-                //                   flex: 1,
-                //                   child:
-                //                       SizedBox(
-                // width: 50,
-                // height: 50,
-                // child: Image.asset('assets/sunny.png'))),
-                //             ],
-                //           )));
-                return Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Container(
+                  //   return Card(
+                  //       child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Row(
+                  //             children: [
+                  //               Expanded(
+                  //                   flex: 2,
+                  //                   child: Text(
+                  //                     dailyAgriDetails[index].locations,
+                  //                     style: kTextStyleSubtitle4b,
+                  //                   )),
+                  //               Spacer(),
+                  //               Expanded(
+                  //                   flex: 3,
+                  //                   child: Text(
+                  //                     dailyAgriDetails[index].weatherCondition,
+                  //                     style: kTextStyleSubtitle4b,
+                  //                   )),
+                  //               Expanded(
+                  //                   flex: 1,
+                  //                   child:
+                  //                       SizedBox(
+                  // width: 50,
+                  // height: 50,
+                  // child: Image.asset('assets/sunny.png'))),
+                  //             ],
+                  //           )));
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white60,
                           borderRadius: BorderRadius.circular(10),
@@ -82,15 +82,15 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                    dailyAgriDetails[index].soilCondition,
-                                    style: GoogleFonts.roboto(
-                                        textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'NunitoSans',
-                                    )),
-                                  ),
+                                dailyAgriDetails[index].soilCondition,
+                                style: GoogleFonts.roboto(
+                                    textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'NunitoSans',
+                                )),
+                              ),
                             ),
                           ),
                           Row(
@@ -103,8 +103,8 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(8, 0, 8, 10),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          8, 0, 8, 10),
                                       child: Text(
                                         dailyAgriDetails[index].locations,
                                         style: kTextStyleSubtitle4b,
@@ -112,18 +112,21 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                                     )
                                   ],
                                 )),
-                                Expanded(
-                                  child: SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: Image.asset(
-                                          'assets/soilmoistnormal.jpg')),
-                                )
+                                if (dailyAgriDetails[index].soilConditionIcon !=
+                                    '')
+                                  Expanded(
+                                    child: SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.network(
+                                            dailyAgriDetails[index]
+                                                .soilConditionIcon)),
+                                  )
                               ]),
                         ],
                       ),
                     ),
-                );
+                  );
                 },
               ),
               // child: SoilMoisture(context),
@@ -131,7 +134,4 @@ class AgriForecastSoilMoistWidget extends HookWidget {
           )
         : SizedBox();
   }
-
-  
-
 }

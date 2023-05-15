@@ -7,7 +7,7 @@ class Agri10Prognosis {
   final String rainyDays;
   final String relativeHumidity;
   final List<SoilConditionModeil> soilCondition;
-  final String temperature;
+  final List<Temperature> temp;
   
 
   Agri10Prognosis(
@@ -19,7 +19,7 @@ class Agri10Prognosis {
       this.rainyDays,
       this.relativeHumidity,
       this.soilCondition,
-      this.temperature
+      this.temp
       );
 }
 
@@ -28,5 +28,11 @@ class SoilConditionModeil{
   final String location;
 
   SoilConditionModeil(this.soilCondition, this.location);
+}
+
+class Temperature{
+  final String temperatureDetails;
+
+  Temperature(this.temperatureDetails);
 }
 

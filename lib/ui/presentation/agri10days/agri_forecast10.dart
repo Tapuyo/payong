@@ -211,29 +211,21 @@ class AgriForecast10Widget extends HookWidget {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 200,
+              height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12), color: Colors.white70
-                  // gradient: LinearGradient(
-                  //     // ignore: prefer_const_literals_to_create_immutables
-                  //     colors: [
-                  //       Color(0xFF005EEB),
-                  //       Color(0xFF489E59),
-                  //     ],
-                  //     begin: Alignment.topCenter,
-                  //     end: Alignment.bottomCenter,
-                  //     tileMode: TileMode.clamp),
                   ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10,),
+                  SizedBox(height: 20,),
                   Text(
                     'Weather systems that will likely affected the whole country',
                     style: TextStyle(fontSize: 20, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
+                    SizedBox(height: 10,),
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 2.5,
                     width: MediaQuery.of(context).size.width,
@@ -266,7 +258,7 @@ class AgriForecast10Widget extends HookWidget {
                   ),
                   
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
@@ -695,7 +687,7 @@ class AgriForecast10Widget extends HookWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: ColoredBox(
-                  color: Colors.white54,
+                  color: Colors.transparent ,
                   child: Text(
                     content,
                     style: TextStyle(color: Colors.black),
@@ -718,14 +710,13 @@ class AgriForecast10Widget extends HookWidget {
 
     for (var i = 0; i < agri.last.map.length; i++) {
       print(agri.last.map[i].map);
-        if(agri.last.map[i].description == 'NORMAL RAINFALL'){
+        if(agri.last.map[i].description == 'MAP2'){
           normalRainfallImage = agri.last.map[i].map;
         }else{
           actualRainfallImage = agri.last.map[i].map;
         }
     }
 
-    print('asdasd $normalRainfallImage');
 
     return showModalBottomSheet<void>(
       isScrollControlled: isScrollControlled.value,
@@ -738,6 +729,7 @@ class AgriForecast10Widget extends HookWidget {
               padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
               child: SingleChildScrollView(
                 child: Stack(children: [
+                
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -846,6 +838,7 @@ class AgriForecast10Widget extends HookWidget {
                                 ),
                               ],
                             ),
+                              SizedBox(height: 20,),
                             agriTab.value == 1
                                 ? Container(
                                     color: Colors.white70,

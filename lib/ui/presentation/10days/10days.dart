@@ -131,47 +131,47 @@ class Daily10Widget extends HookWidget {
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 2))));
           dailyDetails3.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 3))));
           dailyDetails4.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 4))));
           dailyDetails5.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 5))));
           dailyDetails6.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 6))));
           dailyDetails7.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 4))));
           dailyDetails8.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 7))));
           dailyDetails9.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 8))));
           dailyDetails10.value = await Daily10Services.getDailyDetails(
               context,
               id,
               DateFormat('yyyy-MM-dd')
-                  .format(dailyProvider.selectedDate.add(Duration(days: 1))));
+                  .format(dailyProvider.selectedDate.add(Duration(days: 9))));
         }
       });
       return;

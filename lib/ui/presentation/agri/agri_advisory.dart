@@ -45,7 +45,7 @@ class AgriAdvisoryWidget extends HookWidget {
         context.select((AgriProvider p) => p.agriAdvModels);
     final String backImg =
         context.select((InitProvider p) => p.backImgAssetUrl);
-        final bool withRain = context.select((InitProvider p) => p.withRain);
+    final bool withRain = context.select((InitProvider p) => p.withRain);
     ValueNotifier titleChoose = useState('');
     ValueNotifier contentChoose = useState('');
     ValueNotifier carouselInt = useState(0);
@@ -71,13 +71,13 @@ class AgriAdvisoryWidget extends HookWidget {
                   fit: BoxFit.fitHeight,
                 ),
               ),
-              
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ColoredBox(color: Colors.white30),
               ),
-               if(withRain) ParallaxRain(
+              if (withRain)
+                ParallaxRain(
                   // ignore: prefer_const_literals_to_create_immutables
                   dropColors: [Colors.white],
                   trail: true,
@@ -186,7 +186,7 @@ class AgriAdvisoryWidget extends HookWidget {
                                       dailyAgriDetails[value].content;
                                 },
                                 height: 100.0,
-                                viewportFraction: .9,
+                                viewportFraction: 1,
                                 autoPlay: false,
                                 enlargeFactor: .4),
                             items: dailyAgriDetails.map((i) {
@@ -199,51 +199,112 @@ class AgriAdvisoryWidget extends HookWidget {
                             }).toList(),
                           ),
                           if (contentChoose.value != '')
-                            Container(
-                              margin: const EdgeInsets.all(15.0),
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white60,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.black)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  contentChoose.value,
-                                  style: TextStyle(color: Colors.black),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Container(
+                                margin: const EdgeInsets.all(15.0),
+                                padding: const EdgeInsets.all(3.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.white60,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.black)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    contentChoose.value,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  buttonCarouselController.nextPage(
-                                      duration: Duration(milliseconds: 100),
-                                      curve: Curves.linear);
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    buttonCarouselController.nextPage(
+                                        duration: Duration(milliseconds: 100),
+                                        curve: Curves.linear);
 
-                                  titleChoose.value =
-                                      dailyAgriDetails[carouselInt.value].title;
-                                },
-                                child: Container(
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: kColorBlue,
-                                  ),
-                                  height: 35,
-                                  child: Center(
-                                    child: Text(
-                                      'Next',
-                                      style: kTextStyleSubtitle4b,
+                                    titleChoose.value =
+                                        dailyAgriDetails[carouselInt.value]
+                                            .title;
+                                  },
+                                  child: Container(
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: kColorBlue,
+                                    ),
+                                    height: 35,
+                                    child: Center(
+                                      child: Text(
+                                        'Next',
+                                        style: kTextStyleSubtitle4b,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ]),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 380, 10, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      buttonCarouselController.nextPage(
+                          duration: Duration(milliseconds: 100),
+                          curve: Curves.linear);
+
+                      titleChoose.value =
+                          dailyAgriDetails[carouselInt.value].title;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: Colors.white38,
+                      ),
+                      height: 40,
+                      width: 40,
+                      child: Center(
+                        child: Icon(Icons.arrow_forward_ios),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 380, 10, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      buttonCarouselController.previousPage(
+                          duration: Duration(milliseconds: 100),
+                          curve: Curves.linear);
+
+                      titleChoose.value =
+                          dailyAgriDetails[carouselInt.value].title;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: Colors.white38,
+                      ),
+                      height: 40,
+                      width: 40,
+                      child: Center(
+                        child: Icon(Icons.arrow_back_ios, ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -268,7 +329,7 @@ class AgriAdvisoryWidget extends HookWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.black),
-              color: Colors.white,
+              color: Colors.white38,
             ),
             height: 35,
             child: Center(

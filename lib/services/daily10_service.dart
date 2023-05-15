@@ -126,7 +126,7 @@ abstract class Daily10Services {
     var jsondata = json.decode(response.body);
 
     List<Daily10MapModel> newDailyList = [];
-    print(jsondata.toString());
+
     for (var u in jsondata) {
       Daily10MapModel daily = Daily10MapModel(
         u['LocationID'] ?? '',

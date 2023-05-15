@@ -185,7 +185,6 @@ abstract class AgriServices {
 
     List<AgriRegionalForecast> newDailyList = [];
 
-    print('DATA FORECAST' + jsondata.toString());
 
     for (var u in jsondata) {
       List<AgriRegionalForecastWeatherSystem> weatherSystem = [];
@@ -326,7 +325,7 @@ abstract class AgriServices {
 
     String agriID = jsondataParent[0]['AgriDailyID'];
     final response = await http.get(Uri.parse(
-        'http://18.139.91.35//payong/API/AgriDailySoilCondition.php?AgriDailyID=1'));
+        'http://18.139.91.35//payong/API/AgriDailySoilCondition.php?AgriDailyID=$agriID'));
 
     var jsondata = json.decode(response.body);
 
@@ -336,6 +335,7 @@ abstract class AgriServices {
       AgriForecastSoilConditionModel daily = AgriForecastSoilConditionModel(
         u['SoilCondition'] ?? '',
         u['Locations'] ?? '',
+        u['SoilConditionIcon'] ?? ''
       );
       newDailyList.add(daily);
     }
@@ -477,6 +477,15 @@ abstract class AgriServices {
         soilCondition.add(soil);
       }
 
+       List<Temperature>  temp = [];
+
+      for (var a in u['Temperature']) {
+        Temperature soil = Temperature(
+          a['TemperatureDetails'],
+        );
+        temp.add(soil);
+      }
+
       Agri10Prognosis daily = Agri10Prognosis(
         u['AgriInfoID'] ?? '',
         u['RegionDescription'] ?? '',
@@ -486,7 +495,7 @@ abstract class AgriServices {
         u['RainyDays'] ?? '',
         u['RelativeHumidity'] ?? '',
         soilCondition,
-        u['Temperature'][0]['TemperatureDetails'].toString(),
+        temp,
       );
       newDailyList.add(daily);
     }

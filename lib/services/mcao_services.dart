@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 
 abstract class McaoService{
   static Future<List<McaoAssessment>> getAssessment(
-      BuildContext context) async {
+      BuildContext context, String page) async {
     final response = await http
-        .get(Uri.parse('http://18.139.91.35/payong/API/MonthlyMon.php?fdate=APRIL%202023&outlook=1&option=ActualRainfall'));
+        .get(Uri.parse('http://18.139.91.35/payong/API/MonthlyMon.php?fdate=MAY%202023&assessment=1&option=ActualRainfall&page=$page'));
     var jsondata = json.decode(response.body);
 
     List<McaoAssessment> newDailyList = [];

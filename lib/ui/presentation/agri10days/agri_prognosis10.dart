@@ -103,6 +103,12 @@ class AgriPrognosis10Widget extends HookWidget {
 
   Widget listPrognosis(BuildContext context, List<Agri10Prognosis> dailyDetails,
       ValueNotifier showExpand, ValueNotifier soilCondition) {
+        String tempe = '';
+        if(dailyDetails.last.temp.isNotEmpty){
+           for (var u in dailyDetails.last.temp) {
+            tempe = tempe + ' ' + u.temperatureDetails;
+           }
+        }
     return ListView(
       // physics: NeverScrollableScrollPhysics(),
       children: [
@@ -219,7 +225,7 @@ class AgriPrognosis10Widget extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${dailyDetails.last.temperature}°C',
+                        '$tempe°C',
                         style: kTextStyleWeather,
                       ),
                       // Text(

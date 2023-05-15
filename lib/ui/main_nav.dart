@@ -144,7 +144,7 @@ class _MyWidgetState extends State<MainNav> {
           List<LatLng> polygonCoords = [];
           if (coordinates.isNotEmpty) {
             for (var coor in coordinates) {
-              try {
+              // try {
                 // print(coor['coordinate']);
                 var latLng = coor['coordinate'].toString().split(",");
                 print(double.parse(latLng[0]).toString());
@@ -152,7 +152,7 @@ class _MyWidgetState extends State<MainNav> {
                 double longitude = double.parse(latLng[1]);
                 ;
                 polygonCoords.add(LatLng(longitude, latitude));
-              } catch (e) {}
+              // } catch (e) {}
             }
 
             dailyProvider.setPolygonDaiy(Polygon(
@@ -203,7 +203,7 @@ class _MyWidgetState extends State<MainNav> {
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 15; i++) {
+    for (var i = 1; i < 116; i++) {
       final result = await Daily10Services.get10DaysMap(context, i.toString());
 
       try {
@@ -269,17 +269,25 @@ class _MyWidgetState extends State<MainNav> {
       optionFilter = 'ActualRainfall';
     }
 
-    for (var i = 1; i < 20; i++) {
-      await DailyServices.getDailyList(context, dt, i.toString(), optionFilter);
+    for (var i = 1; i < 116; i++) {
+      print('john paul $i');
+      final dailymap = await DailyServices.getDailyList(context, dt, i.toString(), optionFilter);
 
       dailyProvider.setDateSelect(selectedDate);
-      try {
-        setState(() {
-          polygons.clear();
-          title = 'Philippines';
-          dailyList = dailyProvider.dailyList;
+      colorMap(dailymap);
+    
+    }
+    setState(() {
+      isRefresh = false;
+    });
+  }
 
-          for (var name in dailyList) {
+  void colorMap(List<DailyModel> dailymap){
+    final dailyProvider = context.read<DailyProvider>();
+    setState(() {
+          // polygons.clear();
+
+          for (var name in dailymap) {
             List<dynamic> coordinates = name.locationCoordinate;
             List<LatLng> polygonCoords = [];
             if (coordinates.isNotEmpty) {
@@ -333,13 +341,6 @@ class _MyWidgetState extends State<MainNav> {
             }
           }
         });
-      } catch (e) {
-        print('error $e');
-      }
-    }
-    setState(() {
-      isRefresh = false;
-    });
   }
 
   getPast10Days() {
@@ -1687,19 +1688,19 @@ class _MyWidgetState extends State<MainNav> {
             ]),
           ),
         ),
-        if (isRefresh)
-          Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          ),
-        if (selectIndex == 1 || selectIndex == 2 || selectIndex == 3)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 140),
-              child: display10DaysWidget(),
-            ),
-          )
+        // if (isRefresh)
+        //   Align(
+        //     alignment: Alignment.center,
+        //     child: CircularProgressIndicator(),
+        //   ),
+        // if (selectIndex == 1 || selectIndex == 2 || selectIndex == 3)
+        //   Align(
+        //     alignment: Alignment.bottomCenter,
+        //     child: Padding(
+        //       padding: const EdgeInsets.fromLTRB(8, 0, 8, 140),
+        //       child: display10DaysWidget(),
+        //     ),
+        //   )
       ],
     );
   }

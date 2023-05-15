@@ -18,6 +18,8 @@ class assessmentPage extends HookWidget {
     zoom: 4.8,
   );
 
+  // print('http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().month)}23${DateTime.now().year}');
+
   @override
   Widget build(BuildContext context) {
     final dailyProviderPolygon =
@@ -35,7 +37,7 @@ class assessmentPage extends HookWidget {
           child: agriTab.value == 0
               ?  WebView(
                   initialUrl:
-                      'http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().month)}01${DateTime.now().year}',
+                      'http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().month)}%20${DateTime.now().year}',
                   onPageFinished:(url){
                     onLoad.value = false;
                   },
@@ -193,8 +195,8 @@ class assessmentPage extends HookWidget {
     final dailyProvider = context.read<McaoProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    for (var i = 1; i < 2; i++) {
-      final result = await McaoService.getAssessment(context);
+    for (var i = 1; i < 116; i++) {
+      final result = await McaoService.getAssessment(context, i.toString());
 
       try {
         polygons.clear();

@@ -78,7 +78,7 @@ class AgriAdvisory10Widget extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height + 200,
+                              height: MediaQuery.of(context).size.height + 1000,
                               child: ListView.builder(
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 200),
                                 scrollDirection: Axis.horizontal,

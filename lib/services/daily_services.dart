@@ -9,7 +9,7 @@ import 'package:payong/models/daily_model.dart';
 import 'package:payong/provider/daily_provider.dart';
 
 abstract class DailyServices {
-  static Future<void> getDailyList(
+  static Future<List<DailyModel>> getDailyList(
       BuildContext context, String date, String page, String option) async {
     //  date = '2023-05-12';
     print('dasasdasd$dailyMap page=$page&fdate=$date&option=$option');
@@ -51,6 +51,7 @@ abstract class DailyServices {
     // ignore: use_build_context_synchronously
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setDailyList(newDailyList);
+    return newDailyList;
   }
 
   static Future<DailyModel?> getDailyDetails(

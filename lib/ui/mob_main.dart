@@ -87,11 +87,13 @@ class _MainPageState extends State<MainPage> {
   }
 
   getCurrentLocation() async {
+     Future.delayed(Duration.zero, ()async {
     await SystemService.getAdsSystem(context);
 
     Position result = await _determinePosition();
+    // ignore: use_build_context_synchronously
     final dailyProvider = context.read<InitProvider>();
-    if (result != null) {
+   
       dailyProvider.setPosition(result);
 
       List<Placemark> placemarks =
@@ -105,9 +107,11 @@ class _MainPageState extends State<MainPage> {
       final intProv = context.read<InitProvider>();
 
       intProv.setLocationId(locID);
-    }
+    
 
+    // ignore: use_build_context_synchronously
     await SystemService.getInitWeatherBack(context);
+     });
   }
 
   Future<Position> _determinePosition() async {
@@ -398,7 +402,7 @@ class _MainPageState extends State<MainPage> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                      padding: const EdgeInsets.fromLTRB(30, 0, 15, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,7 +451,7 @@ class _MainPageState extends State<MainPage> {
                               ],
                             ),
                           ),
-                          Spacer(),
+                          SizedBox(width: 35,),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -501,7 +505,7 @@ class _MainPageState extends State<MainPage> {
                               ],
                             ),
                           ),
-                          Spacer(),
+                          SizedBox(width: 15,),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -686,6 +690,7 @@ class _MainPageState extends State<MainPage> {
                     children: [
                       CarouselSlider(
                         options: CarouselOptions(
+                          autoPlayInterval: Duration(seconds: 10),
                             height: 180.0,
                             viewportFraction: .9,
                             autoPlay: true,
