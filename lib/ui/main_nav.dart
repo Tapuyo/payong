@@ -131,8 +131,8 @@ class _MyWidgetState extends State<MainNav> {
     final prod = context.read<AgriProvider>();
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
-    // for (var i = 1; i < 10; i++) {
-      final result = await AgriServices.getRegionMap(context, '1');
+    // for (var i = 1; i < 17; i++) {
+      final result = await AgriServices.getRegionMap(context);
 
       // try {
       setState(() {
@@ -144,7 +144,7 @@ class _MyWidgetState extends State<MainNav> {
           List<LatLng> polygonCoords = [];
           if (coordinates.isNotEmpty) {
             for (var coor in coordinates) {
-              // try {
+              try {
                 // print(coor['coordinate']);
                 var latLng = coor['coordinate'].toString().split(",");
                 print(double.parse(latLng[0]).toString());
@@ -152,7 +152,7 @@ class _MyWidgetState extends State<MainNav> {
                 double longitude = double.parse(latLng[1]);
                 ;
                 polygonCoords.add(LatLng(longitude, latitude));
-              // } catch (e) {}
+              } catch (e) {}
             }
 
             dailyProvider.setPolygonDaiy(Polygon(

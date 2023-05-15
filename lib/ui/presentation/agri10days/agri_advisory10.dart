@@ -80,7 +80,7 @@ class AgriAdvisory10Widget extends HookWidget {
                             SizedBox(
                               height: MediaQuery.of(context).size.height + 1000,
                               child: ListView.builder(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 200),
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: dailyAgriDetails.length,
                                 itemBuilder: (context, index) {

@@ -432,7 +432,7 @@ abstract class AgriServices {
   }
 
   static Future<List<Daily10MapModel>> getRegionMap(
-      BuildContext context, String page) async {
+      BuildContext context) async {
     final response = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/regioncoordinates.php?page=1'));
     // final response = await http.get(Uri.parse(

@@ -31,10 +31,7 @@ class RainFallLineChart extends StatelessWidget {
         titlesData: titlesData1,
         borderData: borderData,
         lineBarsData: lineBarsData1,
-        minX: 0,
-        maxX: 14,
-        maxY: 4,
-        minY: 0,
+      
       );
 
   
@@ -55,9 +52,7 @@ class RainFallLineChart extends StatelessWidget {
         topTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        leftTitles: AxisTitles(
-          sideTitles: leftTitles(),
-        ),
+       
       );
 
   List<LineChartBarData> get lineBarsData1 => [
@@ -88,6 +83,7 @@ class RainFallLineChart extends StatelessWidget {
       case 5:
         text = '5mm';
         break;
+     
       default:
         return Container();
     }
@@ -170,12 +166,15 @@ class RainFallLineChart extends StatelessWidget {
         belowBarData: BarAreaData(show: false),
         spots:  [
           FlSpot(1, d0),
-          FlSpot(3, d1),
-          FlSpot(5, d2),
-          FlSpot(7, d3),
-          FlSpot(10, d4),
-          FlSpot(12, d5),
-          FlSpot(13, d6),
+          FlSpot(2, d1),
+          FlSpot(3, d2),
+          FlSpot(4, d3),
+          FlSpot(5, d4),
+          FlSpot(6, d5),
+          FlSpot(7, d6),
+          FlSpot(8, d7),
+          FlSpot(9, d8),
+          FlSpot(10, d9),
         ],
       );
 
@@ -197,7 +196,7 @@ class LineChartSample1 extends StatefulWidget {
   double d8;
   double d9;
 
-   LineChartSample1({required this.d0,required this.d1,required this.d2,required this.d3,required this.d4,required this.d5,required this.d6,required this.d7,required this.d8,required this.d9, Key? key}) : super(key: key);
+  LineChartSample1({required this.d0,required this.d1,required this.d2,required this.d3,required this.d4,required this.d5,required this.d6,required this.d7,required this.d8,required this.d9, Key? key}) : super(key: key);
 
 
   @override
