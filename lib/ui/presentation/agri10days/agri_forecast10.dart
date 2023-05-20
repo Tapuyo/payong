@@ -496,6 +496,7 @@ class AgriForecast10Widget extends HookWidget {
                 children: [
                  Column(
                     children: [
+                        if(agri.last.galeWarning.isNotEmpty)
                       SizedBox(
                           width: 100,
                           height: 100,
@@ -513,6 +514,7 @@ class AgriForecast10Widget extends HookWidget {
                   
                   Column(
                     children: [
+                          if(agri.last.galeWarning.isNotEmpty)
                       Text(agri.last.galeWarning.last.location,
                         style: TextStyle(color: Colors.black),
                         textAlign: TextAlign.center,
@@ -573,6 +575,7 @@ class AgriForecast10Widget extends HookWidget {
                 children: [
                   Column(
                     children: [
+                      if(agri.last.windCondition.isNotEmpty)
                       SizedBox(
                           width: 100,
                           height: 100,
@@ -589,6 +592,7 @@ class AgriForecast10Widget extends HookWidget {
                   ),
                   Column(
                     children: [
+                        if(agri.last.windCondition.isNotEmpty)
                       Text(
                         agri.last.windCondition.last.location,
                         style: TextStyle(color: Colors.black),

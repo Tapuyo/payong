@@ -9,15 +9,20 @@ import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class outlookPage extends HookWidget {
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
     zoom: 4.8,
   );
+  String? mapStyle;
 
   @override
   Widget build(BuildContext context) {
+     rootBundle.loadString('assets/map_style.txt').then((string) {
+      mapStyle = string;
+    });
     final dailyProviderPolygon =
         useState(context.read<McaoProvider>().polygons);
     final agriTab = useState(0);
@@ -35,7 +40,7 @@ class outlookPage extends HookWidget {
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height - 150,
+      height: MediaQuery.of(context).size.height  - 150,
       child: Stack(children: [
         SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -48,10 +53,10 @@ class outlookPage extends HookWidget {
                   },
                 )
               : SizedBox(
-                  height: MediaQuery.of(context).size.height - 150,
+                  height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: GoogleMap(
                       // myLocationEnabled: true,
                       myLocationButtonEnabled: false,
@@ -61,7 +66,7 @@ class outlookPage extends HookWidget {
                       zoomGesturesEnabled: true,
                       tiltGesturesEnabled: false,
                       onMapCreated: (GoogleMapController controller) {
-                        // _controller.complete(controller);
+                        controller.setMapStyle(mapStyle);
                       },
                     ),
                   ),
@@ -133,21 +138,21 @@ class outlookPage extends HookWidget {
         ),
         if (agriTab.value != 0)
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.topRight,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 00, 20, 100),
+              padding: const EdgeInsets.fromLTRB(20, 100, 20, 100),
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 100,
+                width: 150,
+                height: 320,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.black.withOpacity(.2),
+                  color: Colors.black.withOpacity(.1),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text('Legends'),
                       SizedBox(
@@ -155,16 +160,24 @@ class outlookPage extends HookWidget {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 50,
+                        height: 270,
                         child: ListView.builder(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          scrollDirection: Axis.vertical,
                           itemCount: dailyLegends.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
                               child: Row(
+                                   mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
+                                   Text(
+                                    dailyLegends[index].title,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                   SizedBox(
+                                    width: 12,
+                                  ),
                                   ColoredBox(
                                     color: dailyLegends[index].color.toColor(),
                                     child: SizedBox(
@@ -172,13 +185,8 @@ class outlookPage extends HookWidget {
                                       height: 20,
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    dailyLegends[index].title,
-                                    style: TextStyle(color: Colors.white),
-                                  )
+                                 
+                                 
                                 ],
                               ),
                             );

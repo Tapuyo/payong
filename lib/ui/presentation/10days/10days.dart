@@ -241,30 +241,59 @@ class Daily10Widget extends HookWidget {
             ),
             Expanded(
               child: ListView(children: [
-                if(dailyDetails1.value != null)
-                LineChartSample1(
-                  d0: double.parse(
-                    dailyDetails1.value!.rainFallPercentage,
-                  ),d1: double.parse(
-                    dailyDetails2.value!.rainFallPercentage,
-                  ),d2: double.parse(
-                    dailyDetails3.value!.rainFallPercentage,
-                  ),d3: double.parse(
-                    dailyDetails4.value!.rainFallPercentage,
-                  ),d4: double.parse(
-                    dailyDetails5.value!.rainFallPercentage,
-                  ),d5: double.parse(
-                    dailyDetails6.value!.rainFallPercentage,
-                  ),d6: double.parse(
-                    dailyDetails7.value!.rainFallPercentage,
-                  ),d7: double.parse(
-                    dailyDetails8.value!.rainFallPercentage,
-                  ),d8: double.parse(
-                    dailyDetails9.value!.rainFallPercentage,
-                  ),d9: double.parse(
-                    dailyDetails10.value!.rainFallPercentage,
+                if (dailyDetails1.value != null)
+                  LineChartSample1(
+                    d0: dailyDetails1.value != null ? dailyDetails1.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails1.value!.rainFallPercentage,
+                          )
+                        : 0.0: 0.0,
+                    d1: dailyDetails2.value != null ? dailyDetails2.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails2.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d2: dailyDetails3.value != null ? dailyDetails3.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails3.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d3: dailyDetails4.value != null ? dailyDetails4.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails4.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d4: dailyDetails5.value != null ? dailyDetails5.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails5.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d5: dailyDetails6.value != null ? dailyDetails6.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails6.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d6: dailyDetails7.value != null ? dailyDetails7.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails7.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d7: dailyDetails8.value != null ? dailyDetails8.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails8.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d8: dailyDetails9.value != null ? dailyDetails9.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails9.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
+                    d9: dailyDetails10.value != null ? dailyDetails10.value!.rainFallPercentage.isNotEmpty
+                        ? double.parse(
+                            dailyDetails10.value!.rainFallPercentage,
+                          )
+                        : 0.0 : 0.0,
                   ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -422,26 +451,26 @@ class Daily10Widget extends HookWidget {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Divider(),
                 ),
-                   if(dailyDetails1.value != null)
-                dateWidget(showExpandable1, 0, dailyDetails1.value),
-                   if(dailyDetails2.value != null)
-                dateWidget(showExpandable2, 1, dailyDetails2.value),
-                   if(dailyDetails3.value != null)
-                dateWidget(showExpandable3, 2, dailyDetails3.value),
-                   if(dailyDetails4.value != null)
-                dateWidget(showExpandable4, 3, dailyDetails4.value),
-                   if(dailyDetails5.value != null)
-                dateWidget(showExpandable5, 4, dailyDetails5.value),
-                   if(dailyDetails6.value != null)
-                dateWidget(showExpandable6, 5, dailyDetails6.value),
-                   if(dailyDetails7.value != null)
-                dateWidget(showExpandable7, 6, dailyDetails7.value),
-                   if(dailyDetails8.value != null)
-                dateWidget(showExpandable8, 7, dailyDetails8.value),
-                   if(dailyDetails9.value != null)
-                dateWidget(showExpandable9, 8, dailyDetails9.value),
-                   if(dailyDetails10.value != null)
-                dateWidget(showExpandable10, 9, dailyDetails10.value),
+                if (dailyDetails1.value != null)
+                  dateWidget(showExpandable1, 0, dailyDetails1.value),
+                if (dailyDetails2.value != null)
+                  dateWidget(showExpandable2, 1, dailyDetails2.value),
+                if (dailyDetails3.value != null)
+                  dateWidget(showExpandable3, 2, dailyDetails3.value),
+                if (dailyDetails4.value != null)
+                  dateWidget(showExpandable4, 3, dailyDetails4.value),
+                if (dailyDetails5.value != null)
+                  dateWidget(showExpandable5, 4, dailyDetails5.value),
+                if (dailyDetails6.value != null)
+                  dateWidget(showExpandable6, 5, dailyDetails6.value),
+                if (dailyDetails7.value != null)
+                  dateWidget(showExpandable7, 6, dailyDetails7.value),
+                if (dailyDetails8.value != null)
+                  dateWidget(showExpandable8, 7, dailyDetails8.value),
+                if (dailyDetails9.value != null)
+                  dateWidget(showExpandable9, 8, dailyDetails9.value),
+                if (dailyDetails10.value != null)
+                  dateWidget(showExpandable10, 9, dailyDetails10.value),
               ]),
             ),
           ],
@@ -452,7 +481,7 @@ class Daily10Widget extends HookWidget {
 
   Widget dateWidget(
       ValueNotifier<bool> showExpandable1, int addDay, DailyModel10? daily) {
-        print(daily!.cloudCover);
+    print(daily!.cloudCover);
     return daily != null
         ? Column(
             children: [
@@ -492,7 +521,6 @@ class Daily10Widget extends HookWidget {
                             ),
                           ),
                           cloudIcons(daily.cloudCover),
-                          
                         ],
                       ),
                       if (showExpandable1.value) Divider(),
@@ -556,9 +584,9 @@ class Daily10Widget extends HookWidget {
           Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/sunny.png'))),
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/sunny.png'))),
         ],
       );
     } else if (des == 'MOSTLY SUNNY') {
@@ -567,20 +595,20 @@ class Daily10Widget extends HookWidget {
           Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/mostly_sunny.png'))),
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/mostly_sunny.png'))),
         ],
       );
     } else if (des == 'CLOUDY') {
       return Stack(
         children: [
-         Align(
+          Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/cloudy.png'))),
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/cloudy.png'))),
         ],
       );
     } else if (des == 'PARTLY CLOUDY') {
@@ -589,31 +617,31 @@ class Daily10Widget extends HookWidget {
           Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/cloudy.png'))),
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/cloudy.png'))),
         ],
       );
-    }  else if (des == 'MOSTLY CLOUDY') {
+    } else if (des == 'MOSTLY CLOUDY') {
       return Stack(
         children: [
-      Align(
+          Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/cloudy_rain.png'))),
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/cloudy_rain.png'))),
         ],
       );
-    }  else if (des == 'RAINY') {
+    } else if (des == 'RAINY') {
       return Stack(
         children: [
-         Align(
+          Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/rain.png'))),
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/rain.png'))),
         ],
       );
     } else {
@@ -622,10 +650,9 @@ class Daily10Widget extends HookWidget {
           Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset('assets/sunny.png'))),
-    
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/sunny.png'))),
         ],
       );
     }

@@ -66,9 +66,36 @@ class DailyWidget extends HookWidget {
         context.select((DailyProvider p) => p.dailyDetails3);
     final accumulatedRainFall = useState('0');
     String title = 'Area';
-
+    String optionTitle = 'Daily Weather';
+    final String option = context.select((DailyProvider p) => p.option);
+   if (option == 'ActualRainfall') {
+          optionTitle = 'Daily Weather Actual Rainfall';
+        } else if (option == 'NormalRainfall') {
+          optionTitle = 'Daily Weather Normal Rainfall';
+        } else if (option == 'RainfallPercent') {
+          optionTitle = 'Daily Weather Percent Rainfall';
+        } else if (option == 'MaxTemp') {
+          optionTitle = 'Daily Weather Max Temp Rainfall';
+        } else if (option == 'MinTemp') {
+          optionTitle = 'Daily Weather Min Temp Rainfall';
+        } else {
+          optionTitle = 'Daily Weather Actual Rainfall';
+        }
     useEffect(() {
       Future.microtask(() async {
+        if (option == 'ActualRainfall') {
+          optionTitle = 'Daily Weather Actual Rainfall';
+        } else if (option == 'NormalRainfall') {
+          optionTitle = 'Daily Weather Normal Rainfall';
+        } else if (option == 'RainfallPercent') {
+          optionTitle = 'Daily Weather Percent Rainfall';
+        } else if (option == 'MaxTemp') {
+          optionTitle = 'Daily Weather Max Temp Rainfall';
+        } else if (option == 'MinTemp') {
+          optionTitle = 'Daily Weather Min Temp Rainfall';
+        } else {
+          optionTitle = 'Daily Weather Actual Rainfall';
+        }
         final dailyProvider = context.read<DailyProvider>();
         String dt = DateFormat('yyyy-MM-dd')
             .format(dailyProvider.selectedDate.subtract(Duration(days: 1)));
@@ -79,9 +106,12 @@ class DailyWidget extends HookWidget {
           await DailyServices.getDailyDetails(context, id, dt);
         }
 
-          meanTemp.value = dailyDetails != null ? dailyDetails.overAllMeannTemp : '0';
-        highTemp.value = dailyDetails != null ?  dailyDetails.overAllMaxTemp:'0';
-        lowTemp.value = dailyDetails != null ?  dailyDetails.overAllMinTemp:'0';
+        meanTemp.value =
+            dailyDetails != null ? dailyDetails.overAllMeannTemp : '0';
+        highTemp.value =
+            dailyDetails != null ? dailyDetails.overAllMaxTemp : '0';
+        lowTemp.value =
+            dailyDetails != null ? dailyDetails.overAllMinTemp : '0';
         if (dailyProvider.option == 'MinTemp') {
           accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
         } else if (dailyProvider.option == 'NormalRainfall') {
@@ -96,9 +126,7 @@ class DailyWidget extends HookWidget {
           accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
         }
         print('Accumulated: ${accumulatedRainFall.value}');
-      
 
-        
         // lowTemp.value = dailyDetails != null ? dailyDetails.lowTemp : '0';
         // highTemp.value = dailyDetails != null ? dailyDetails.highTemp : '0';
         // meanTemp.value = dailyDetails != null
@@ -134,7 +162,7 @@ class DailyWidget extends HookWidget {
                 .toStringAsFixed(1)
             : '0';
       });
-      
+
       return;
     }, [id]);
 
@@ -170,7 +198,7 @@ class DailyWidget extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "Daily Weather",
+            optionTitle,
             style: kTextStyleSubtitle1,
           ),
         ),
@@ -187,9 +215,7 @@ class DailyWidget extends HookWidget {
         ),
         // cloudIcons('CLOUDY'),
         Text(
-          'Accumulated report as of ${DateFormat.MMMEd()
-              .format(DateTime.now().subtract(Duration(days: 1)))
-              .toString()}',
+          'Accumulated report as of ${DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString()}',
           style: kTextStyleSubTitle,
         ),
         SizedBox(
@@ -211,7 +237,9 @@ class DailyWidget extends HookWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(double.parse(accumulatedRainFall.value).toStringAsFixed(1),
+                    Text(
+                      double.parse(accumulatedRainFall.value)
+                          .toStringAsFixed(1),
                       style: kTextStyleWeather,
                     ),
                     Text(
@@ -222,7 +250,6 @@ class DailyWidget extends HookWidget {
                 ),
               ],
             ),
-            
             Column(
               children: [
                 Text(

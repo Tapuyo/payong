@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:flutter/services.dart' show rootBundle;
 import 'dart:async';
 import 'dart:convert';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
@@ -70,6 +70,7 @@ class _MyWidgetState extends State<MainNav> {
   LatLng _center = LatLng(11.051436, 122.880019);
   LatLng mapMarker = LatLng(11.051436, 122.880019);
   String prognosisColorMap = '';
+  String? mapStyle;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
@@ -87,6 +88,9 @@ class _MyWidgetState extends State<MainNav> {
 //11.051436, 122.880019
   @override
   void initState() {
+    rootBundle.loadString('assets/map_style.txt').then((string) {
+      mapStyle = string;
+    });
     selectIndex = widget.index!;
     getDataPerModule();
     getPast10Days();
@@ -132,63 +136,62 @@ class _MyWidgetState extends State<MainNav> {
     dailyProvider.setPolygonDaiyClear();
     Set<Polygon> polygons = {};
     // for (var i = 1; i < 17; i++) {
-      final result = await AgriServices.getRegionMap(context);
+    final result = await AgriServices.getRegionMap(context);
 
-      // try {
-      setState(() {
-        polygons.clear();
+    // try {
+    setState(() {
+      polygons.clear();
 
-        for (var name in result) {
-          // print(name.locationCoordinate);
-          List<dynamic> coordinates = name.locationCoordinate;
-          List<LatLng> polygonCoords = [];
-          if (coordinates.isNotEmpty) {
-            for (var coor in coordinates) {
-              try {
-                // print(coor['coordinate']);
-                var latLng = coor['coordinate'].toString().split(",");
-                print(double.parse(latLng[0]).toString());
-                double latitude = double.parse(latLng[0]);
-                double longitude = double.parse(latLng[1]);
-                ;
-                polygonCoords.add(LatLng(longitude, latitude));
-              } catch (e) {}
-            }
-
-            dailyProvider.setPolygonDaiy(Polygon(
-                onTap: () async {
-                  prod.setProgID(name.dailyDetailsID);
-                  await AgriServices.getProgDetails(
-                      context, name.dailyDetailsID);
-                  dailyProvider.removePolygonDaiy(PolygonId(prognosisColorMap));
-                  setState(() {
-                    prognosisColorMap = name.dailyDetailsID;
-                  });
-                  print(name.dailyDetailsID);
-                  dailyProvider.setPolygonDaiy(Polygon(
-                      onTap: () async {
-                        print(name.dailyDetailsID);
-                        prod.setProgID(name.dailyDetailsID);
-                      },
-                      consumeTapEvents: true,
-                      polygonId: PolygonId(name.dailyDetailsID),
-                      points: polygonCoords,
-                      strokeWidth: 4,
-                      fillColor: Colors.blueAccent,
-                      strokeColor: Colors.transparent));
-                },
-                consumeTapEvents: true,
-                polygonId: PolygonId(name.dailyDetailsID),
-                points: polygonCoords,
-                strokeWidth: 4,
-                fillColor: Colors.transparent,
-                strokeColor: Colors.transparent));
+      for (var name in result) {
+        // print(name.locationCoordinate);
+        List<dynamic> coordinates = name.locationCoordinate;
+        List<LatLng> polygonCoords = [];
+        if (coordinates.isNotEmpty) {
+          for (var coor in coordinates) {
+            try {
+              // print(coor['coordinate']);
+              var latLng = coor['coordinate'].toString().split(",");
+              print(double.parse(latLng[0]).toString());
+              double latitude = double.parse(latLng[0]);
+              double longitude = double.parse(latLng[1]);
+              ;
+              polygonCoords.add(LatLng(longitude, latitude));
+            } catch (e) {}
           }
+
+          dailyProvider.setPolygonDaiy(Polygon(
+              onTap: () async {
+                prod.setProgID(name.dailyDetailsID);
+                await AgriServices.getProgDetails(context, name.dailyDetailsID);
+                dailyProvider.removePolygonDaiy(PolygonId(prognosisColorMap));
+                setState(() {
+                  prognosisColorMap = name.dailyDetailsID;
+                });
+                print(name.dailyDetailsID);
+                dailyProvider.setPolygonDaiy(Polygon(
+                    onTap: () async {
+                      print(name.dailyDetailsID);
+                      prod.setProgID(name.dailyDetailsID);
+                    },
+                    consumeTapEvents: true,
+                    polygonId: PolygonId(name.dailyDetailsID),
+                    points: polygonCoords,
+                    strokeWidth: 4,
+                    fillColor: Colors.blueAccent,
+                    strokeColor: Colors.transparent));
+              },
+              consumeTapEvents: true,
+              polygonId: PolygonId(name.dailyDetailsID),
+              points: polygonCoords,
+              strokeWidth: 4,
+              fillColor: Colors.transparent,
+              strokeColor: Colors.transparent));
         }
-      });
-      // } catch (e) {
-      //   print('error $e');
-      // }
+      }
+    });
+    // } catch (e) {
+    //   print('error $e');
+    // }
     // }
     context.read<InitProvider>().setIsLoading(false);
     setState(() {
@@ -248,6 +251,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Future<void> getDailyList(String mod) async {
+    await DailyServices.getDailyLegend(context);
     setState(() {
       isRefresh = true;
     });
@@ -269,78 +273,77 @@ class _MyWidgetState extends State<MainNav> {
       optionFilter = 'ActualRainfall';
     }
 
-    for (var i = 1; i < 116; i++) {
+    for (var i = 1; i < 200; i++) {
       print('john paul $i');
-      final dailymap = await DailyServices.getDailyList(context, dt, i.toString(), optionFilter);
+      final dailymap = await DailyServices.getDailyList(
+          context, dt, i.toString(), optionFilter);
 
       dailyProvider.setDateSelect(selectedDate);
       colorMap(dailymap);
-    
     }
     setState(() {
       isRefresh = false;
     });
   }
 
-  void colorMap(List<DailyModel> dailymap){
+  void colorMap(List<DailyModel> dailymap) {
     final dailyProvider = context.read<DailyProvider>();
     setState(() {
-          // polygons.clear();
+      // polygons.clear();
 
-          for (var name in dailymap) {
-            List<dynamic> coordinates = name.locationCoordinate;
-            List<LatLng> polygonCoords = [];
-            if (coordinates.isNotEmpty) {
-              for (var coor in coordinates) {
-                var latLng = coor['coordinate'].toString().split(",");
-                double latitude = double.parse(latLng[0]);
-                double longitude = double.parse(latLng[1]);
+      for (var name in dailymap) {
+        List<dynamic> coordinates = name.locationCoordinate;
+        List<LatLng> polygonCoords = [];
+        if (coordinates.isNotEmpty) {
+          for (var coor in coordinates) {
+            var latLng = coor['coordinate'].toString().split(",");
+            double latitude = double.parse(latLng[0]);
+            double longitude = double.parse(latLng[1]);
 
-                polygonCoords.add(LatLng(longitude, latitude));
-              }
-              Color lxColor = Color(0xFF42A5F5);
-
-              if (dailyProvider.option == 'MinTemp') {
-                lxColor = name.lowTempColorCode.toColor();
-              } else if (dailyProvider.option == 'NormalRainfall') {
-                lxColor = name.rainFallNormalColorCode.toColor();
-              } else if (dailyProvider.option == 'MaxTemp') {
-                lxColor = name.highTempColorCode.toColor();
-              } else if (dailyProvider.option == 'ActualRainfall') {
-                lxColor = name.rainFallActualColorCode.toColor();
-              } else if (dailyProvider.option == 'RainfallPercent') {
-                lxColor = name.percentrainFallColorCode.toColor();
-              } else {
-                lxColor = name.rainFallActualColorCode.toColor();
-              }
-
-              print(lxColor);
-
-              dailyProvider.setPolygonDaiy(Polygon(
-                  onTap: () async {
-                    dailyProvider.setDailyId(name.dailyDetailsID);
-                    await DailyServices.getDailyLegend(context);
-
-                    setState(() {
-                      showLegends = true;
-                    });
-                    Future.delayed(Duration(seconds: 8), () {
-                      setState(() {
-                        showLegends = false;
-                      });
-                    });
-                  },
-                  consumeTapEvents: true,
-                  polygonId: PolygonId(name.dailyDetailsID),
-                  points: polygonCoords,
-                  strokeWidth: 4,
-                  fillColor: lxColor.withOpacity(.9),
-                  strokeColor: lxColor));
-              print('color: $lxColor');
-              // polygons.add();
-            }
+            polygonCoords.add(LatLng(longitude, latitude));
           }
-        });
+          Color lxColor = Color(0xFF42A5F5);
+
+          if (dailyProvider.option == 'MinTemp') {
+            lxColor = name.lowTempColorCode.toColor();
+          } else if (dailyProvider.option == 'NormalRainfall') {
+            lxColor = name.rainFallNormalColorCode.toColor();
+          } else if (dailyProvider.option == 'MaxTemp') {
+            lxColor = name.highTempColorCode.toColor();
+          } else if (dailyProvider.option == 'ActualRainfall') {
+            lxColor = name.rainFallActualColorCode.toColor();
+          } else if (dailyProvider.option == 'RainfallPercent') {
+            lxColor = name.percentrainFallColorCode.toColor();
+          } else {
+            lxColor = name.rainFallActualColorCode.toColor();
+          }
+
+          print(lxColor);
+
+          dailyProvider.setPolygonDaiy(Polygon(
+              onTap: () async {
+                dailyProvider.setDailyId(name.dailyDetailsID);
+
+                setState(() {
+                  showLegends = true;
+                });
+                Future.delayed(Duration(seconds: 8), () {
+                  setState(() {
+                    showLegends = false;
+                  });
+                });
+              },
+              consumeTapEvents: true,
+              polygonId: PolygonId(name.dailyDetailsID),
+              points: polygonCoords,
+              strokeWidth: 4,
+              fillColor: lxColor.withOpacity(.9),
+              strokeColor: lxColor));
+          print('color: $lxColor');
+          // polygons.add();
+        }
+      }
+    });
   }
 
   getPast10Days() {
@@ -455,71 +458,69 @@ class _MyWidgetState extends State<MainNav> {
       //   )
       // ]),
       body: Stack(
-              children: [
-                Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: mainTab(context))),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Visibility(
-                    visible: selectIndex == 1 ||
-                        selectIndex == 3 ||
-                        selectIndex == 4,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white,
-                      ),
-                      child: BottomBarInspiredOutside(
-                        items: myTabs,
-                        // heightItem: 38,
-                        iconSize: 20,
-                        titleStyle: TextStyle(fontSize: 14),
-                        backgroundColor: kColorBlue,
-                        color: Colors.white,
-                        colorSelected: Colors.white,
-                        indexSelected: visit,
-                        top: -34,
-                        itemStyle: ItemStyle.circle,
-                        chipStyle: const ChipStyle(
-                            background: kColorBlue,
-                            size: 100,
-                            notchSmoothness: NotchSmoothness.defaultEdge),
-                        onTap: (int index) => setState(() {
-                          visit = index;
-                          agriTab = index;
-                          if (selectIndex == 4) {
-                            _mcaoprovider.setMcaoTab(index);
-                          } else {
-                            _agri10provider.setAgri10Tab(index);
-                          }
-                        }),
-                      ),
-                    ),
-                  ),
+        children: [
+          Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: mainTab(context))),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Visibility(
+              visible: selectIndex == 1 || selectIndex == 3 || selectIndex == 4,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white,
                 ),
-                // if(isRefresh)
-                // Container(
-                //   color: Colors.white30,
-                //   child: SizedBox(
-                //     width: MediaQuery.of(context).size.width,
-                //     height: MediaQuery.of(context).size.height,
-                //     child: Center(child: Column(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       children: [
-                //         CircularProgressIndicator(),
-                //         SizedBox(height: 8),
-                //         Text('Please wait...', style: TextStyle(color: Colors.black),)
-                //       ],
-                //     )),
-                //   ),
-                // )
-              ],
+                child: BottomBarInspiredOutside(
+                  items: myTabs,
+                  // heightItem: 38,
+                  iconSize: 20,
+                  titleStyle: TextStyle(fontSize: 14),
+                  backgroundColor: kColorBlue,
+                  color: Colors.white,
+                  colorSelected: Colors.white,
+                  indexSelected: visit,
+                  top: -34,
+                  itemStyle: ItemStyle.circle,
+                  chipStyle: const ChipStyle(
+                      background: kColorBlue,
+                      size: 100,
+                      notchSmoothness: NotchSmoothness.defaultEdge),
+                  onTap: (int index) => setState(() {
+                    visit = index;
+                    agriTab = index;
+                    if (selectIndex == 4) {
+                      _mcaoprovider.setMcaoTab(index);
+                    } else {
+                      _agri10provider.setAgri10Tab(index);
+                    }
+                  }),
+                ),
+              ),
             ),
+          ),
+          // if(isRefresh)
+          // Container(
+          //   color: Colors.white30,
+          //   child: SizedBox(
+          //     width: MediaQuery.of(context).size.width,
+          //     height: MediaQuery.of(context).size.height,
+          //     child: Center(child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       crossAxisAlignment: CrossAxisAlignment.center,
+          //       children: [
+          //         CircularProgressIndicator(),
+          //         SizedBox(height: 8),
+          //         Text('Please wait...', style: TextStyle(color: Colors.black),)
+          //       ],
+          //     )),
+          //   ),
+          // )
+        ],
+      ),
       // bottomNavigationBar:
       floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 00, 150),
@@ -548,28 +549,28 @@ class _MyWidgetState extends State<MainNav> {
               iconSize: 70,
               color: kColorBlue,
               onPressed: () {
-                // setState(() {
-                //   selectedDate = DateTime.now();
-                //   final dailyProvider = context.read<DailyProvider>();
-                //   dailyProvider.setDateSelect(selectedDate);
-                //   polygons.clear();
-                //   title = 'Philippines';
-                //   selectIndex = 1;
-                // })
-                final snackBar = SnackBar(
-                  content:
-                      const Text('Sorry, this module is under development.'),
-                  // action: SnackBarAction(
-                  //   label: 'Undo',
-                  //   onPressed: () {
-                  //     // Some code to undo the change.
-                  //   },
-                  // ),
-                );
+                setState(() {
+                  selectedDate = DateTime.now();
+                  final dailyProvider = context.read<DailyProvider>();
+                  dailyProvider.setDateSelect(selectedDate);
+                  polygons.clear();
+                  title = 'Philippines';
+                  selectIndex = 1;
+                });
+                // final snackBar = SnackBar(
+                //   content:
+                //       const Text('Sorry, this module is under development.'),
+                //   // action: SnackBarAction(
+                //   //   label: 'Undo',
+                //   //   onPressed: () {
+                //   //     // Some code to undo the change.
+                //   //   },
+                //   // ),
+                // );
 
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                // // Find the ScaffoldMessenger in the widget tree
+                // // and use it to show a SnackBar.
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: const Icon(Icons.cloud_done, size: 35),
             ),
@@ -577,28 +578,28 @@ class _MyWidgetState extends State<MainNav> {
               iconSize: 70,
               color: kColorBlue,
               onPressed: () {
-                // setState(() {
-                //   selectedDate = DateTime.now();
-                //   final dailyProvider = context.read<DailyProvider>();
-                //   dailyProvider.setDateSelect(selectedDate);
-                //   polygons.clear();
-                //   title = 'Philippines';
-                //   selectIndex = 2;
-                // })
-                final snackBar = SnackBar(
-                  content:
-                      const Text('Sorry, this module is under development.'),
-                  // action: SnackBarAction(
-                  //   label: 'Undo',
-                  //   onPressed: () {
-                  //     // Some code to undo the change.
-                  //   },
-                  // ),
-                );
+                setState(() {
+                  selectedDate = DateTime.now();
+                  final dailyProvider = context.read<DailyProvider>();
+                  dailyProvider.setDateSelect(selectedDate);
+                  polygons.clear();
+                  title = 'Philippines';
+                  selectIndex = 2;
+                });
+                // final snackBar = SnackBar(
+                //   content:
+                //       const Text('Sorry, this module is under development.'),
+                //   // action: SnackBarAction(
+                //   //   label: 'Undo',
+                //   //   onPressed: () {
+                //   //     // Some code to undo the change.
+                //   //   },
+                //   // ),
+                // );
 
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                // // Find the ScaffoldMessenger in the widget tree
+                // // and use it to show a SnackBar.
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: const Icon(Icons.cloud_queue, size: 35),
             ),
@@ -635,28 +636,28 @@ class _MyWidgetState extends State<MainNav> {
               iconSize: 70,
               color: kColorBlue,
               onPressed: () {
-                // setState(() {
-                //   selectedDate = DateTime.now();
-                //   final dailyProvider = context.read<DailyProvider>();
-                //   dailyProvider.setDateSelect(selectedDate);
-                //   polygons.clear();
-                //   title = 'Philippines';
-                //   selectIndex = 4;
-                // })
-                final snackBar = SnackBar(
-                  content:
-                      const Text('Sorry, this module is under development.'),
-                  // action: SnackBarAction(
-                  //   label: 'Undo',
-                  //   onPressed: () {
-                  //     // Some code to undo the change.
-                  //   },
-                  // ),
-                );
+                setState(() {
+                  selectedDate = DateTime.now();
+                  final dailyProvider = context.read<DailyProvider>();
+                  dailyProvider.setDateSelect(selectedDate);
+                  polygons.clear();
+                  title = 'Philippines';
+                  selectIndex = 4;
+                });
+                // final snackBar = SnackBar(
+                //   content:
+                //       const Text('Sorry, this module is under development.'),
+                //   // action: SnackBarAction(
+                //   //   label: 'Undo',
+                //   //   onPressed: () {
+                //   //     // Some code to undo the change.
+                //   //   },
+                //   // ),
+                // );
 
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                // // Find the ScaffoldMessenger in the widget tree
+                // // and use it to show a SnackBar.
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
             ),
@@ -1003,34 +1004,9 @@ class _MyWidgetState extends State<MainNav> {
           ),
         ),
         Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.white, spreadRadius: 3),
-                  ],
-                ),
-                height: 40,
-                width: 40,
-                child: Center(
-                  child: Icon(Icons.help),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
+            padding: const EdgeInsets.fromLTRB(20, 60, 0, 0),
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(Routes.mobMain);
@@ -1074,6 +1050,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
+     controller.setMapStyle(mapStyle);
     final marker = Marker(
       markerId: MarkerId('area'),
       position: LatLng(11.051436, 122.880019),
@@ -1104,6 +1081,84 @@ class _MyWidgetState extends State<MainNav> {
           zoomGesturesEnabled: true,
           tiltGesturesEnabled: false,
           onMapCreated: _onMapCreated,
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding:  EdgeInsets.fromLTRB(20, 0, 0, 140),
+            child:
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mapType = MapType.normal;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: mapType == MapType.normal
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        'Normal',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                width: 12,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mapType = MapType.hybrid;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: mapType == MapType.hybrid
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        'Hybrid',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                width: 12,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      mapType = MapType.satellite;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: mapType == MapType.satellite
+                          ? Colors.white.withOpacity(.8)
+                          : Colors.white.withOpacity(.4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        'Satellite',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  )),
+            ]),
+          ),
         ),
         Align(
           child: Column(children: [
@@ -1152,157 +1207,7 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
-            child: GestureDetector(
-              onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 290,
-                      color: Colors.white,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              final dailyProvider =
-                                  context.read<DailyProvider>();
-                              dailyProvider.setOption('ActualRainfall');
-                              getDailyList('daily');
-                              Navigator.pop(context);
-                            },
-                            child: ColoredBox(
-                              color: kColorBlue,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width - 10,
-                                  height: 50,
-                                  child: Center(
-                                      child: Text(
-                                    'Actual Rainfall',
-                                    style: buttonStyleWhiet,
-                                  ))),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              final dailyProvider =
-                                  context.read<DailyProvider>();
-                              dailyProvider.setOption('NormalRainfall');
-                              getDailyList('daily');
-                              Navigator.pop(context);
-                            },
-                            child: ColoredBox(
-                              color: kColorBlue,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width - 10,
-                                  height: 50,
-                                  child: Center(
-                                      child: Text(
-                                    'Normal Rainfall',
-                                    style: buttonStyleWhiet,
-                                  ))),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              final dailyProvider =
-                                  context.read<DailyProvider>();
-                              dailyProvider.setOption('RainfallPercent');
-                              getDailyList('daily');
-                              Navigator.pop(context);
-                            },
-                            child: ColoredBox(
-                              color: kColorBlue,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width - 10,
-                                  height: 50,
-                                  child: Center(
-                                      child: Text(
-                                    'Rainfall Percent',
-                                    style: buttonStyleWhiet,
-                                  ))),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              final dailyProvider =
-                                  context.read<DailyProvider>();
-                              dailyProvider.setOption('MaxTemp');
-                              getDailyList('daily');
-                              Navigator.pop(context);
-                            },
-                            child: ColoredBox(
-                              color: kColorBlue,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width - 10,
-                                  height: 50,
-                                  child: Center(
-                                      child: Text(
-                                    'Max Temperature',
-                                    style: buttonStyleWhiet,
-                                  ))),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              final dailyProvider =
-                                  context.read<DailyProvider>();
-                              dailyProvider.setOption('MinTemp');
-                              getDailyList('daily');
-                              Navigator.pop(context);
-                            },
-                            child: ColoredBox(
-                              color: kColorBlue,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width - 10,
-                                  height: 50,
-                                  child: Center(
-                                      child: Text(
-                                    'Minimum Temperature',
-                                    style: buttonStyleWhiet,
-                                  ))),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.white, spreadRadius: 3),
-                  ],
-                ),
-                height: 40,
-                width: 40,
-                child: Center(
-                  child: Icon(Icons.help),
-                ),
-              ),
-            ),
-          ),
-        ),
+
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
@@ -1341,6 +1246,7 @@ class _MyWidgetState extends State<MainNav> {
     final dailyProvider = context.read<DailyProvider>().polygons;
     final List<DailyLegendModel> dailyLegends =
         context.select((DailyProvider p) => p.dailyLegend);
+    final String option = context.select((DailyProvider p) => p.option);
     return Stack(
       children: [
         GoogleMap(
@@ -1352,6 +1258,7 @@ class _MyWidgetState extends State<MainNav> {
           zoomGesturesEnabled: true,
           tiltGesturesEnabled: true,
           onMapCreated: (GoogleMapController controller) {
+            controller.setMapStyle(mapStyle);
             _controller.complete(controller);
           },
         ),
@@ -1369,6 +1276,36 @@ class _MyWidgetState extends State<MainNav> {
               ),
             ),
           ),
+        ),
+        Align(
+          child: Column(children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
+              child: TextField(
+                style: TextStyle(color: Colors.black),
+                onChanged: (value) async {
+                  final dailyProvider = context.read<Daily10Provider>();
+
+                  if (value.isNotEmpty) {
+                    dailyProvider.setShowList(true);
+                  } else {
+                    dailyProvider.setShowList(false);
+                  }
+
+                  dailyProvider.setSearchString(value);
+                  await Daily10Services.get10DaysSearch(context, value);
+                },
+                decoration: InputDecoration(
+                  hintText: "Search Location",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                ),
+              ),
+            ),
+            SearchList()
+          ]),
         ),
         Align(
           alignment: Alignment.topRight,
@@ -1394,15 +1331,23 @@ class _MyWidgetState extends State<MainNav> {
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
-                            child: ColoredBox(
-                              color: kColorBlue,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'ActualRainfall'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width - 10,
                                   height: 50,
                                   child: Center(
                                       child: Text(
                                     'Actual Rainfall',
-                                    style: buttonStyleWhiet,
+                                    style: TextStyle(
+                                        color: option == 'ActualRainfall'
+                                            ? Colors.white
+                                            : kColorBlue),
                                   ))),
                             ),
                           ),
@@ -1417,15 +1362,23 @@ class _MyWidgetState extends State<MainNav> {
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
-                            child: ColoredBox(
-                              color: kColorBlue,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'NormalRainfall'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width - 10,
                                   height: 50,
                                   child: Center(
                                       child: Text(
                                     'Normal Rainfall',
-                                    style: buttonStyleWhiet,
+                                    style: TextStyle(
+                                        color: option == 'NormalRainfall'
+                                            ? Colors.white
+                                            : kColorBlue),
                                   ))),
                             ),
                           ),
@@ -1440,15 +1393,23 @@ class _MyWidgetState extends State<MainNav> {
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
-                            child: ColoredBox(
-                              color: kColorBlue,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'RainfallPercent'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width - 10,
                                   height: 50,
                                   child: Center(
                                       child: Text(
                                     'Rainfall Percent',
-                                    style: buttonStyleWhiet,
+                                    style: TextStyle(
+                                        color: option == 'RainfallPercent'
+                                            ? Colors.white
+                                            : kColorBlue),
                                   ))),
                             ),
                           ),
@@ -1463,15 +1424,23 @@ class _MyWidgetState extends State<MainNav> {
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
-                            child: ColoredBox(
-                              color: kColorBlue,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'MaxTemp'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width - 10,
                                   height: 50,
                                   child: Center(
                                       child: Text(
                                     'Max Temperature',
-                                    style: buttonStyleWhiet,
+                                    style: TextStyle(
+                                        color: option == 'MaxTemp'
+                                            ? Colors.white
+                                            : kColorBlue),
                                   ))),
                             ),
                           ),
@@ -1486,15 +1455,23 @@ class _MyWidgetState extends State<MainNav> {
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
-                            child: ColoredBox(
-                              color: kColorBlue,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'MinTemp'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width - 10,
                                   height: 50,
                                   child: Center(
                                       child: Text(
                                     'Minimum Temperature',
-                                    style: buttonStyleWhiet,
+                                    style: TextStyle(
+                                        color: option == 'MinTemp'
+                                            ? Colors.white
+                                            : kColorBlue),
                                   ))),
                             ),
                           ),
@@ -1515,30 +1492,29 @@ class _MyWidgetState extends State<MainNav> {
                 height: 40,
                 width: 40,
                 child: Center(
-                  child: Icon(Icons.help),
+                  child: Icon(Icons.menu),
                 ),
               ),
             ),
           ),
         ),
-        Visibility(
-          visible: showLegends,
-          child: Align(
-            alignment: Alignment.bottomCenter,
+        if (dailyLegends.isNotEmpty)
+          Align(
+            alignment: Alignment.topRight,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 00, 20, 180),
+              padding: const EdgeInsets.fromLTRB(20, 200, 10, 0),
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 100,
+                width: 150,
+                height: 300,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.black.withOpacity(.2),
+                  color: Colors.black.withOpacity(.1),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text('Legends'),
                       SizedBox(
@@ -1546,16 +1522,25 @@ class _MyWidgetState extends State<MainNav> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 50,
+                        height: 250,
                         child: ListView.builder(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          scrollDirection: Axis.horizontal,
+                          scrollDirection: Axis.vertical,
                           itemCount: dailyLegends.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
+                                  Text(
+                                    dailyLegends[index].title,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
                                   ColoredBox(
                                     color: dailyLegends[index].color.toColor(),
                                     child: SizedBox(
@@ -1563,13 +1548,6 @@ class _MyWidgetState extends State<MainNav> {
                                       height: 20,
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    dailyLegends[index].title,
-                                    style: TextStyle(color: Colors.white),
-                                  )
                                 ],
                               ),
                             );
@@ -1582,7 +1560,6 @@ class _MyWidgetState extends State<MainNav> {
               ),
             ),
           ),
-        ),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
@@ -1633,7 +1610,7 @@ class _MyWidgetState extends State<MainNav> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Normal',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   )),
@@ -1657,7 +1634,7 @@ class _MyWidgetState extends State<MainNav> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Hybrid',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   )),
@@ -1681,7 +1658,7 @@ class _MyWidgetState extends State<MainNav> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Satellite',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   )),
@@ -1719,15 +1696,14 @@ class _MyWidgetState extends State<MainNav> {
           zoomGesturesEnabled: true,
           tiltGesturesEnabled: false,
           onMapCreated: (GoogleMapController controller) {
+            controller.setMapStyle(mapStyle);
             _controller.complete(controller);
           },
         ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: selectIndex != 0
-                ? EdgeInsets.fromLTRB(20, 0, 0, 230)
-                : EdgeInsets.fromLTRB(20, 0, 0, 140),
+            padding: EdgeInsets.fromLTRB(20, 0, 0, 200),
             child:
                 Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               GestureDetector(
@@ -1747,7 +1723,7 @@ class _MyWidgetState extends State<MainNav> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Normal',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   )),
@@ -1771,7 +1747,7 @@ class _MyWidgetState extends State<MainNav> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Hybrid',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   )),
@@ -1795,7 +1771,7 @@ class _MyWidgetState extends State<MainNav> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Satellite',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   )),
