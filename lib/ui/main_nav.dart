@@ -113,8 +113,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       get10DaysList();
     } else if (selectIndex == 3) {
-      // getAgriList();
-      getPrognosissMapList();
+      // getPrognosissMapList();
     } else if (selectIndex == 4) {
       // getPrognosissMapList();
     } else {

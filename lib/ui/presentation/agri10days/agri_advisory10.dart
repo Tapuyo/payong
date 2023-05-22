@@ -16,6 +16,7 @@ import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/init_provider.dart';
 import 'package:payong/services/agri_service.dart';
 import 'package:payong/services/daily_services.dart';
+import 'package:payong/ui/presentation/agri10days/components/agri_advisory_view_pdf.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
@@ -39,10 +40,10 @@ class AgriAdvisory10Widget extends HookWidget {
     final String id = context.select((AgriProvider p) => p.dailyIDSelected);
     final String backImg =
         context.select((InitProvider p) => p.backImgAssetUrl);
-        final bool withRain = context.select((InitProvider p) => p.withRain);
+    final bool withRain = context.select((InitProvider p) => p.withRain);
     final List<AgriAdvModel>? dailyAgriDetails =
         context.select((AgriProvider p) => p.agriAdvModels);
-        
+
     useEffect(() {
       Future.microtask(() async {
         await AgriServices.getAgriAdvisory(context, id, false, true);
@@ -61,7 +62,8 @@ class AgriAdvisory10Widget extends HookWidget {
                   child: Image.asset(backImg),
                 ),
               ),
-                if(withRain) ParallaxRain(
+              if (withRain)
+                ParallaxRain(
                   // ignore: prefer_const_literals_to_create_immutables
                   dropColors: [Colors.white],
                   trail: true,
@@ -147,11 +149,35 @@ class AgriAdvisory10Widget extends HookWidget {
                               SizedBox(
                                 height: 12,
                               ),
-                              Text(
-                                agriAdsModel.content,
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.justify,
-                              ),
+                              ElevatedButton(
+                                  child: Text("Read more",
+                                      style: TextStyle(fontSize: 14)),
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.blue),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                                              side: BorderSide(
+                                                  color: Colors.blue)))),
+                                  onPressed: () {
+                                     Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                         AgriAvisoryViewPdf(urlPdf: agriAdsModel.content)),
+                              );
+                                  }),
+                              // Text(
+                              //   agriAdsModel.content,
+                              //   style: TextStyle(color: Colors.black),
+                              //   textAlign: TextAlign.justify,
+                              // ),
                             ],
                           ),
                         ),

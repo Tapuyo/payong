@@ -103,12 +103,13 @@ class AgriForecastTempWidget extends HookWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'High Land: ${dailyAgriDetails[index].highLandMaxTemp}°C - ${dailyAgriDetails[index].highLandMinTemp}°C',
+                                    'Lowland: ${dailyAgriDetails[index].lowLandMaxTemp}°C - ${dailyAgriDetails[index].lowLandMinTemp}°C',
                                     style: kTextStyleSubtitle4b,
                                   ),
                                   VerticalDivider(),
-                                  Text(
-                                    'Low Land: ${dailyAgriDetails[index].lowLandMaxTemp}°C - ${dailyAgriDetails[index].lowLandMinTemp}°C',
+                                 
+                                   Text(
+                                    'Upland: ${dailyAgriDetails[index].highLandMaxTemp}°C - ${dailyAgriDetails[index].highLandMinTemp}°C',
                                     style: kTextStyleSubtitle4b,
                                   ),
                                 ],

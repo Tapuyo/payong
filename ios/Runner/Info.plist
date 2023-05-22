@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Payong app would like to save pdf from the app to your file</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Payong app would like to access your gallery for saving pdf file to the app</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>http</string>
