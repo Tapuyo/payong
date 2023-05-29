@@ -46,7 +46,7 @@ class AgriAdvisory10Widget extends HookWidget {
 
     useEffect(() {
       Future.microtask(() async {
-        await AgriServices.getAgriAdvisory(context, id, false, true);
+        await AgriServices.getAgriAdvisory(context, id, false, false);
       });
       return;
     }, [id]);
@@ -80,7 +80,7 @@ class AgriAdvisory10Widget extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height + 1000,
+                              height: MediaQuery.of(context).size.height ,
                               child: ListView.builder(
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                                 scrollDirection: Axis.horizontal,
@@ -102,6 +102,7 @@ class AgriAdvisory10Widget extends HookWidget {
   }
 
   Widget advisoryWidget(BuildContext context, AgriAdvModel? agriAdsModel) {
+    print(agriAdsModel!.title);
     return agriAdsModel != null
         ? Column(children: [
             Padding(
@@ -115,13 +116,9 @@ class AgriAdvisory10Widget extends HookWidget {
                       SizedBox(
                         height: 12,
                       ),
-                      Text(
-                        agriAdsModel.title,
-                        style: kTextStyleSubtitle4b,
-                      ),
                       Container(
                         padding: EdgeInsets.all(5),
-                        width: MediaQuery.of(context).size.width - 50,
+                        width: MediaQuery.of(context).size.width - 20,
                         decoration: BoxDecoration(
                             color: Colors.white60,
                             borderRadius: BorderRadius.circular(10),
@@ -129,7 +126,22 @@ class AgriAdvisory10Widget extends HookWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              Text(
+                                'Advisory for this ${DateFormat.yMMMd().format(DateTime.now())}, ',
+                                style: kTextStyleSubtitle4b,
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                agriAdsModel.title,
+                                style: kTextStyleSubtitle4b,
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
                               if (agriAdsModel.img.isNotEmpty)
                                 SizedBox(
                                   width: 300,
@@ -140,7 +152,9 @@ class AgriAdvisory10Widget extends HookWidget {
                                     itemBuilder: (BuildContext context,
                                             int index) =>
                                         SizedBox(
-                                            width: 250,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             height: 200,
                                             child: Image.network(
                                                 agriAdsModel.img[index].img)),
@@ -162,22 +176,20 @@ class AgriAdvisory10Widget extends HookWidget {
                                       shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                                              side: BorderSide(
-                                                  color: Colors.blue)))),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              side:
+                                                  BorderSide(color: Colors.blue)))),
                                   onPressed: () {
-                                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                         AgriAvisoryViewPdf(urlPdf: agriAdsModel.content)),
-                              );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AgriAvisoryViewPdf(
+                                                  urlPdf:
+                                                      agriAdsModel.content)),
+                                    );
                                   }),
-                              // Text(
-                              //   agriAdsModel.content,
-                              //   style: TextStyle(color: Colors.black),
-                              //   textAlign: TextAlign.justify,
-                              // ),
                             ],
                           ),
                         ),

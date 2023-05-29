@@ -95,6 +95,11 @@ class SearchList extends HookWidget {
                  final dailyProvider = context.read<Daily10Provider>();
                   dailyProvider.setDailyId(dailyMods.locationId);
                   dailyProvider.setShowList(false);
+
+                    final dailyProvider1 = context.read<DailyProvider>();
+                  dailyProvider1.setDailyId(dailyMods.locationId);
+
+                 
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

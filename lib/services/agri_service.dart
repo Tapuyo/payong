@@ -133,7 +133,7 @@ abstract class AgriServices {
       }}
 
       AgriAdvModel daily = AgriAdvModel(
-        u['Titles'] ?? '',
+        farm ? u['Titles'] :u['Title'],
         u['Content'] ?? '',
         imgList
       );
@@ -433,11 +433,14 @@ abstract class AgriServices {
 
   static Future<List<Daily10MapModel>> getRegionMap(
       BuildContext context) async {
-    final response = await http.get(Uri.parse(
-        'http://18.139.91.35/payong/API/regioncoordinates.php?page=1'));
+    // final response = await http.get(Uri.parse(
+    //     'http://18.139.91.35/payong/API/regioncoordinates.php?page=1'));
     // final response = await http.get(Uri.parse(
     //     'http://18.139.91.35/payong/API/regioncoordinates.php?page=1&RegionID=11'));
-    var jsondata = json.decode(response.body);
+    // var jsondata = json.decode(response.body);
+    final response = await DefaultAssetBundle.of(context).loadString("assets/coordinates/coordinatesregion.json");
+    print('PROGNOSIS MAP CALL: ${response.toString()}');
+    var jsondata = json.decode(response);
 
     List<Daily10MapModel> newDailyList = [];
 

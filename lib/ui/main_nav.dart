@@ -113,7 +113,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       get10DaysList();
     } else if (selectIndex == 3) {
-      // getPrognosissMapList();
+      getPrognosissMapList();
     } else if (selectIndex == 4) {
       // getPrognosissMapList();
     } else {
@@ -161,7 +161,7 @@ class _MyWidgetState extends State<MainNav> {
           dailyProvider.setPolygonDaiy(Polygon(
               onTap: () async {
                 prod.setProgID(name.dailyDetailsID);
-                await AgriServices.getProgDetails(context, name.dailyDetailsID);
+
                 dailyProvider.removePolygonDaiy(PolygonId(prognosisColorMap));
                 setState(() {
                   prognosisColorMap = name.dailyDetailsID;
@@ -178,6 +178,7 @@ class _MyWidgetState extends State<MainNav> {
                     strokeWidth: 4,
                     fillColor: Colors.blueAccent,
                     strokeColor: Colors.transparent));
+                await AgriServices.getProgDetails(context, name.dailyDetailsID);
               },
               consumeTapEvents: true,
               polygonId: PolygonId(name.dailyDetailsID),
@@ -254,6 +255,7 @@ class _MyWidgetState extends State<MainNav> {
     setState(() {
       isRefresh = true;
     });
+
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setPolygonDaiyClear();
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -272,14 +274,14 @@ class _MyWidgetState extends State<MainNav> {
       optionFilter = 'ActualRainfall';
     }
 
-    for (var i = 1; i < 200; i++) {
-      print('john paul $i');
-      final dailymap = await DailyServices.getDailyList(
-          context, dt, i.toString(), optionFilter);
+    // for (var i = 1; i < 200; i++) {
+    // print('john paul $i');
+    final dailymap =
+        await DailyServices.getDailyList(context, dt, '1', optionFilter);
 
-      dailyProvider.setDateSelect(selectedDate);
-      colorMap(dailymap);
-    }
+    dailyProvider.setDateSelect(selectedDate);
+    colorMap(dailymap);
+    // }
     setState(() {
       isRefresh = false;
     });
@@ -301,21 +303,21 @@ class _MyWidgetState extends State<MainNav> {
 
             polygonCoords.add(LatLng(longitude, latitude));
           }
-          Color lxColor = Color(0xFF42A5F5);
+          Color lxColor = Color.fromARGB(0, 249, 247, 247);
 
-          if (dailyProvider.option == 'MinTemp') {
-            lxColor = name.lowTempColorCode.toColor();
-          } else if (dailyProvider.option == 'NormalRainfall') {
-            lxColor = name.rainFallNormalColorCode.toColor();
-          } else if (dailyProvider.option == 'MaxTemp') {
-            lxColor = name.highTempColorCode.toColor();
-          } else if (dailyProvider.option == 'ActualRainfall') {
-            lxColor = name.rainFallActualColorCode.toColor();
-          } else if (dailyProvider.option == 'RainfallPercent') {
-            lxColor = name.percentrainFallColorCode.toColor();
-          } else {
-            lxColor = name.rainFallActualColorCode.toColor();
-          }
+          // if (dailyProvider.option == 'MinTemp') {
+          //   lxColor = name.lowTempColorCode.toColor();
+          // } else if (dailyProvider.option == 'NormalRainfall') {
+          //   lxColor = name.rainFallNormalColorCode.toColor();
+          // } else if (dailyProvider.option == 'MaxTemp') {
+          //   lxColor = name.highTempColorCode.toColor();
+          // } else if (dailyProvider.option == 'ActualRainfall') {
+          //   lxColor = name.rainFallActualColorCode.toColor();
+          // } else if (dailyProvider.option == 'RainfallPercent') {
+          //   lxColor = name.percentrainFallColorCode.toColor();
+          // } else {
+          //   lxColor = name.rainFallActualColorCode.toColor();
+          // }
 
           print(lxColor);
 
@@ -855,90 +857,6 @@ class _MyWidgetState extends State<MainNav> {
     //Prognosis map
     return Stack(
       children: [
-        //tab
-        // Padding(
-        //   padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: [
-        //       GestureDetector(
-        //         onTap: () {
-        //           setState(() {
-        //             agriTab = 0;
-        //           });
-        //         },
-        //         child: Container(
-        //           width: 100,
-        //           decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(10),
-        //             color: agriTab == 0
-        //                 ? dayNow
-        //                     ? kColorSecondary
-        //                     : kColorBlue
-        //                 : Colors.white,
-        //           ),
-        //           height: 35,
-        //           child: Center(
-        //             child: Text(
-        //               'Forecast',
-        //               style: kTextStyleSubtitle4b,
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       GestureDetector(
-        //         onTap: () {
-        //           setState(() {
-        //             agriTab = 1;
-        //           });
-        //         },
-        //         child: Container(
-        //           width: 130,
-        //           decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(10),
-        //             color: agriTab == 1
-        //                 ? dayNow
-        //                     ? kColorSecondary
-        //                     : kColorBlue
-        //                 : Colors.white,
-        //           ),
-        //           height: 35,
-        //           child: Center(
-        //             child: Text(
-        //               'Crop phenology',
-        //               style: kTextStyleSubtitle4b,
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       GestureDetector(
-        //         onTap: () {
-        //           setState(() {
-        //             agriTab = 2;
-        //           });
-        //         },
-        //         child: Container(
-        //           width: 100,
-        //           decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(10),
-        //             color: agriTab == 2
-        //                 ? dayNow
-        //                     ? kColorSecondary
-        //                     : kColorBlue
-        //                 : Colors.white,
-        //           ),
-        //           height: 35,
-        //           child: Center(
-        //             child: Text(
-        //               'Advisory',
-        //               style: kTextStyleSubtitle4b,
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
@@ -1049,7 +967,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
-     controller.setMapStyle(mapStyle);
+    controller.setMapStyle(mapStyle);
     final marker = Marker(
       markerId: MarkerId('area'),
       position: LatLng(11.051436, 122.880019),
@@ -1084,7 +1002,7 @@ class _MyWidgetState extends State<MainNav> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding:  EdgeInsets.fromLTRB(20, 0, 0, 140),
+            padding: EdgeInsets.fromLTRB(20, 0, 0, 140),
             child:
                 Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               GestureDetector(
@@ -1249,17 +1167,32 @@ class _MyWidgetState extends State<MainNav> {
     return Stack(
       children: [
         GoogleMap(
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
+          myLocationEnabled: false,
+          myLocationButtonEnabled: false,
           mapType: mapType,
           polygons: dailyProvider!,
           initialCameraPosition: _kGooglePlex,
-          zoomGesturesEnabled: true,
-          tiltGesturesEnabled: true,
+          zoomGesturesEnabled: false,
+          tiltGesturesEnabled: false,
+          zoomControlsEnabled: false,
+          scrollGesturesEnabled: true,
           onMapCreated: (GoogleMapController controller) {
             controller.setMapStyle(mapStyle);
             _controller.complete(controller);
           },
+        ),
+        IgnorePointer(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Image.asset(
+              'assets/samplelayer.png',
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              fit: BoxFit.fitWidth,
+              // opacity: const AlwaysStoppedAnimation(.5),
+            ),
+          ),
         ),
         Visibility(
           visible: rainDropShow,
@@ -1283,16 +1216,18 @@ class _MyWidgetState extends State<MainNav> {
               child: TextField(
                 style: TextStyle(color: Colors.black),
                 onChanged: (value) async {
-                  final dailyProvider = context.read<Daily10Provider>();
-
+                  final dailyProvider1 = context.read<Daily10Provider>();
+                  print(value);
                   if (value.isNotEmpty) {
-                    dailyProvider.setShowList(true);
+                    print('ansldkjalksdjlaksjd');
+                    dailyProvider1.setShowList(true);
                   } else {
-                    dailyProvider.setShowList(false);
+                    print('mnv,mzn,mcnv,m');
+                    dailyProvider1.setShowList(false);
                   }
 
-                  dailyProvider.setSearchString(value);
-                  await Daily10Services.get10DaysSearch(context, value);
+                  dailyProvider1.setSearchString(value);
+                await Daily10Services.get10DaysSearch(context, value);
                 },
                 decoration: InputDecoration(
                   hintText: "Search Location",

@@ -12,10 +12,12 @@ abstract class DailyServices {
   static Future<List<DailyModel>> getDailyList(
       BuildContext context, String date, String page, String option) async {
     //  date = '2023-05-12';
-    print('dasasdasd$dailyMap page=$page&fdate=$date&option=$option');
-    final response = await http
-        .get(Uri.parse('$dailyMap page=$page&fdate=$date&option=$option'));
-    var jsondata = json.decode(response.body);
+    // print('dasasdasd$dailyMap page=$page&fdate=$date&option=$option');
+    // final response = await http
+    //     .get(Uri.parse('$dailyMap page=$page&fdate=$date&option=$option'));
+    // var jsondata = json.decode(response.body);
+      final response = await DefaultAssetBundle.of(context).loadString("assets/coordinates/coordinatescitymun.json");
+    var jsondata = json.decode(response);
 
     List<DailyModel> newDailyList = [];
     print(jsondata.toString());
@@ -323,6 +325,7 @@ abstract class DailyServices {
       legendUrl = 'http://18.139.91.35/payong/API/normal_rainfall_legends.php';
     }
 
+  
     final response = await http.get(Uri.parse(legendUrl));
     var jsondata = json.decode(response.body);
 
