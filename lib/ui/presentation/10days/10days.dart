@@ -214,7 +214,7 @@ class Daily10Widget extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "10 Days Forecast",
+                    "10 Days Weather Forecast",
                     style: kTextStyleSubtitle1,
                   ),
                 ],

@@ -20,6 +20,7 @@ import 'package:payong/ui/presentation/agri10days/components/agri_advisory_view_
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 bool dayNow = true;
 
@@ -80,7 +81,7 @@ class AgriAdvisory10Widget extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height ,
+                              height: MediaQuery.of(context).size.height,
                               child: ListView.builder(
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
                                 scrollDirection: Axis.horizontal,
@@ -156,8 +157,74 @@ class AgriAdvisory10Widget extends HookWidget {
                                                 .size
                                                 .width,
                                             height: 200,
-                                            child: Image.network(
-                                                agriAdsModel.img[index].img)),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                showModalBottomSheet<void>(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.all(12.0),
+                                                      child: Container(
+                                                        child: SizedBox(
+                                                          height: 300,
+                                                          child: ListView.builder(
+                                                            padding: EdgeInsets
+                                                                .fromLTRB(
+                                                                    0, 0, 0, 100),
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            itemCount:
+                                                                agriAdsModel
+                                                                    .linkImg
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context, index) {
+                                                              return Padding(
+                                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                                                                child: GestureDetector(
+                                                                  onTap: () async{
+                                                                    await openlaunchUrl(agriAdsModel
+                                                                      .linkImg[index]);
+                                                                  },
+                                                                  child: Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                                  20),
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade300,
+                                                                    ),
+                                                                    child: SizedBox(
+                                                                        width: MediaQuery.of(context)
+                                                                                .size
+                                                                                .width -
+                                                                            10,
+                                                                        height: 50,
+                                                                        child: Center(
+                                                                            child: Text(agriAdsModel
+                                                                      .linkImg[index],
+                                                                          style: TextStyle(
+                                                                              color:
+                                                                                  kColorBlue),
+                                                                        ))),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Image.network(
+                                                  agriAdsModel.img[index].img),
+                                            )),
                                   ),
                                 ),
                               SizedBox(
@@ -202,4 +269,10 @@ class AgriAdvisory10Widget extends HookWidget {
           ])
         : SizedBox();
   }
+  Future<void> openlaunchUrl(String urlLink) async {
+    if (!await launchUrl(Uri.parse(urlLink))) {
+      throw Exception('Could not launch $urlLink');
+    }
+  }
+
 }

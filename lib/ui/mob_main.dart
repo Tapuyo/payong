@@ -498,7 +498,7 @@ class _MainPageState extends State<MainPage> {
                                   height: 12,
                                 ),
                                 Text(
-                                  '10 Days',
+                                  '10 Days \nWeather \nForecast',
                                   style: kTextStyleSubtitle12,
                                   textAlign: TextAlign.center,
                                 )
@@ -691,7 +691,7 @@ class _MainPageState extends State<MainPage> {
                       CarouselSlider(
                         options: CarouselOptions(
                           autoPlayInterval: Duration(seconds: 10),
-                            height: 180.0,
+                            // height: 180.0,
                             viewportFraction: .9,
                             autoPlay: true,
                             enlargeFactor: .4),
@@ -705,7 +705,7 @@ class _MainPageState extends State<MainPage> {
                                   }
                                 },
                                 child: Container(
-                                  height: 150,
+                                  // height: 150, 
                                   width: MediaQuery.of(context).size.width - 50,
                                   decoration: BoxDecoration(
                                     border: Border.all(
@@ -725,21 +725,25 @@ class _MainPageState extends State<MainPage> {
                                             MainAxisAlignment.spaceAround,
                                         // ignore: prefer_const_literals_to_create_immutables
                                         children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                i.title,
-                                                style: kTextStyleSubtitle2b,
-                                              ),
-                                              SizedBox(
-                                                width: 200,
-                                                child: Text(
-                                                  i.description,
-                                                  style: kTextStyleSubtitle3b,
-                                                  maxLines: 10,
+                                          SizedBox(
+                                            width: 200,
+                                            child: Column(
+                                              children: [
+                                                   SizedBox(height: 12,),
+                                                Text(
+                                                  i.title,
+                                                  style: kTextStyleSubtitle2b,
                                                 ),
-                                              ),
-                                            ],
+                                                // SizedBox(height: 12,),
+                                                Flexible(
+                                                  child: Text(
+                                                    i.description,
+                                                    style: kTextStyleSubtitle3b,
+                                                    // maxLines: 10,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 100,

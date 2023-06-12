@@ -27,8 +27,12 @@ abstract class AgriServices {
     List<AgriModel> newDailyList = [];
 
     for (var u in jsondata) {
-      AgriModel daily = AgriModel(u['AgriDailyID'] ?? '', u['DateIssue'] ?? '',
-          u['ValidityDate'] ?? DateTime.now().toString(), u['Title'] ?? '', u['Content'] ?? '');
+      AgriModel daily = AgriModel(
+          u['AgriDailyID'] ?? '',
+          u['DateIssue'] ?? '',
+          u['ValidityDate'] ?? DateTime.now().toString(),
+          u['Title'] ?? '',
+          u['Content'] ?? '');
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -125,18 +129,22 @@ abstract class AgriServices {
 
     for (var u in jsondata) {
       List<AgriAdImgvModel> imgList = [];
-     
-     if(u['img'] != null){
-      for (var image in u['img']) {
-         AgriAdImgvModel img = AgriAdImgvModel(image['Img']);
-         imgList.add(img);
-      }}
 
-      AgriAdvModel daily = AgriAdvModel(
-        farm ? u['Titles'] :u['Title'],
-        u['Content'] ?? '',
-        imgList
-      );
+      if (u['img'] != null) {
+        for (var image in u['img']) {
+          AgriAdImgvModel img = AgriAdImgvModel(image['Img']);
+          imgList.add(img);
+        }
+      }
+      List<String> linkImg = [];
+      if (u['link'] != null) {
+        for (var link in u['link']) {
+          linkImg.add(link['link']);
+        }
+      }
+
+      AgriAdvModel daily = AgriAdvModel(farm ? u['Titles'] : u['Title'],
+          u['Content'] ?? '', imgList, linkImg);
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -185,56 +193,56 @@ abstract class AgriServices {
 
     List<AgriRegionalForecast> newDailyList = [];
 
-
     for (var u in jsondata) {
       List<AgriRegionalForecastWeatherSystem> weatherSystem = [];
 
-      if(u['WeatherSystem'] != null){
-      for (var a in u['WeatherSystem']) {
-        AgriRegionalForecastWeatherSystem weather =
-            AgriRegionalForecastWeatherSystem(
-                a['Name'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
-        weatherSystem.add(weather);
-      }}
+      if (u['WeatherSystem'] != null) {
+        for (var a in u['WeatherSystem']) {
+          AgriRegionalForecastWeatherSystem weather =
+              AgriRegionalForecastWeatherSystem(
+                  a['Name'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
+          weatherSystem.add(weather);
+        }
+      }
 
       List<AgriRegionalForecastWindCondition> windCondition = [];
 
-       if(u['WindCondition'] != null){
-      for (var a in u['WindCondition']) {
-        AgriRegionalForecastWindCondition weather =
-            AgriRegionalForecastWindCondition(
-                a['Location'] ?? '', a['Description'] ?? '', a['Icon']?? '');
-        windCondition.add(weather);
-      }}
+      if (u['WindCondition'] != null) {
+        for (var a in u['WindCondition']) {
+          AgriRegionalForecastWindCondition weather =
+              AgriRegionalForecastWindCondition(
+                  a['Location'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
+          windCondition.add(weather);
+        }
+      }
 
       List<AgriRegionalForecastGaleWarning> galeWarning = [];
 
-       if(u['GaleWarning'] != null){
-      for (var a in u['GaleWarning']) {
-        AgriRegionalForecastGaleWarning weather =
-            AgriRegionalForecastGaleWarning(
-                a['Location']?? '', a['Description']?? '', a['Icon']?? '');
-        galeWarning.add(weather);
-      }}
+      if (u['GaleWarning'] != null) {
+        for (var a in u['GaleWarning']) {
+          AgriRegionalForecastGaleWarning weather =
+              AgriRegionalForecastGaleWarning(
+                  a['Location'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
+          galeWarning.add(weather);
+        }
+      }
 
       List<AgriRegionalForecastEnso> enso = [];
 
-       if(u['EnsoWarning'] != null){
-       for (var a in u['EnsoWarning']) {
-        AgriRegionalForecastEnso weather = AgriRegionalForecastEnso(
-          a['Location']?? '',
-          a['Description'] ?? '',
-          a['Icon']?? ''
-        );
-        enso.add(weather);
-      }}
+      if (u['EnsoWarning'] != null) {
+        for (var a in u['EnsoWarning']) {
+          AgriRegionalForecastEnso weather = AgriRegionalForecastEnso(
+              a['Location'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
+          enso.add(weather);
+        }
+      }
 
       List<AgriRegionalForecastMap> map = [];
 
       for (var a in u['Maps']) {
         AgriRegionalForecastMap weather = AgriRegionalForecastMap(
-          a['Map']?? '',
-          a['Description']?? '',
+          a['Map'] ?? '',
+          a['Description'] ?? '',
         );
         map.add(weather);
       }
@@ -278,8 +286,8 @@ abstract class AgriServices {
         u['HighLandMinTemp'] ?? '',
         u['HighLandMaxTemp'] ?? '',
         u['Locations'] ?? '',
-         u['LowLandMinTempIcon'] ?? '',
-          u['HighLandMinTempIcon'] ?? '',
+        u['LowLandMinTempIcon'] ?? '',
+        u['HighLandMinTempIcon'] ?? '',
       );
       newDailyList.add(daily);
     }
@@ -305,10 +313,9 @@ abstract class AgriServices {
 
     for (var u in jsondata) {
       AgriForecastWindModel daily = AgriForecastWindModel(
-        u['WindCondition'] ?? '',
-        u['Locations'] ?? '',
-        u['WindConditionIcon'] ?? ''
-      );
+          u['WindCondition'] ?? '',
+          u['Locations'] ?? '',
+          u['WindConditionIcon'] ?? '');
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -333,10 +340,9 @@ abstract class AgriServices {
 
     for (var u in jsondata) {
       AgriForecastSoilConditionModel daily = AgriForecastSoilConditionModel(
-        u['SoilCondition'] ?? '',
-        u['Locations'] ?? '',
-        u['SoilConditionIcon'] ?? ''
-      );
+          u['SoilCondition'] ?? '',
+          u['Locations'] ?? '',
+          u['SoilConditionIcon'] ?? '');
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -361,10 +367,9 @@ abstract class AgriServices {
 
     for (var u in jsondata) {
       AgriForecastWeatherModel daily = AgriForecastWeatherModel(
-        u['WeatherCondition'] ?? '',
-        u['Locations'] ?? '',
-        u['WeatherConditionIcon']
-      );
+          u['WeatherCondition'] ?? '',
+          u['Locations'] ?? '',
+          u['WeatherConditionIcon']);
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously
@@ -438,7 +443,8 @@ abstract class AgriServices {
     // final response = await http.get(Uri.parse(
     //     'http://18.139.91.35/payong/API/regioncoordinates.php?page=1&RegionID=11'));
     // var jsondata = json.decode(response.body);
-    final response = await DefaultAssetBundle.of(context).loadString("assets/coordinates/coordinatesregion.json");
+    final response = await DefaultAssetBundle.of(context)
+        .loadString("assets/coordinates/coordinatesregion.json");
     print('PROGNOSIS MAP CALL: ${response.toString()}');
     var jsondata = json.decode(response);
 
@@ -453,14 +459,16 @@ abstract class AgriServices {
     return newDailyList;
   }
 
-  static Future<List<Agri10Prognosis>> getProgDetails(BuildContext context, String id) async {
+  static Future<List<Agri10Prognosis>> getProgDetails(
+      BuildContext context, String id) async {
     // id = '7';
     final responseParent = await http
         .get(Uri.parse('http://18.139.91.35/payong/API/agri_info.php'));
     var jsondataParent = json.decode(responseParent.body);
 
     String agriID = jsondataParent[0]['AgriInfoID'];
-    print('http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$agriID&RegionID=$id');
+    print(
+        'http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$agriID&RegionID=$id');
     final response = await http.get(Uri.parse(
         'http://18.139.91.35/payong/API/prognosis.php?AgriInfoID=$agriID&RegionID=$id'));
     var jsondata = json.decode(response.body);
@@ -470,17 +478,15 @@ abstract class AgriServices {
     print(jsondata.toString());
 
     for (var u in jsondata) {
-      List<SoilConditionModeil>  soilCondition = [];
+      List<SoilConditionModeil> soilCondition = [];
 
       for (var a in u['SoilCondition']) {
-        SoilConditionModeil soil = SoilConditionModeil(
-          a['SoilCondition'],
-          a['Location']
-        );
+        SoilConditionModeil soil =
+            SoilConditionModeil(a['SoilCondition'], a['Location']);
         soilCondition.add(soil);
       }
 
-       List<Temperature>  temp = [];
+      List<Temperature> temp = [];
 
       for (var a in u['Temperature']) {
         Temperature soil = Temperature(
@@ -502,7 +508,7 @@ abstract class AgriServices {
       );
       newDailyList.add(daily);
     }
-     dailyProvider.setProg(newDailyList);
+    dailyProvider.setProg(newDailyList);
     return newDailyList;
   }
 }

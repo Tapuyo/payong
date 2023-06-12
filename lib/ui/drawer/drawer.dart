@@ -1,6 +1,8 @@
-
 import 'package:flutter/material.dart';
+import 'package:payong/drawers_content/about_us.dart';
+import 'package:payong/drawers_content/contact_us.dart';
 import 'package:payong/utils/themes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerPage extends StatelessWidget {
   final VoidCallback onTap;
@@ -13,18 +15,18 @@ class DrawerPage extends StatelessWidget {
         // backgroundColor: kColorPrimary,
         body: Container(
           decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              // ignore: prefer_const_literals_to_create_immutables
-              colors: [
-                Color(0xFF005EEB),
-                Color(0xFF489E59),
-                Color(0xFFF2E90B),
-                Color(0xFF762917),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              tileMode: TileMode.clamp),
-        ),
+            gradient: LinearGradient(
+                // ignore: prefer_const_literals_to_create_immutables
+                colors: [
+                  Color(0xFF005EEB),
+                  Color(0xFF489E59),
+                  Color(0xFFF2E90B),
+                  Color(0xFF762917),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                tileMode: TileMode.clamp),
+          ),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -33,36 +35,27 @@ class DrawerPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                 
                   const SizedBox(
                     height: 30,
                   ),
+                  _drawerItem(text: 'Home', onTap: () {}),
                   _drawerItem(
-                    text: 'Home',
-                    onTap: () {}
-                        
-                  ),
-                  _drawerItem(
-                    text: 'About Us',
-                    onTap: (){
-                     
-                    }
-        
-                  ),
-                  _drawerItem(
-                      text: 'Contact Us',
-                      onTap: (){
-                        
-                      }
-        
-                  ),
-                  _drawerItem(
-                      text: 'Visit Website',
-                      onTap: (){
-                        
-                      }
-        
-                  ),
+                      text: 'About Us',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AboutUs()),
+                        );
+                      }),
+                  _drawerItem(text: 'Contact Us', onTap: () {
+                     Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ContactUs()),
+                        );
+                  }),
+                  _drawerItem(text: 'Visit Website', onTap: () async{
+                    await openlaunchUrl('https://bagong.pagasa.dost.gov.ph/');
+                  }),
                 ],
               ),
             ),
@@ -70,7 +63,16 @@ class DrawerPage extends StatelessWidget {
         ),
       ),
     );
+
+    
   }
+
+Future<void> openlaunchUrl(String urlLink) async {
+    if (!await launchUrl(Uri.parse(urlLink))) {
+      throw Exception('Could not launch $urlLink');
+    }
+  }
+  
 
   InkWell _drawerItem({
     required String text,
@@ -87,7 +89,6 @@ class DrawerPage extends StatelessWidget {
         height: 58,
         child: Row(
           children: <Widget>[
-           
             const SizedBox(
               width: 10,
             ),

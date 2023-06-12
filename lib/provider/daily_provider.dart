@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_model.dart';
@@ -16,6 +19,9 @@ class DailyProvider with ChangeNotifier{
   bool refresh = false;
   DateTime selectedDate = DateTime.now();
   Set<Polygon> polygon = {};
+  String _mapImage = 'http://18.139.91.35/payong/images/daily_tiff/2023-05-302_mar15tmn.png';
+
+  String  get mapImage => _mapImage; 
 
   DateTime  get dateSelect => selectedDate; 
 
@@ -40,7 +46,15 @@ class DailyProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void setOption(String value) {
+  void setOption(String value)async {
+    String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
+    // dt = '2023-05-30';
+    String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value'; 
+    final response = await http.get(Uri.parse(urlValue));
+    var jsondata = json.decode(response.body);
+    if(jsondata != []){
+       _mapImage = jsondata[0]['Map'];
+    }
     _option = value;
     notifyListeners();
   }

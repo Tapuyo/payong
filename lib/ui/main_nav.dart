@@ -113,6 +113,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       get10DaysList();
     } else if (selectIndex == 3) {
+      
       getPrognosissMapList();
     } else if (selectIndex == 4) {
       // getPrognosissMapList();
@@ -126,6 +127,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Future<void> getPrognosissMapList() async {
+    await Future.delayed(const Duration(seconds: 5));
     setState(() {
       isRefresh = true;
     });
@@ -153,7 +155,7 @@ class _MyWidgetState extends State<MainNav> {
               print(double.parse(latLng[0]).toString());
               double latitude = double.parse(latLng[0]);
               double longitude = double.parse(latLng[1]);
-              ;
+              
               polygonCoords.add(LatLng(longitude, latitude));
             } catch (e) {}
           }
@@ -1161,9 +1163,24 @@ class _MyWidgetState extends State<MainNav> {
 
   Widget mapWid() {
     final dailyProvider = context.read<DailyProvider>().polygons;
+    final dailyProviderImage = context.read<DailyProvider>().mapImage;
     final List<DailyLegendModel> dailyLegends =
         context.select((DailyProvider p) => p.dailyLegend);
     final String option = context.select((DailyProvider p) => p.option);
+    String optionTitle = '';
+   if (option == 'ActualRainfall') {
+          optionTitle = 'Actual Rainfall';
+        } else if (option == 'NormalRainfall') {
+          optionTitle = 'Normal Rainfall';
+        } else if (option == 'RainfallPercent') {
+          optionTitle = 'Percent Rainfall';
+        } else if (option == 'MaxTemp') {
+          optionTitle = 'Max Temp Rainfall';
+        } else if (option == 'MinTemp') {
+          optionTitle = 'Min Temp Rainfall';
+        } else {
+          optionTitle = 'Actual Rainfall';
+        }
     return Stack(
       children: [
         GoogleMap(
@@ -1181,12 +1198,19 @@ class _MyWidgetState extends State<MainNav> {
             _controller.complete(controller);
           },
         ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+            child: Text(optionTitle, style: TextStyle(color: Colors.black, fontSize: 18),),
+          )
+        ),
+        if(dailyProviderImage != '')
         IgnorePointer(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: Image.asset(
-              'assets/samplelayer.png',
+            child: Image.network(dailyProviderImage,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               fit: BoxFit.fitWidth,
