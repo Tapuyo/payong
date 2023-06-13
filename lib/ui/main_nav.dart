@@ -114,9 +114,8 @@ class _MyWidgetState extends State<MainNav> {
       get10DaysList();
     } else if (selectIndex == 3) {
       
-      getPrognosissMapList();
-    } else if (selectIndex == 4) {
       // getPrognosissMapList();
+    } else if (selectIndex == 4) {
     } else {
       // getDailyList('daily');
     }

@@ -352,19 +352,25 @@ class AgriForecast10Widget extends HookWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  agri.last.title,
-                                                  style: GoogleFonts.roboto(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontFamily: 'NunitoSans',
-                                                  )),
+                                              SizedBox(
+                                                height: MediaQuery.of(context).size.height - 250,
+                                                width: MediaQuery.of(context).size.width,
+                                                child: ListView(
+                                                  children:[ Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      agri.last.content,
+                                                      style: GoogleFonts.roboto(
+                                                          textStyle:
+                                                              const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: 'NunitoSans',
+                                                      )),
+                                                    ),
+                                                  ),]
                                                 ),
                                               ),
                                             ],
@@ -713,8 +719,7 @@ class AgriForecast10Widget extends HookWidget {
     print(agri.last.map.last.description);
 
     for (var i = 0; i < agri.last.map.length; i++) {
-      print(agri.last.map[i].map);
-        if(agri.last.map[i].description == 'MAP2'){
+        if(agri.last.map[i].description == 'ACTUAL RAINFALL'){
           normalRainfallImage = agri.last.map[i].map;
         }else{
           actualRainfallImage = agri.last.map[i].map;
