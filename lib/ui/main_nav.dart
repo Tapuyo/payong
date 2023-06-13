@@ -114,7 +114,7 @@ class _MyWidgetState extends State<MainNav> {
       get10DaysList();
     } else if (selectIndex == 3) {
       
-      // getPrognosissMapList();
+      getPrognosissMapList();
     } else if (selectIndex == 4) {
     } else {
       // getDailyList('daily');
@@ -126,7 +126,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Future<void> getPrognosissMapList() async {
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 10));
     setState(() {
       isRefresh = true;
     });
