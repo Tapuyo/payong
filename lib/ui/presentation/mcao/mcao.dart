@@ -111,6 +111,7 @@ class _mCaOPageState extends State<mCaOPage>
 
   @override
   Widget build(BuildContext context) {
+    final String option = context.select((DailyProvider p) => p.option);
   final int mCaoTab = context.select((McaoProvider p) => p.mCaoTab);
     // getMapAll(context);
     return Stack(
@@ -126,7 +127,192 @@ class _mCaOPageState extends State<mCaOPage>
             ]
           ]),
         ),
-       
+       Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 290,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('ActualRainfall');
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'ActualRainfall'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Actual Rainfall',
+                                    style: TextStyle(
+                                        color: option == 'ActualRainfall'
+                                            ? Colors.white
+                                            : kColorBlue),
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('NormalRainfall');
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'NormalRainfall'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Normal Rainfall',
+                                    style: TextStyle(
+                                        color: option == 'NormalRainfall'
+                                            ? Colors.white
+                                            : kColorBlue),
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('RainfallPercent');
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'RainfallPercent'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Rainfall Percent',
+                                    style: TextStyle(
+                                        color: option == 'RainfallPercent'
+                                            ? Colors.white
+                                            : kColorBlue),
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('MaxTemp');
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'MaxTemp'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Max Temperature',
+                                    style: TextStyle(
+                                        color: option == 'MaxTemp'
+                                            ? Colors.white
+                                            : kColorBlue),
+                                  ))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('MinTemp');
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: option == 'MinTemp'
+                                    ? kColorBlue
+                                    : Colors.grey.shade300,
+                              ),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 10,
+                                  height: 50,
+                                  child: Center(
+                                      child: Text(
+                                    'Minimum Temperature',
+                                    style: TextStyle(
+                                        color: option == 'MinTemp'
+                                            ? Colors.white
+                                            : kColorBlue),
+                                  ))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.menu),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

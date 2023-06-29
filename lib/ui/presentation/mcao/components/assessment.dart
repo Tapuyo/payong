@@ -24,6 +24,7 @@ class assessmentPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dailyProviderImage = context.read<DailyProvider>().mapImage;
     rootBundle.loadString('assets/map_style.txt').then((string) {
       mapStyle = string;
     });
@@ -31,7 +32,7 @@ class assessmentPage extends HookWidget {
         useState(context.read<McaoProvider>().polygons);
     final agriTab = useState(0);
     final onLoad = useState(true);
-      final List<DailyLegendModel> dailyLegends =
+    final List<DailyLegendModel> dailyLegends =
         context.select((DailyProvider p) => p.dailyLegend);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -40,39 +41,59 @@ class assessmentPage extends HookWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: agriTab.value == 0
-              ?  WebView(
+              ? WebView(
                   initialUrl:
                       'http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().month)}%20${DateTime.now().year}',
-                  onPageFinished:(url){
+                  onPageFinished: (url) {
                     onLoad.value = false;
                   },
                 )
-                
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: GoogleMap(
-                      // myLocationEnabled: true,
-                      myLocationButtonEnabled: false,
-                      mapType: MapType.normal,
-                      polygons: dailyProviderPolygon.value!,
-                      initialCameraPosition: _kGooglePlex,
-                      zoomGesturesEnabled: true,
-                      tiltGesturesEnabled: false,
-                      onMapCreated: (GoogleMapController controller) {
-                        controller.setMapStyle(mapStyle);
-                      },
+              : Stack(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: GoogleMap(
+                          // myLocationEnabled: true,
+                          myLocationButtonEnabled: false,
+                          mapType: MapType.normal,
+                          polygons: dailyProviderPolygon.value!,
+                          initialCameraPosition: _kGooglePlex,
+                          zoomGesturesEnabled: true,
+                          tiltGesturesEnabled: false,
+                          onMapCreated: (GoogleMapController controller) {
+                            controller.setMapStyle(mapStyle);
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                    if (dailyProviderImage != '')
+                      IgnorePointer(
+                        child: ColoredBox(
+                          color: Colors.white,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: Image.network(
+                              dailyProviderImage,
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              fit: BoxFit.fitWidth,
+                              // opacity: const AlwaysStoppedAnimation(.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
         ),
-        if(onLoad.value) Align(
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(),
-        ),
-        
+        if (onLoad.value)
+          Align(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
@@ -132,7 +153,7 @@ class assessmentPage extends HookWidget {
             ),
           ),
         ),
-       if (agriTab.value != 0)
+        if (agriTab.value != 0)
           Align(
             alignment: Alignment.topRight,
             child: Padding(
@@ -165,13 +186,13 @@ class assessmentPage extends HookWidget {
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
                               child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                   Text(
+                                  Text(
                                     dailyLegends[index].title,
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                   SizedBox(
+                                  SizedBox(
                                     width: 12,
                                   ),
                                   ColoredBox(
@@ -181,8 +202,6 @@ class assessmentPage extends HookWidget {
                                       height: 20,
                                     ),
                                   ),
-                                 
-                                 
                                 ],
                               ),
                             );
@@ -236,12 +255,10 @@ class assessmentPage extends HookWidget {
       } catch (e) {
         print('error $e');
       }
-
-      
     }
   }
 
-    String monthReturn(int val) {
+  String monthReturn(int val) {
     if (val == 1) {
       return 'JANUARY';
     } else if (val == 2) {

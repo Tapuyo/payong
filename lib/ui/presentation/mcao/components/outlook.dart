@@ -20,6 +20,8 @@ class outlookPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dailyProviderImage = context.read<DailyProvider>().mapImage;
+    print(dailyProviderImage);
      rootBundle.loadString('assets/map_style.txt').then((string) {
       mapStyle = string;
     });
@@ -52,25 +54,58 @@ class outlookPage extends HookWidget {
                     onLoad.value = false;
                   },
                 )
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: GoogleMap(
-                      // myLocationEnabled: true,
-                      myLocationButtonEnabled: false,
-                      mapType: MapType.normal,
-                      polygons: dailyProviderPolygon.value!,
-                      initialCameraPosition: _kGooglePlex,
-                      zoomGesturesEnabled: true,
-                      tiltGesturesEnabled: false,
-                      onMapCreated: (GoogleMapController controller) {
-                        controller.setMapStyle(mapStyle);
-                      },
+              : Stack(
+                children: [
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: GoogleMap(
+                          // myLocationEnabled: true,
+                          myLocationButtonEnabled: false,
+                          mapType: MapType.normal,
+                          polygons: dailyProviderPolygon.value!,
+                          initialCameraPosition: _kGooglePlex,
+                          zoomGesturesEnabled: true,
+                          tiltGesturesEnabled: false,
+                          onMapCreated: (GoogleMapController controller) {
+                            controller.setMapStyle(mapStyle);
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                      IgnorePointer(
+                        child: ColoredBox(
+                          color: Colors.white,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            
+                          ),
+                        ),
+                      ),
+                     if (dailyProviderImage != '')
+                      IgnorePointer(
+                        child: ColoredBox(
+                          color: Colors.white,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: Image.network(
+                              
+                              dailyProviderImage,
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              fit: BoxFit.fitWidth,
+                              // color: Colors.white,
+                              // opacity: const AlwaysStoppedAnimation(.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                ],
+              ),
         ),
         if (onLoad.value)
           Align(

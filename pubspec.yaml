@@ -47,6 +47,7 @@ dependencies:
   firebase_messaging: ^14.2.5
   firebase_core: ^2.7.0
   geocoding: ^2.0.5
+  google_static_maps_controller: ^1.0.0
 
   #utils
   google_fonts: ^4.0.3

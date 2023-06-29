@@ -74,14 +74,14 @@ class _MyWidgetState extends State<MainNav> {
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
-    zoom: 5.5,
+    zoom: 6,
   );
 
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(11.051436, 122.880019),
       tilt: 59.440717697143555,
-      zoom: 5.5);
+      zoom: 6);
 
   int selectIndex = 0;
 
@@ -113,8 +113,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       get10DaysList();
     } else if (selectIndex == 3) {
-      
-      getPrognosissMapList();
+      // getPrognosissMapList();
     } else if (selectIndex == 4) {
     } else {
       // getDailyList('daily');
@@ -154,7 +153,7 @@ class _MyWidgetState extends State<MainNav> {
               print(double.parse(latLng[0]).toString());
               double latitude = double.parse(latLng[0]);
               double longitude = double.parse(latLng[1]);
-              
+
               polygonCoords.add(LatLng(longitude, latitude));
             } catch (e) {}
           }
@@ -274,7 +273,7 @@ class _MyWidgetState extends State<MainNav> {
     } else {
       optionFilter = 'ActualRainfall';
     }
-
+    dailyProvider.setOption(optionFilter);
     // for (var i = 1; i < 200; i++) {
     // print('john paul $i');
     final dailymap =
@@ -320,7 +319,6 @@ class _MyWidgetState extends State<MainNav> {
           //   lxColor = name.rainFallActualColorCode.toColor();
           // }
 
-          print(lxColor);
 
           dailyProvider.setPolygonDaiy(Polygon(
               onTap: () async {
@@ -341,7 +339,6 @@ class _MyWidgetState extends State<MainNav> {
               strokeWidth: 4,
               fillColor: lxColor.withOpacity(.9),
               strokeColor: lxColor));
-          print('color: $lxColor');
           // polygons.add();
         }
       }
@@ -1167,19 +1164,19 @@ class _MyWidgetState extends State<MainNav> {
         context.select((DailyProvider p) => p.dailyLegend);
     final String option = context.select((DailyProvider p) => p.option);
     String optionTitle = '';
-   if (option == 'ActualRainfall') {
-          optionTitle = 'Actual Rainfall';
-        } else if (option == 'NormalRainfall') {
-          optionTitle = 'Normal Rainfall';
-        } else if (option == 'RainfallPercent') {
-          optionTitle = 'Percent Rainfall';
-        } else if (option == 'MaxTemp') {
-          optionTitle = 'Max Temp Rainfall';
-        } else if (option == 'MinTemp') {
-          optionTitle = 'Min Temp Rainfall';
-        } else {
-          optionTitle = 'Actual Rainfall';
-        }
+    if (option == 'ActualRainfall') {
+      optionTitle = 'Actual Rainfall';
+    } else if (option == 'NormalRainfall') {
+      optionTitle = 'Normal Rainfall';
+    } else if (option == 'RainfallPercent') {
+      optionTitle = 'Percent Rainfall';
+    } else if (option == 'MaxTemp') {
+      optionTitle = 'Max Temp Rainfall';
+    } else if (option == 'MinTemp') {
+      optionTitle = 'Min Temp Rainfall';
+    } else {
+      optionTitle = 'Actual Rainfall';
+    }
     return Stack(
       children: [
         GoogleMap(
@@ -1198,25 +1195,31 @@ class _MyWidgetState extends State<MainNav> {
           },
         ),
         Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
-            child: Text(optionTitle, style: TextStyle(color: Colors.black, fontSize: 18),),
-          )
-        ),
-        if(dailyProviderImage != '')
-        IgnorePointer(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Image.network(dailyProviderImage,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              fit: BoxFit.fitWidth,
-              // opacity: const AlwaysStoppedAnimation(.5),
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+              child: Text(
+                optionTitle,
+                style: TextStyle(color: Colors.black, fontSize: 18),
+              ),
+            )),
+        if (dailyProviderImage != '')
+          IgnorePointer(
+            child: ColoredBox(
+              color: Colors.white,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Image.network(
+                  dailyProviderImage,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  fit: BoxFit.fitWidth,
+                  // opacity: const AlwaysStoppedAnimation(.5),
+                ),
+              ),
             ),
           ),
-        ),
         Visibility(
           visible: rainDropShow,
           child: IgnorePointer(
@@ -1250,7 +1253,7 @@ class _MyWidgetState extends State<MainNav> {
                   }
 
                   dailyProvider1.setSearchString(value);
-                await Daily10Services.get10DaysSearch(context, value);
+                  await Daily10Services.get10DaysSearch(context, value);
                 },
                 decoration: InputDecoration(
                   hintText: "Search Location",
@@ -1521,105 +1524,114 @@ class _MyWidgetState extends State<MainNav> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(Routes.mobMain);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.white, spreadRadius: 3),
-                  ],
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed(Routes.mobMain);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(color: Colors.white, spreadRadius: 3),
+                      ],
+                    ),
+                    height: 40,
+                    width: 40,
+                    child: Center(
+                      child: Icon(Icons.arrow_back_ios),
+                    ),
+                  ),
                 ),
-                height: 40,
-                width: 40,
-                child: Center(
-                  child: Icon(Icons.arrow_back_ios),
-                ),
-              ),
+                // SizedBox(width: 12,),
+                // Text(optionTitle, style: TextStyle(color: Colors.black, fontSize: 20))
+              ],
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: selectIndex != 0
-                ? EdgeInsets.fromLTRB(20, 0, 0, 230)
-                : EdgeInsets.fromLTRB(20, 0, 0, 140),
-            child:
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      mapType = MapType.normal;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: mapType == MapType.normal
-                          ? Colors.white.withOpacity(.8)
-                          : Colors.white.withOpacity(.4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        'Normal',
-                        style: TextStyle(color: Colors.black),
+        Visibility(
+          visible: false,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: selectIndex != 0
+                  ? EdgeInsets.fromLTRB(20, 0, 0, 230)
+                  : EdgeInsets.fromLTRB(20, 0, 0, 140),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        mapType = MapType.normal;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: mapType == MapType.normal
+                            ? Colors.white.withOpacity(.8)
+                            : Colors.white.withOpacity(.4),
                       ),
-                    ),
-                  )),
-              SizedBox(
-                width: 12,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      mapType = MapType.hybrid;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: mapType == MapType.hybrid
-                          ? Colors.white.withOpacity(.8)
-                          : Colors.white.withOpacity(.4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        'Hybrid',
-                        style: TextStyle(color: Colors.black),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          'Normal',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
-                    ),
-                  )),
-              SizedBox(
-                width: 12,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      mapType = MapType.satellite;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: mapType == MapType.satellite
-                          ? Colors.white.withOpacity(.8)
-                          : Colors.white.withOpacity(.4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        'Satellite',
-                        style: TextStyle(color: Colors.black),
+                    )),
+                SizedBox(
+                  width: 12,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        mapType = MapType.hybrid;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: mapType == MapType.hybrid
+                            ? Colors.white.withOpacity(.8)
+                            : Colors.white.withOpacity(.4),
                       ),
-                    ),
-                  )),
-            ]),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          'Hybrid',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    )),
+                SizedBox(
+                  width: 12,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        mapType = MapType.satellite;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: mapType == MapType.satellite
+                            ? Colors.white.withOpacity(.8)
+                            : Colors.white.withOpacity(.4),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          'Satellite',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    )),
+              ]),
+            ),
           ),
         ),
         // if (isRefresh)

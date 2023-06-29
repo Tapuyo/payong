@@ -17,6 +17,7 @@ import 'package:payong/services/daily_services.dart';
 import 'package:payong/services/getLocationId.dart';
 import 'package:payong/ui/drawer/drawer.dart';
 import 'package:payong/ui/main_nav.dart';
+import 'package:payong/ui/test/map_static.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:payong/routes/routes.dart';
@@ -415,6 +416,12 @@ class _MainPageState extends State<MainPage> {
                                     builder: (context) =>
                                         const MainNav(index: 0)),
                               );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           const MapStaticTesting()),
+                              // );
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

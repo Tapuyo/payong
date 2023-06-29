@@ -48,12 +48,16 @@ class DailyProvider with ChangeNotifier{
 
   void setOption(String value)async {
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
-    // dt = '2023-05-30';
-    String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value'; 
+    // dt = '2023-06-22';
+    String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
+    print(urlValue); 
     final response = await http.get(Uri.parse(urlValue));
     var jsondata = json.decode(response.body);
-    if(jsondata != []){
+    print(jsondata);
+    if(jsondata.isNotEmpty){
        _mapImage = jsondata[0]['Map'];
+    }else{
+      _mapImage = '';
     }
     _option = value;
     notifyListeners();
