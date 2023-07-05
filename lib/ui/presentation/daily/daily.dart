@@ -198,7 +198,7 @@ class DailyWidget extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Daily Monitoring of Weather and Temperature',
+            'Daily Monitoring of Rainfall and Temperature',
             style: kTextStyleSubtitle1,
           ),
         ),

@@ -3,12 +3,16 @@ class AgriAdvModel {
   final String content;
   final List<AgriAdImgvModel> img;
   final List<String> linkImg;
+  final String datePublish;
+  final String dateValid;
 
   AgriAdvModel(
       this.title,
       this.content,
       this.img,
-      this.linkImg);
+      this.linkImg,
+      this.datePublish,
+      this.dateValid);
 }
 
 class AgriAdImgvModel {

@@ -51,14 +51,12 @@ abstract class Daily10Services {
     print(dailyDetailsID);
     final dailyProvider = context.read<Daily10Provider>();
     dailyProvider.setRefresh(true);
-    // date = '2023-05-12';
-    // dailyDetailsID = '1';
+    print('$days10Details fdate=$date&location=$dailyDetailsID');
     final response = await http.get(Uri.parse('$days10Details fdate=$date&location=$dailyDetailsID'));
     // http://18.139.91.35/payong/API/daily_details.php?fdate=2023-03-16&location=12
 
     // if (response.statusCode == 201 || response.statusCode == 200) {
     var jsondata = json.decode(response.body);
-    print(jsondata);
 
     List<DailyModel10> newDailyList = [];
 

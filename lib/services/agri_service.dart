@@ -103,24 +103,37 @@ abstract class AgriServices {
     final dailyProvider = context.read<AgriProvider>();
 
     dailyProvider.clearAdvisory();
+    String url = 'http://18.139.91.35/payong/API/agri_daily.php';
+    if(daily){
+      url = 'http://18.139.91.35/payong/API/agri_daily.php';
+    }else{
+      url = 'http://18.139.91.35/payong/API/agri_info.php';
+    }
     final responseParent = await http
-        .get(Uri.parse('http://18.139.91.35/payong/API/agri_info.php'));
+        .get(Uri.parse(url));
     var jsondataParent = json.decode(responseParent.body);
 
-    String agriID = jsondataParent[0]['AgriInfoID'];
+    String agriID = '';
+     if(daily){
+      agriID = jsondataParent[0]['AgriDailyID'];
+    }else{
+      agriID = jsondataParent[0]['AgriInfoID'];
+    }
     print(agriID);
     var response;
     if (daily) {
       if (farm) {
+        print('http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm&AgriDailyID=$agriID');
         response = await http.get(Uri.parse(
-            'http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm'));
+            'http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm&AgriDailyID=$agriID'));
       } else {
         response = await http.get(Uri.parse(
-            'http://18.139.91.35/payong/API/agri_daily_advisory.php?category=fishing'));
+            'http://18.139.91.35/payong/API/agri_daily_advisory.php?category=fishing&AgriDailyID=$agriID'));
       }
     } else {
       response = await http.get(Uri.parse(
           'http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID'));
+          print('http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID');
     }
     print(response.body);
     var jsondata = json.decode(response.body);
@@ -143,9 +156,9 @@ abstract class AgriServices {
         }
       }
 
-      AgriAdvModel daily = AgriAdvModel(farm ? u['Titles'] : u['Title'],
-          u['Content'] ?? '', imgList, linkImg);
-      newDailyList.add(daily);
+      AgriAdvModel tmpdaily = AgriAdvModel(daily ? u['Titles'] : u['Title'],
+          u['Content'] ?? '', imgList, linkImg,u['DateIssue'] ?? '',u['Validity'] ?? '');
+      newDailyList.add(tmpdaily);
     }
     // ignore: use_build_context_synchronously
 

@@ -129,13 +129,13 @@ class AgriAdvisory10Widget extends HookWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                'Advisory for this ${DateFormat.yMMMd().format(DateTime.now())}, ',
-                                style: kTextStyleSubtitle4b,
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
+                              // Text(
+                              //   'Advisory for this ${DateFormat.yMMMd().format(DateTime.now())}, ',
+                              //   style: kTextStyleSubtitle4b,
+                              // ),
+                              // SizedBox(
+                              //   height: 12,
+                              // ),
                               Text(
                                 agriAdsModel.title,
                                 style: kTextStyleSubtitle4b,

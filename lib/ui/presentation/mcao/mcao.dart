@@ -49,6 +49,13 @@ class _mCaOPageState extends State<mCaOPage>
     Future.delayed(Duration.zero, () {
       getMapAll(context);
     });
+    setImageMap();
+  }
+
+  setImageMap(){
+     final dailyProvider =
+                                  context.read<DailyProvider>();
+                              dailyProvider.setOption('NormalRainfall');
   }
 
   getMapAll(BuildContext context) async {
@@ -133,6 +140,15 @@ class _mCaOPageState extends State<mCaOPage>
             padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
             child: GestureDetector(
               onTap: () {
+                //  final dailyProvider =
+                //                   context.read<DailyProvider>();
+                //  if (mCaoTab == 0) {
+                //   dailyProvider.setDateSelect(DateTime.now().subtract(const Duration(days: 30)));  
+                //  }else{
+                //   dailyProvider.setDateSelect(DateTime.now());  
+                //  }
+                
+                                
                 showModalBottomSheet<void>(
                   context: context,
                   builder: (BuildContext context) {

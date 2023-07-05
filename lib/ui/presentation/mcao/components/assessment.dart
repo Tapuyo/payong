@@ -25,6 +25,7 @@ class assessmentPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final dailyProviderImage = context.read<DailyProvider>().mapImage;
+    print(dailyProviderImage);
     rootBundle.loadString('assets/map_style.txt').then((string) {
       mapStyle = string;
     });
@@ -43,7 +44,7 @@ class assessmentPage extends HookWidget {
           child: agriTab.value == 0
               ? WebView(
                   initialUrl:
-                      'http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().month)}%20${DateTime.now().year}',
+                      'http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().subtract(Duration(days: 30)).month)}%20${DateTime.now().year}',
                   onPageFinished: (url) {
                     onLoad.value = false;
                   },

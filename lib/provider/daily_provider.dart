@@ -47,8 +47,8 @@ class DailyProvider with ChangeNotifier{
   }
 
   void setOption(String value)async {
-    String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
-    // dt = '2023-06-22';
+    String dt = DateFormat('yyyy-MM-dd').format(selectedDate.subtract(Duration(days: 1)));
+    // dt = '2023-06-29';
     String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
     print(urlValue); 
     final response = await http.get(Uri.parse(urlValue));

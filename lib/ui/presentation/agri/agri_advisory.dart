@@ -91,20 +91,20 @@ class AgriAdvisoryWidget extends HookWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.all(8.0),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       Text(
+                          //         "Advisory for ${DateFormat.MMMEd().format(DateTime.now()).toString()}",
+                          //         style: kTextStyleSubtitle4b,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Advisory for ${DateFormat.MMMEd().format(DateTime.now()).toString()}",
-                                  style: kTextStyleSubtitle4b,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                             child: Row(
                               children: [
                                 Expanded(
@@ -185,7 +185,7 @@ class AgriAdvisoryWidget extends HookWidget {
                                   contentChoose.value =
                                       dailyAgriDetails[value].content;
                                 },
-                                height: 100.0,
+                                height: 160.0,
                                 viewportFraction: 1,
                                 autoPlay: false,
                                 enlargeFactor: .4),
@@ -300,10 +300,24 @@ class AgriAdvisoryWidget extends HookWidget {
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  agriAdsModel!.title,
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  children: [
+                    Text(
+                      agriAdsModel!.title,
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                     Text(
+                      'Valid From ${agriAdsModel!.datePublish}',
+                      style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
+                      textAlign: TextAlign.center,
+                    ),
+                     Text(
+                      "Valid until ${agriAdsModel!.dateValid}",
+                      style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             ),

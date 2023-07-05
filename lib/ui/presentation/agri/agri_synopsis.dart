@@ -43,7 +43,7 @@ class AgriSynopsisWidget extends HookWidget {
     final AgriModel? agriSypnosis =
         context.select((AgriProvider p) => p.dailyDetails);
     DateTime pubDate =
-        DateFormat("yyyy-MM-dd").parse(agriSypnosis != null ? agriSypnosis.validityDate:DateTime.now().toString());
+        DateFormat("yyyy-MM-dd").parse(agriSypnosis != null ? agriSypnosis.dateIssue:DateTime.now().toString());
     final String publishDate = DateFormat.yMMMMd('en_US').format(pubDate);
     print(withRain);
     return Padding(

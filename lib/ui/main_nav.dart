@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
+import 'package:hawk_fab_menu/hawk_fab_menu.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,17 +72,17 @@ class _MyWidgetState extends State<MainNav> {
   LatLng mapMarker = LatLng(11.051436, 122.880019);
   String prognosisColorMap = '';
   String? mapStyle;
-
+  HawkFabMenuController hawkFabMenuController = HawkFabMenuController();
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(11.051436, 122.880019),
-    zoom: 6,
+    zoom: 5.3,
   );
 
   static const CameraPosition _kLake = CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(11.051436, 122.880019),
       tilt: 59.440717697143555,
-      zoom: 6);
+      zoom: 5.3);
 
   int selectIndex = 0;
 
@@ -113,7 +114,7 @@ class _MyWidgetState extends State<MainNav> {
     } else if (selectIndex == 2) {
       get10DaysList();
     } else if (selectIndex == 3) {
-      // getPrognosissMapList();
+      getPrognosissMapList();
     } else if (selectIndex == 4) {
     } else {
       // getDailyList('daily');
@@ -227,7 +228,7 @@ class _MyWidgetState extends State<MainNav> {
 
               dailyProvider.setPolygonDaiy(Polygon(
                   onTap: () async {
-                    print(name.dailyDetailsID);
+                    print('ID ${name.dailyDetailsID}');
                     final dailyProvider = context.read<Daily10Provider>();
                     dailyProvider.setDailyId(name.dailyDetailsID);
                     dailyProvider.setShowList(false);
@@ -236,7 +237,7 @@ class _MyWidgetState extends State<MainNav> {
                   polygonId: PolygonId(name.dailyDetailsID),
                   points: polygonCoords,
                   strokeWidth: 4,
-                  fillColor: Colors.transparent,
+                  fillColor: Colors.white,
                   strokeColor: Colors.transparent));
             }
           }
@@ -318,7 +319,6 @@ class _MyWidgetState extends State<MainNav> {
           // } else {
           //   lxColor = name.rainFallActualColorCode.toColor();
           // }
-
 
           dailyProvider.setPolygonDaiy(Polygon(
               onTap: () async {
@@ -419,136 +419,16 @@ class _MyWidgetState extends State<MainNav> {
       myTabs = itemsMcao;
     }
     return Scaffold(
-      // appBar: AppBar(
-      // title: Column(
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Text(
-      //       title,
-      //       style: kTextStyleSubtitle2b,
-      //     ),
-      //     Row(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //         Text(
-      //           '${getMonthString(selectedDate.month)} ${selectedDate.day}, ${selectedDate.year}',
-      //           style: TextStyle(fontSize: 12, color: Colors.black38),
-      //         ),
-      //       ],
-      //     )
-      //   ],
-      // ),
-      // leading: IconButton(
-      //   icon: const Icon(
-      //     Icons.arrow_back_ios,
-      //     size: 30,
-      //   ),
-      //   onPressed: () {
-      //     Navigator.of(context).pushReplacementNamed(Routes.mobMain);
-      //   },
-      // ),
-      // actions: [
-      //   IconButton(
-      //     icon: const Icon(
-      //       Icons.help,
-      //       size: 30,
-      //     ),
-      //     onPressed: () {},
-      //   )
-      // ]),
-      body: Stack(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: mainTab(context))),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Visibility(
-              visible: selectIndex == 1 || selectIndex == 3 || selectIndex == 4,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
-                ),
-                child: BottomBarInspiredOutside(
-                  items: myTabs,
-                  // heightItem: 38,
-                  iconSize: 20,
-                  titleStyle: TextStyle(fontSize: 14),
-                  backgroundColor: kColorBlue,
-                  color: Colors.white,
-                  colorSelected: Colors.white,
-                  indexSelected: visit,
-                  top: -34,
-                  itemStyle: ItemStyle.circle,
-                  chipStyle: const ChipStyle(
-                      background: kColorBlue,
-                      size: 100,
-                      notchSmoothness: NotchSmoothness.defaultEdge),
-                  onTap: (int index) => setState(() {
-                    visit = index;
-                    agriTab = index;
-                    if (selectIndex == 4) {
-                      _mcaoprovider.setMcaoTab(index);
-                    } else {
-                      _agri10provider.setAgri10Tab(index);
-                    }
-                  }),
-                ),
-              ),
-            ),
-          ),
-          // if(isRefresh)
-          // Container(
-          //   color: Colors.white30,
-          //   child: SizedBox(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: MediaQuery.of(context).size.height,
-          //     child: Center(child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       children: [
-          //         CircularProgressIndicator(),
-          //         SizedBox(height: 8),
-          //         Text('Please wait...', style: TextStyle(color: Colors.black),)
-          //       ],
-          //     )),
-          //   ),
-          // )
-        ],
-      ),
-      // bottomNavigationBar:
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 00, 150),
-        child: ExpandableFabClass(
-          distanceBetween: 150.0,
-          subChildren: [
-            IconButton(
-              iconSize: 70,
-              color: kColorBlue,
-              onPressed: () => {
-                setState(() {
-                  selectedDate = DateTime.now();
-                  final dailyProvider = context.read<DailyProvider>();
-                  dailyProvider.setDateSelect(selectedDate);
-                  polygons.clear();
-                  title = 'Philippines';
-                  selectIndex = 0;
-                })
-              },
-              icon: const Icon(
-                Icons.cloud_circle,
-                size: 35,
-              ),
-            ),
-            IconButton(
-              iconSize: 70,
-              color: kColorBlue,
-              onPressed: () {
-                setState(() {
+      body: HawkFabMenu(
+        icon: AnimatedIcons.menu_close,
+        fabColor: Colors.black,
+        iconColor: Colors.white,
+        hawkFabMenuController: hawkFabMenuController,
+        items: [
+          HawkFabMenuItem(
+            label: 'Daily Monitoring',
+            ontap: () {
+               setState(() {
                   selectedDate = DateTime.now();
                   final dailyProvider = context.read<DailyProvider>();
                   dailyProvider.setDateSelect(selectedDate);
@@ -556,28 +436,31 @@ class _MyWidgetState extends State<MainNav> {
                   title = 'Philippines';
                   selectIndex = 1;
                 });
-                // final snackBar = SnackBar(
-                //   content:
-                //       const Text('Sorry, this module is under development.'),
-                //   // action: SnackBarAction(
-                //   //   label: 'Undo',
-                //   //   onPressed: () {
-                //   //     // Some code to undo the change.
-                //   //   },
-                //   // ),
-                // );
-
-                // // Find the ScaffoldMessenger in the widget tree
-                // // and use it to show a SnackBar.
-                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              icon: const Icon(Icons.cloud_done, size: 35),
-            ),
-            IconButton(
-              iconSize: 70,
-              color: kColorBlue,
-              onPressed: () {
-                setState(() {
+            },
+            icon: const Icon(Icons.cloud_circle, size: 35),
+            color: Colors.blue,
+            labelColor: Colors.blue,
+          ),
+          HawkFabMenuItem(
+            label: '10 Days monitoring',
+            ontap: () {
+               setState(() {
+                  selectedDate = DateTime.now();
+                  final dailyProvider = context.read<DailyProvider>();
+                  dailyProvider.setDateSelect(selectedDate);
+                  polygons.clear();
+                  title = 'Philippines';
+                  selectIndex = 1;
+                });
+            },
+            icon: const Icon(Icons.cloud_done),
+            color: Colors.blue,
+            labelColor: Colors.blue,
+          ),
+          HawkFabMenuItem(
+            label: 'Daily Farm Weather Forecasts and Advisories',
+            ontap: () {
+              setState(() {
                   selectedDate = DateTime.now();
                   final dailyProvider = context.read<DailyProvider>();
                   dailyProvider.setDateSelect(selectedDate);
@@ -585,28 +468,16 @@ class _MyWidgetState extends State<MainNav> {
                   title = 'Philippines';
                   selectIndex = 2;
                 });
-                // final snackBar = SnackBar(
-                //   content:
-                //       const Text('Sorry, this module is under development.'),
-                //   // action: SnackBarAction(
-                //   //   label: 'Undo',
-                //   //   onPressed: () {
-                //   //     // Some code to undo the change.
-                //   //   },
-                //   // ),
-                // );
+            },
+            icon: const Icon(Icons.cloud_queue, size: 35),
 
-                // // Find the ScaffoldMessenger in the widget tree
-                // // and use it to show a SnackBar.
-                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              icon: const Icon(Icons.cloud_queue, size: 35),
-            ),
-            IconButton(
-              iconSize: 70,
-              color: kColorBlue,
-              onPressed: () {
-                setState(() {
+            color: Colors.blue,
+            labelColor: Colors.blue,
+          ),
+          HawkFabMenuItem(
+            label: '10 Days Regional Agri-weather Information',
+            ontap: () {
+              setState(() {
                   selectedDate = DateTime.now();
                   final dailyProvider = context.read<DailyProvider>();
                   dailyProvider.setDateSelect(selectedDate);
@@ -614,27 +485,15 @@ class _MyWidgetState extends State<MainNav> {
                   title = 'Philippines';
                   selectIndex = 3;
                 });
-                // final snackBar = SnackBar(
-                //   content:
-                //       const Text('Sorry, this module is under development.'),
-                //   // action: SnackBarAction(
-                //   //   label: 'Undo',
-                //   //   onPressed: () {
-                //   //     // Some code to undo the change.
-                //   //   },
-                //   // ),
-                // );
+            },
+            icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
 
-                // // Find the ScaffoldMessenger in the widget tree
-                // // and use it to show a SnackBar.
-                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
-            ),
-            IconButton(
-              iconSize: 70,
-              color: kColorBlue,
-              onPressed: () {
+            color: Colors.blue,
+            labelColor: Colors.blue,
+          ),
+          HawkFabMenuItem(
+            label: 'Monthly Climate Assessment and Outlook',
+            ontap: () {
                 setState(() {
                   selectedDate = DateTime.now();
                   final dailyProvider = context.read<DailyProvider>();
@@ -643,26 +502,206 @@ class _MyWidgetState extends State<MainNav> {
                   title = 'Philippines';
                   selectIndex = 4;
                 });
-                // final snackBar = SnackBar(
-                //   content:
-                //       const Text('Sorry, this module is under development.'),
-                //   // action: SnackBarAction(
-                //   //   label: 'Undo',
-                //   //   onPressed: () {
-                //   //     // Some code to undo the change.
-                //   //   },
-                //   // ),
-                // );
+            },
+            icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
 
-                // // Find the ScaffoldMessenger in the widget tree
-                // // and use it to show a SnackBar.
-                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
+            color: Colors.blue,
+            labelColor: Colors.blue,
+          ),
+        ],
+        body: Stack(
+          children: [
+            Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: mainTab(context))),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Visibility(
+                visible:
+                    selectIndex == 1 || selectIndex == 3 || selectIndex == 4,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.white,
+                  ),
+                  child: BottomBarInspiredOutside(
+                    items: myTabs,
+                    // heightItem: 38,
+                    iconSize: 20,
+                    titleStyle: TextStyle(fontSize: 14),
+                    backgroundColor: kColorBlue,
+                    color: Colors.white,
+                    colorSelected: Colors.white,
+                    indexSelected: visit,
+                    top: -34,
+                    itemStyle: ItemStyle.circle,
+                    chipStyle: const ChipStyle(
+                        background: kColorBlue,
+                        size: 100,
+                        notchSmoothness: NotchSmoothness.defaultEdge),
+                    onTap: (int index) => setState(() {
+                      visit = index;
+                      agriTab = index;
+                      if (selectIndex == 4) {
+                        _mcaoprovider.setMcaoTab(index);
+                      } else {
+                        _agri10provider.setAgri10Tab(index);
+                      }
+                    }),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
+
+      // bottomNavigationBar:
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.fromLTRB(0, 0, 00, 150),
+      //   child: ExpandableFabClass(
+      //     distanceBetween: 150.0,
+      //     subChildren: [
+      //       IconButton(
+      //         iconSize: 70,
+      //         color: kColorBlue,
+      //         onPressed: () => {
+      //           setState(() {
+      //             selectedDate = DateTime.now();
+      //             final dailyProvider = context.read<DailyProvider>();
+      //             dailyProvider.setDateSelect(selectedDate);
+      //             polygons.clear();
+      //             title = 'Philippines';
+      //             selectIndex = 0;
+      //           })
+      //         },
+      //         icon: const Icon(
+      //           Icons.cloud_circle,
+      //           size: 35,
+      //         ),
+      //       ),
+      //       IconButton(
+      //         iconSize: 70,
+      //         color: kColorBlue,
+      //         onPressed: () {
+      //           setState(() {
+      //             selectedDate = DateTime.now();
+      //             final dailyProvider = context.read<DailyProvider>();
+      //             dailyProvider.setDateSelect(selectedDate);
+      //             polygons.clear();
+      //             title = 'Philippines';
+      //             selectIndex = 1;
+      //           });
+      //           // final snackBar = SnackBar(
+      //           //   content:
+      //           //       const Text('Sorry, this module is under development.'),
+      //           //   // action: SnackBarAction(
+      //           //   //   label: 'Undo',
+      //           //   //   onPressed: () {
+      //           //   //     // Some code to undo the change.
+      //           //   //   },
+      //           //   // ),
+      //           // );
+
+      //           // // Find the ScaffoldMessenger in the widget tree
+      //           // // and use it to show a SnackBar.
+      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //         },
+      //         icon: const Icon(Icons.cloud_done, size: 35),
+      //       ),
+      //       IconButton(
+      //         iconSize: 70,
+      //         color: kColorBlue,
+      //         onPressed: () {
+      //           setState(() {
+      //             selectedDate = DateTime.now();
+      //             final dailyProvider = context.read<DailyProvider>();
+      //             dailyProvider.setDateSelect(selectedDate);
+      //             polygons.clear();
+      //             title = 'Philippines';
+      //             selectIndex = 2;
+      //           });
+      //           // final snackBar = SnackBar(
+      //           //   content:
+      //           //       const Text('Sorry, this module is under development.'),
+      //           //   // action: SnackBarAction(
+      //           //   //   label: 'Undo',
+      //           //   //   onPressed: () {
+      //           //   //     // Some code to undo the change.
+      //           //   //   },
+      //           //   // ),
+      //           // );
+
+      //           // // Find the ScaffoldMessenger in the widget tree
+      //           // // and use it to show a SnackBar.
+      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //         },
+      //         icon: const Icon(Icons.cloud_queue, size: 35),
+      //       ),
+      //       IconButton(
+      //         iconSize: 70,
+      //         color: kColorBlue,
+      //         onPressed: () {
+      //           setState(() {
+      //             selectedDate = DateTime.now();
+      //             final dailyProvider = context.read<DailyProvider>();
+      //             dailyProvider.setDateSelect(selectedDate);
+      //             polygons.clear();
+      //             title = 'Philippines';
+      //             selectIndex = 3;
+      //           });
+      //           // final snackBar = SnackBar(
+      //           //   content:
+      //           //       const Text('Sorry, this module is under development.'),
+      //           //   // action: SnackBarAction(
+      //           //   //   label: 'Undo',
+      //           //   //   onPressed: () {
+      //           //   //     // Some code to undo the change.
+      //           //   //   },
+      //           //   // ),
+      //           // );
+
+      //           // // Find the ScaffoldMessenger in the widget tree
+      //           // // and use it to show a SnackBar.
+      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //         },
+      //         icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
+      //       ),
+      //       IconButton(
+      //         iconSize: 70,
+      //         color: kColorBlue,
+      //         onPressed: () {
+      //           setState(() {
+      //             selectedDate = DateTime.now();
+      //             final dailyProvider = context.read<DailyProvider>();
+      //             dailyProvider.setDateSelect(selectedDate);
+      //             polygons.clear();
+      //             title = 'Philippines';
+      //             selectIndex = 4;
+      //           });
+      //           // final snackBar = SnackBar(
+      //           //   content:
+      //           //       const Text('Sorry, this module is under development.'),
+      //           //   // action: SnackBarAction(
+      //           //   //   label: 'Undo',
+      //           //   //   onPressed: () {
+      //           //   //     // Some code to undo the change.
+      //           //   //   },
+      //           //   // ),
+      //           // );
+
+      //           // // Find the ScaffoldMessenger in the widget tree
+      //           // // and use it to show a SnackBar.
+      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //         },
+      //         icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
@@ -1171,9 +1210,9 @@ class _MyWidgetState extends State<MainNav> {
     } else if (option == 'RainfallPercent') {
       optionTitle = 'Percent Rainfall';
     } else if (option == 'MaxTemp') {
-      optionTitle = 'Max Temp Rainfall';
+      optionTitle = 'Max Temp';
     } else if (option == 'MinTemp') {
-      optionTitle = 'Min Temp Rainfall';
+      optionTitle = 'Min Temp';
     } else {
       optionTitle = 'Actual Rainfall';
     }
@@ -1190,19 +1229,11 @@ class _MyWidgetState extends State<MainNav> {
           zoomControlsEnabled: false,
           scrollGesturesEnabled: true,
           onMapCreated: (GoogleMapController controller) {
-            controller.setMapStyle(mapStyle);
+            // controller.setMapStyle(mapStyle);
             _controller.complete(controller);
           },
         ),
-        Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
-              child: Text(
-                optionTitle,
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            )),
+
         if (dailyProviderImage != '')
           IgnorePointer(
             child: ColoredBox(
@@ -1215,7 +1246,7 @@ class _MyWidgetState extends State<MainNav> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   fit: BoxFit.fitWidth,
-                  // opacity: const AlwaysStoppedAnimation(.5),
+                  // opacity: const AlwaysStoppedAnimation(.02),
                 ),
               ),
             ),
@@ -1551,6 +1582,15 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
+        Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+              child: Text(
+                optionTitle,
+                style: TextStyle(color: Colors.black, fontSize: 18),
+              ),
+            )),
         Visibility(
           visible: false,
           child: Align(
