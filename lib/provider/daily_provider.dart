@@ -19,7 +19,7 @@ class DailyProvider with ChangeNotifier{
   bool refresh = false;
   DateTime selectedDate = DateTime.now();
   Set<Polygon> polygon = {};
-  String _mapImage = 'http://18.139.91.35/payong/images/daily_tiff/2023-05-302_mar15tmn.png';
+  String _mapImage = '';
 
   String  get mapImage => _mapImage; 
 
@@ -48,17 +48,18 @@ class DailyProvider with ChangeNotifier{
 
   void setOption(String value)async {
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate.subtract(Duration(days: 1)));
-    // dt = '2023-06-29';
+    // dt = '2023-07-17';
     String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
-    print(urlValue); 
+    // print(urlValue); 
     final response = await http.get(Uri.parse(urlValue));
     var jsondata = json.decode(response.body);
-    print(jsondata);
+    // print(jsondata);
     if(jsondata.isNotEmpty){
        _mapImage = jsondata[0]['Map'];
     }else{
       _mapImage = '';
     }
+    print(_mapImage);
     _option = value;
     notifyListeners();
   }

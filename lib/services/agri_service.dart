@@ -104,26 +104,26 @@ abstract class AgriServices {
 
     dailyProvider.clearAdvisory();
     String url = 'http://18.139.91.35/payong/API/agri_daily.php';
-    if(daily){
+    if (daily) {
       url = 'http://18.139.91.35/payong/API/agri_daily.php';
-    }else{
+    } else {
       url = 'http://18.139.91.35/payong/API/agri_info.php';
     }
-    final responseParent = await http
-        .get(Uri.parse(url));
+    final responseParent = await http.get(Uri.parse(url));
     var jsondataParent = json.decode(responseParent.body);
 
     String agriID = '';
-     if(daily){
+    if (daily) {
       agriID = jsondataParent[0]['AgriDailyID'];
-    }else{
+    } else {
       agriID = jsondataParent[0]['AgriInfoID'];
     }
     print(agriID);
     var response;
     if (daily) {
       if (farm) {
-        print('http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm&AgriDailyID=$agriID');
+        print(
+            'http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm&AgriDailyID=$agriID');
         response = await http.get(Uri.parse(
             'http://18.139.91.35/payong/API/agri_daily_advisory.php?category=farm&AgriDailyID=$agriID'));
       } else {
@@ -133,7 +133,8 @@ abstract class AgriServices {
     } else {
       response = await http.get(Uri.parse(
           'http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID'));
-          print('http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID');
+      print(
+          'http://18.139.91.35/payong/API/agri_advisory.php?AgriInfoID=$agriID');
     }
     print(response.body);
     var jsondata = json.decode(response.body);
@@ -156,8 +157,13 @@ abstract class AgriServices {
         }
       }
 
-      AgriAdvModel tmpdaily = AgriAdvModel(daily ? u['Titles'] : u['Title'],
-          u['Content'] ?? '', imgList, linkImg,u['DateIssue'] ?? '',u['Validity'] ?? '');
+      AgriAdvModel tmpdaily = AgriAdvModel(
+          daily ? u['Titles'] : u['Title'],
+          u['Content'] ?? '',
+          imgList,
+          linkImg,
+          u['DateIssue'] ?? '',
+          u['Validity'] ?? '');
       newDailyList.add(tmpdaily);
     }
     // ignore: use_build_context_synchronously
@@ -199,8 +205,13 @@ abstract class AgriServices {
     BuildContext context,
     String id,
   ) async {
-    final response = await http
-        .get(Uri.parse('http://18.139.91.35/payong/API/agri_forecast.php'));
+    final responseParent = await http
+        .get(Uri.parse('http://18.139.91.35/payong/API/agri_info.php'));
+    var jsondataParent = json.decode(responseParent.body);
+
+    String agriID = jsondataParent[0]['AgriInfoID'];
+    final response = await http.get(Uri.parse(
+        'http://18.139.91.35/payong/API/agri_forecast.php?AgriInfoID=$agriID'));
 
     var jsondata = json.decode(response.body);
 
@@ -493,19 +504,22 @@ abstract class AgriServices {
     for (var u in jsondata) {
       List<SoilConditionModeil> soilCondition = [];
 
-      for (var a in u['SoilCondition']) {
-        SoilConditionModeil soil =
-            SoilConditionModeil(a['SoilCondition'], a['Location']);
-        soilCondition.add(soil);
+      if (u['SoilCondition'] != null) {
+        for (var a in u['SoilCondition']) {
+          SoilConditionModeil soil =
+              SoilConditionModeil(a['SoilCondition'], a['Location']);
+          soilCondition.add(soil);
+        }
       }
 
       List<Temperature> temp = [];
-
-      for (var a in u['Temperature']) {
-        Temperature soil = Temperature(
-          a['TemperatureDetails'],
-        );
-        temp.add(soil);
+      if (u['Temperature'] != null) {
+        for (var a in u['Temperature']) {
+          Temperature soil = Temperature(
+            a['TemperatureDetails'],
+          );
+          temp.add(soil);
+        }
       }
 
       Agri10Prognosis daily = Agri10Prognosis(
