@@ -56,6 +56,9 @@ class AgriAdvisoryWidget extends HookWidget {
         } else {
           await AgriServices.getAgriAdvisory(context, id, true, false);
         }
+        if (dailyAgriDetails != null) {
+          contentChoose.value = dailyAgriDetails[0].content;
+        }
       });
       return;
     }, [id, agriTab.value]);
@@ -91,18 +94,6 @@ class AgriAdvisoryWidget extends HookWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     children: [
-                          //       Text(
-                          //         "Advisory for ${DateFormat.MMMEd().format(DateTime.now()).toString()}",
-                          //         style: kTextStyleSubtitle4b,
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                             child: Row(
@@ -118,6 +109,7 @@ class AgriAdvisoryWidget extends HookWidget {
                                       buttonCarouselController.nextPage(
                                           duration: Duration(milliseconds: 300),
                                           curve: Curves.linear);
+                                     
                                     },
                                     child: Container(
                                       // width: 80,
@@ -150,6 +142,9 @@ class AgriAdvisoryWidget extends HookWidget {
                                       agriTab.value = 1;
                                       await AgriServices.getAgriAdvisory(
                                           context, id, true, false);
+                                       buttonCarouselController.nextPage(
+                                          duration: Duration(milliseconds: 300),
+                                          curve: Curves.linear);
                                     },
                                     child: Container(
                                       // width: 120,
@@ -185,7 +180,7 @@ class AgriAdvisoryWidget extends HookWidget {
                                   contentChoose.value =
                                       dailyAgriDetails[value].content;
                                 },
-                                height: 160.0,
+                                height: 100.0,
                                 viewportFraction: 1,
                                 autoPlay: false,
                                 enlargeFactor: .4),
@@ -272,7 +267,6 @@ class AgriAdvisoryWidget extends HookWidget {
                   ),
                 ),
               ),
-             
             ],
           )
         : SizedBox();
@@ -296,7 +290,7 @@ class AgriAdvisoryWidget extends HookWidget {
               border: Border.all(color: Colors.black),
               color: Colors.white38,
             ),
-            height: 35,
+            height: 20,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -307,16 +301,20 @@ class AgriAdvisoryWidget extends HookWidget {
                       style: TextStyle(fontSize: 18, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
-                     Text(
-                      'Valid From ${agriAdsModel!.datePublish}',
-                      style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      'Publish date: ${agriAdsModel!.datePublish}',
+                      style: TextStyle(
+                          fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
                       textAlign: TextAlign.center,
                     ),
-                     Text(
-                      "Valid until ${agriAdsModel!.dateValid}",
-                      style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
-                      textAlign: TextAlign.center,
-                    ),
+                    //  Text(
+                    //   "Valid until ${agriAdsModel!.dateValid}",
+                    //   style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
+                    //   textAlign: TextAlign.center,
+                    // ),
                   ],
                 ),
               ),

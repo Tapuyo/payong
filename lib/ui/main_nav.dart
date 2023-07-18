@@ -420,7 +420,7 @@ class _MyWidgetState extends State<MainNav> {
     }
     return Scaffold(
       body: HawkFabMenu(
-        icon: AnimatedIcons.menu_close,
+        icon: AnimatedIcons.home_menu,
         fabColor: Colors.black,
         iconColor: Colors.white,
         hawkFabMenuController: hawkFabMenuController,
@@ -1483,7 +1483,9 @@ class _MyWidgetState extends State<MainNav> {
                 height: 40,
                 width: 40,
                 child: Center(
-                  child: Icon(Icons.menu),
+                  child: Image.asset( 'assets/waterdropmenu.png',
+                                          width: 50.0,
+                                          height: 50.0,)
                 ),
               ),
             ),

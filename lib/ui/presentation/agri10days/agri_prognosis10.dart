@@ -203,14 +203,14 @@ class AgriPrognosis10Widget extends HookWidget {
                     children: [
                       Text(
                         '${dailyDetails.last.rainFall}mm',
-                        style: kTextStyleWeather,
+                        style: TextStyle(fontSize: 22),
                       ),
                     ],
                   ),
                 ],
               ),
               SizedBox(
-                width: 30,
+                width: 12,
               ),
               Column(
                 children: [
@@ -226,7 +226,7 @@ class AgriPrognosis10Widget extends HookWidget {
                     children: [
                       Text(
                         '$tempe°C',
-                        style: kTextStyleWeather,
+                        style: TextStyle(fontSize: 22),
                       ),
                       // Text(
                       //   '°',

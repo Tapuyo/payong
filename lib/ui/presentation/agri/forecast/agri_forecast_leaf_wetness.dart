@@ -95,7 +95,7 @@ class AgriForecastLeafWidget extends HookWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${dailyAgriDetails[index].minLeafWetness}hrs - ${dailyAgriDetails[index].maxLeafWetness}hrs',
+                                    '${dailyAgriDetails[index].minLeafWetness} ${dailyAgriDetails[index].maxLeafWetness}hrs',
                                     style: GoogleFonts.roboto(
                                         textStyle: const TextStyle(
                                       color: Colors.white,

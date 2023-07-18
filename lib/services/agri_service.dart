@@ -235,7 +235,7 @@ abstract class AgriServices {
         for (var a in u['WindCondition']) {
           AgriRegionalForecastWindCondition weather =
               AgriRegionalForecastWindCondition(
-                  a['Location'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
+                  a['Location'] ?? '', ' ${a['Description']} \n\n ${a['WindDescription']}' ?? '', a['Icon'] ?? '');
           windCondition.add(weather);
         }
       }
@@ -246,7 +246,7 @@ abstract class AgriServices {
         for (var a in u['GaleWarning']) {
           AgriRegionalForecastGaleWarning weather =
               AgriRegionalForecastGaleWarning(
-                  a['Location'] ?? '', a['Description'] ?? '', a['Icon'] ?? '');
+                  a['Location'] ?? '', '${a['Title']} \n\n ${a['Description']}' ?? '', a['Icon'] ?? '');
           galeWarning.add(weather);
         }
       }
@@ -271,6 +271,17 @@ abstract class AgriServices {
         map.add(weather);
       }
 
+      List<AgriWeatherCondition> weatherCon = [];
+
+      for (var a in u['WeatherCondition']) {
+        AgriWeatherCondition condition = AgriWeatherCondition(
+          a['Location'] ?? '',
+          a['Description'] ?? '',
+          a['Icon'] ?? '',
+        );
+        weatherCon.add(condition);
+      }
+
       AgriRegionalForecast daily = AgriRegionalForecast(
           u['AgriInfoID'] ?? '',
           u['Title'] ?? '',
@@ -279,7 +290,7 @@ abstract class AgriServices {
           windCondition,
           galeWarning,
           enso,
-          map);
+          map,weatherCon);
       newDailyList.add(daily);
     }
     print(newDailyList.last.content);
@@ -364,9 +375,12 @@ abstract class AgriServices {
 
     for (var u in jsondata) {
       AgriForecastSoilConditionModel daily = AgriForecastSoilConditionModel(
-          u['SoilCondition'] ?? '',
-          u['Locations'] ?? '',
-          u['SoilConditionIcon'] ?? '');
+          u['WetSoilLocation'] ?? '',
+          u['WetIcon'] ?? '',
+          u['MoistSoilLocation'] ?? '',
+          u['MoistIcon'] ?? '',
+          u['DrySoilLocation'] ?? '',
+          u['DryIcon'] ?? '');
       newDailyList.add(daily);
     }
     // ignore: use_build_context_synchronously

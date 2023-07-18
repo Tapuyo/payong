@@ -62,70 +62,161 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                   // child: Image.asset('assets/sunny.png'))),
                   //             ],
                   //           )));
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white60,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.black)),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(113, 157, 130, 1),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                dailyAgriDetails[index].soilCondition,
-                                style: GoogleFonts.roboto(
-                                    textStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'NunitoSans',
-                                )),
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white60,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black)),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(113, 157, 130, 1),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    dailyAgriDetails[index].wetSoilLocation,
+                                    style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'NunitoSans',
+                                    )),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                    child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          8, 0, 8, 10),
-                                      child: Text(
-                                        dailyAgriDetails[index].locations,
-                                        style: kTextStyleSubtitle4b,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                                if (dailyAgriDetails[index].soilConditionIcon !=
-                                    '')
-                                  Expanded(
-                                    child: SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: Image.network(
-                                            dailyAgriDetails[index]
-                                                .soilConditionIcon)),
-                                  )
-                              ]),
-                        ],
+                                    
+                                    if (dailyAgriDetails[index].wetIcon !=
+                                        '')
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.network(
+                                              dailyAgriDetails[index]
+                                                  .wetIcon)),
+                                      Text('Wet Soil', style: TextStyle(color: Colors.black),)
+                                  ]),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 12,),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white60,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black)),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(113, 157, 130, 1),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    dailyAgriDetails[index].moistSoilLocation,
+                                    style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'NunitoSans',
+                                    )),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    
+                                    if (dailyAgriDetails[index].wetIcon !=
+                                        '')
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.network(
+                                              dailyAgriDetails[index]
+                                                  .moistIcon)),
+                                      Text('Moist Soil', style: TextStyle(color: Colors.black),)
+                                  ]),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 12,),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white60,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black)),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(113, 157, 130, 1),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    dailyAgriDetails[index].drySoilLocation,
+                                    style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'NunitoSans',
+                                    )),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    
+                                    if (dailyAgriDetails[index].wetIcon !=
+                                        '')
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.network(
+                                              dailyAgriDetails[index]
+                                                  .wetIcon)),
+                                                   Text('Dry Soil', style: TextStyle(color: Colors.black),)
+                                  ]),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),

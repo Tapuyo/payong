@@ -114,7 +114,7 @@ class AgriSynopsisWidget extends HookWidget {
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'NunitoSans',
-                              wordSpacing: 2)),
+                              wordSpacing: 2), )
                     ),
                   ),
                 ),

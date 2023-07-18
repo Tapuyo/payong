@@ -323,7 +323,9 @@ class _mCaOPageState extends State<mCaOPage>
                 height: 40,
                 width: 40,
                 child: Center(
-                  child: Icon(Icons.menu),
+                  child: Image.asset( 'assets/waterdropmenu.png',
+                                          width: 50.0,
+                                          height: 50.0,)
                 ),
               ),
             ),

@@ -25,7 +25,7 @@ import 'package:provider/provider.dart';
 
 bool dayNow = true;
 CarouselController buttonCarouselController = CarouselController();
-List<String> tb = ['Weather', 'Wind', 'Enso'];
+List<String> tb = ['Weather','Condition', 'Wind', 'Enso'];
 
 class AgriForecast10Widget extends HookWidget {
   const AgriForecast10Widget({Key? key}) : super(key: key);
@@ -117,6 +117,8 @@ class AgriForecast10Widget extends HookWidget {
                                     if (i == 'Weather') ...{
                                       weatherWidget(context, isScrollControlled,
                                           agriTab, agri)
+                                    }  else if (i == 'Condition') ...{
+                                      weatherConditionWidget(context, agri)
                                     } else if (i == 'Wind') ...{
                                       windWidget(context, agri),
                                       galeWidget(context, agri)
@@ -484,6 +486,86 @@ class AgriForecast10Widget extends HookWidget {
     );
   }
 
+    Padding weatherConditionWidget(BuildContext context, List<AgriRegionalForecast> agri) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 400,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white70),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                 Column(
+                    children: [
+                        if(agri.last.weatherCondition.isNotEmpty)
+                      SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.network(agri.last.weatherCondition.last.icon)),
+                      Text(
+                        'Weather Condition',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                 
+                  
+                  Column(
+                    children: [
+                          if(agri.last.weatherCondition.isNotEmpty)
+                      SizedBox(
+                        width: 180,
+                        child: Text(agri.last.weatherCondition.last.location,
+                          style: TextStyle(color: Colors.black),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      
+                      SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          loadReadmore(context,agri.last.weatherCondition.last.description);
+                        },
+                        child: Container(
+                          // width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          height: 35,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                            child: Center(
+                              child: Text(
+                                'Read more',
+                                style:
+                                    TextStyle(color: kColorBlue, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Padding galeWidget(BuildContext context, List<AgriRegionalForecast> agri) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -508,7 +590,7 @@ class AgriForecast10Widget extends HookWidget {
                           height: 100,
                           child: Image.network(agri.last.galeWarning.last.icon)),
                       Text(
-                        'Gale',
+                        'Sea Condition',
                         style: TextStyle(color: Colors.black),
                         textAlign: TextAlign.center,
                       ),

@@ -96,8 +96,8 @@ class AgriPrognosisWidget extends HookWidget {
                       dailyDetails != null
                           ? dailyDetails.locationDescription != ''
                               ? dailyDetails.locationDescription
-                              : 'Bohol'
-                          : 'Pilar Bohol',
+                              : ''
+                          : '',
                       style: kTextStyleSubtitle4,
                     ),
                   ],

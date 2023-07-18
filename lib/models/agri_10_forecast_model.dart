@@ -7,6 +7,7 @@ class AgriRegionalForecast {
   final List<AgriRegionalForecastGaleWarning> galeWarning;
   final List<AgriRegionalForecastEnso> enso;
   final List<AgriRegionalForecastMap> map;
+  final List<AgriWeatherCondition> weatherCondition;
 
   AgriRegionalForecast(
       this.agriInfoID,
@@ -15,7 +16,8 @@ class AgriRegionalForecast {
       this.weatherSystem,
       this.windCondition,
       this.galeWarning,
-      this.enso,this.map);
+      this.enso,this.map,
+      this.weatherCondition);
 }
 
 class AgriRegionalForecastWeatherSystem {
@@ -88,4 +90,16 @@ class AgriRegionalForecastMap {
       this.map,
       this.description,
       );
+}
+
+class AgriWeatherCondition {
+  final String location;
+  final String description;
+  final String icon;
+
+
+  AgriWeatherCondition(
+      this.location,
+      this.description,
+      this.icon);
 }

@@ -215,7 +215,7 @@ class DailyWidget extends HookWidget {
         ),
         // cloudIcons('CLOUDY'),
         Text(
-          'Accumulated report as of ${DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString()}',
+          'Report as of ${DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString()}',
           style: kTextStyleSubTitle,
         ),
         SizedBox(
