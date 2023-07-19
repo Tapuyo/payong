@@ -46,10 +46,43 @@ class DailyProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void setOption(String value)async {
+  void setOption(String value, bool daily, String mcao)async {
     String dt = DateFormat('yyyy-MM-dd').format(selectedDate.subtract(Duration(days: 1)));
     // dt = '2023-07-17';
-    String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
+   
+      String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
+    if(daily){
+      urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
+    }else{
+      String mo = 'January';
+       if(selectedDate.month == 1){
+        mo = 'January';
+       }else if(DateTime.now().month == 2){
+      mo = 'February';
+       }else if(DateTime.now().month == 3){
+      mo = 'March';
+       }else if(DateTime.now().month == 4){
+      mo = 'April';
+       }else if(DateTime.now().month == 5){
+      mo = 'May';
+       }else if(DateTime.now().month == 6){
+      mo = 'Jun';
+       }else if(DateTime.now().month == 7){
+      mo = 'July';
+       }else if(DateTime.now().month == 8){
+      mo = 'August';
+       }else if(DateTime.now().month == 9){
+      mo = 'September';
+       }else if(DateTime.now().month == 10){
+      mo = 'October';
+       }else if(DateTime.now().month == 11){
+      mo = 'November';
+       }else if(DateTime.now().month == 12){
+      mo = 'December';
+       }
+      urlValue = 'http://18.139.91.35/payong/API/MonthlyMonMap.php?fdate=$mo%20${DateTime.now().year}&option=$value&$mcao=1';
+    }
+  
     // print(urlValue); 
     final response = await http.get(Uri.parse(urlValue));
     var jsondata = json.decode(response.body);

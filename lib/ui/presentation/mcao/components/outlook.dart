@@ -181,7 +181,7 @@ class outlookPage extends HookWidget {
                 height: 320,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.black.withOpacity(.1),
+                  // color: Colors.black.withOpacity(.1),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -202,22 +202,20 @@ class outlookPage extends HookWidget {
                           itemCount: dailyLegends.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                              child: Row(
+                              padding: const EdgeInsets.fromLTRB(8, 4, 0, 4),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                    mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                    Text(
                                     dailyLegends[index].title,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                   SizedBox(
-                                    width: 12,
+                                    style: TextStyle(color: Colors.white,fontSize: 12),
                                   ),
                                   ColoredBox(
                                     color: dailyLegends[index].color.toColor(),
                                     child: SizedBox(
-                                      width: 20,
-                                      height: 20,
+                                      width: 15,
+                                      height: 15,
                                     ),
                                   ),
                                  

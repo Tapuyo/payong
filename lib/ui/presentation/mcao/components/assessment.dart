@@ -164,7 +164,7 @@ class assessmentPage extends HookWidget {
                 height: 320,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.black.withOpacity(.1),
+                  // color: Colors.black.withOpacity(.1),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -186,12 +186,13 @@ class assessmentPage extends HookWidget {
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                              child: Row(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
                                     dailyLegends[index].title,
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.white, fontSize: 12),
                                   ),
                                   SizedBox(
                                     width: 12,
@@ -199,8 +200,8 @@ class assessmentPage extends HookWidget {
                                   ColoredBox(
                                     color: dailyLegends[index].color.toColor(),
                                     child: SizedBox(
-                                      width: 20,
-                                      height: 20,
+                                      width: 15,
+                                      height: 15,
                                     ),
                                   ),
                                 ],
@@ -242,7 +243,7 @@ class assessmentPage extends HookWidget {
 
               polygonCoords.add(LatLng(longitude, latitude));
             }
-            Color lxColor = name.color.toColor();
+            Color lxColor = Colors.transparent;
             dailyProvider.setPolygonDaiy(Polygon(
                 onTap: () async {},
                 consumeTapEvents: true,

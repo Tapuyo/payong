@@ -274,7 +274,7 @@ class _MyWidgetState extends State<MainNav> {
     } else {
       optionFilter = 'ActualRainfall';
     }
-    dailyProvider.setOption(optionFilter);
+    dailyProvider.setOption(optionFilter, true,'');
     // for (var i = 1; i < 200; i++) {
     // print('john paul $i');
     final dailymap =
@@ -434,7 +434,7 @@ class _MyWidgetState extends State<MainNav> {
                 dailyProvider.setDateSelect(selectedDate);
                 polygons.clear();
                 title = 'Philippines';
-                selectIndex = 1;
+                selectIndex = 0;
               });
             },
             icon: const Icon(Icons.cloud_circle, size: 35),
@@ -442,7 +442,7 @@ class _MyWidgetState extends State<MainNav> {
             labelColor: Colors.blue,
           ),
           HawkFabMenuItem(
-            label: '10 Days monitoring',
+            label: '10 Days Weather Outlook',
             ontap: () {
               setState(() {
                 selectedDate = DateTime.now();
@@ -450,7 +450,7 @@ class _MyWidgetState extends State<MainNav> {
                 dailyProvider.setDateSelect(selectedDate);
                 polygons.clear();
                 title = 'Philippines';
-                selectIndex = 1;
+                selectIndex = 2;
               });
             },
             icon: const Icon(Icons.cloud_done),
@@ -466,7 +466,7 @@ class _MyWidgetState extends State<MainNav> {
                 dailyProvider.setDateSelect(selectedDate);
                 polygons.clear();
                 title = 'Philippines';
-                selectIndex = 2;
+                selectIndex = 1;
               });
             },
             icon: const Icon(Icons.cloud_queue, size: 35),
@@ -1317,7 +1317,7 @@ class _MyWidgetState extends State<MainNav> {
                             onTap: () {
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('ActualRainfall');
+                              dailyProvider.setOption('ActualRainfall', true,'');
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
@@ -1348,7 +1348,7 @@ class _MyWidgetState extends State<MainNav> {
                             onTap: () {
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('NormalRainfall');
+                              dailyProvider.setOption('NormalRainfall', true,'');
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
@@ -1379,7 +1379,7 @@ class _MyWidgetState extends State<MainNav> {
                             onTap: () {
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('RainfallPercent');
+                              dailyProvider.setOption('RainfallPercent', true,'');
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
@@ -1410,7 +1410,7 @@ class _MyWidgetState extends State<MainNav> {
                             onTap: () {
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('MaxTemp');
+                              dailyProvider.setOption('MaxTemp', true,'');
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
@@ -1441,7 +1441,7 @@ class _MyWidgetState extends State<MainNav> {
                             onTap: () {
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('MinTemp');
+                              dailyProvider.setOption('MinTemp', true,'');
                               getDailyList('daily');
                               Navigator.pop(context);
                             },
@@ -1482,11 +1482,7 @@ class _MyWidgetState extends State<MainNav> {
                 height: 40,
                 width: 40,
                 child: Center(
-                    child: Image.asset(
-                  'assets/waterdropmenu.png',
-                  width: 50.0,
-                  height: 50.0,
-                )),
+                    child: Icon(Icons.menu)),
               ),
             ),
           ),

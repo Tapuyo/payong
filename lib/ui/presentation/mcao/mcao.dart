@@ -49,18 +49,23 @@ class _mCaOPageState extends State<mCaOPage>
     Future.delayed(Duration.zero, () {
       getMapAll(context);
     });
-    setImageMap();
+    // setImageMap();
   }
 
-  setImageMap(){
-     final dailyProvider =
-                                  context.read<DailyProvider>();
-                              dailyProvider.setOption('NormalRainfall');
+  setImageMap() {
+    final int mCaoTab = context.select((McaoProvider p) => p.mCaoTab);
+    if (mCaoTab == 0) {
+      final dailyProvider = context.read<DailyProvider>();
+      dailyProvider.setOption('NormalRainfall', true, 'assessment');
+    } else {
+      final dailyProvider = context.read<DailyProvider>();
+      dailyProvider.setOption('NormalRainfall', true, 'outlook');
+    }
   }
 
   getMapAll(BuildContext context) async {
     await McaoService.getDailyLegend(context);
-     await getMap(context);
+    await getMap(context);
   }
 
   Future<void> getMap(BuildContext context) async {
@@ -77,11 +82,10 @@ class _mCaOPageState extends State<mCaOPage>
         List<dynamic> coordinates = name.coordinates;
         List<LatLng> polygonCoords = [];
         if (coordinates.isNotEmpty) {
-
           for (var coor in coordinates) {
             try {
               var latLng = coor['coordinate'].toString().split(",");
-              
+
               double latitude = double.parse(latLng[0]);
               double longitude = double.parse(latLng[1]);
               // print(longitude.toString() + ',' + latitude.toString());
@@ -90,11 +94,9 @@ class _mCaOPageState extends State<mCaOPage>
           }
           Color lxColor = Colors.blue.shade50;
 
-          try{
+          try {
             lxColor = name.color.toColor();
-          }catch(e){
-
-          }
+          } catch (e) {}
           dailyProvider.setPolygonDaiy(Polygon(
               onTap: () async {
                 print(name.provinceID);
@@ -119,14 +121,14 @@ class _mCaOPageState extends State<mCaOPage>
   @override
   Widget build(BuildContext context) {
     final String option = context.select((DailyProvider p) => p.option);
-  final int mCaoTab = context.select((McaoProvider p) => p.mCaoTab);
+    final int mCaoTab = context.select((McaoProvider p) => p.mCaoTab);
+
     // getMapAll(context);
     return Stack(
       children: [
         Container(
           padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
           child: Column(children: [
-            
             if (mCaoTab == 0) ...[
               assessmentPage(),
             ] else ...[
@@ -134,7 +136,7 @@ class _mCaOPageState extends State<mCaOPage>
             ]
           ]),
         ),
-       Align(
+        Align(
           alignment: Alignment.topRight,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
@@ -143,12 +145,11 @@ class _mCaOPageState extends State<mCaOPage>
                 //  final dailyProvider =
                 //                   context.read<DailyProvider>();
                 //  if (mCaoTab == 0) {
-                //   dailyProvider.setDateSelect(DateTime.now().subtract(const Duration(days: 30)));  
+                //   dailyProvider.setDateSelect(DateTime.now().subtract(const Duration(days: 30)));
                 //  }else{
-                //   dailyProvider.setDateSelect(DateTime.now());  
+                //   dailyProvider.setDateSelect(DateTime.now());
                 //  }
-                
-                                
+
                 showModalBottomSheet<void>(
                   context: context,
                   builder: (BuildContext context) {
@@ -161,9 +162,15 @@ class _mCaOPageState extends State<mCaOPage>
                         children: <Widget>[
                           GestureDetector(
                             onTap: () {
+                              String mcaoOption = 'assessment';
+                              if (mCaoTab == 0) {
+                                mcaoOption = 'assessment';
+                              } else {
+                                mcaoOption = 'outlook';
+                              }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('ActualRainfall');
+                              dailyProvider.setOption('ActualRainfall', false, mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -191,9 +198,15 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
+                               String mcaoOption = 'assessment';
+                              if (mCaoTab == 0) {
+                                mcaoOption = 'assessment';
+                              } else {
+                                mcaoOption = 'outlook';
+                              }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('NormalRainfall');
+                              dailyProvider.setOption('NormalRainfall',false,mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -221,9 +234,15 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
+                               String mcaoOption = 'assessment';
+                              if (mCaoTab == 0) {
+                                mcaoOption = 'assessment';
+                              } else {
+                                mcaoOption = 'outlook';
+                              }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('RainfallPercent');
+                              dailyProvider.setOption('RainfallPercent',false,mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -251,9 +270,15 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
+                               String mcaoOption = 'assessment';
+                              if (mCaoTab == 0) {
+                                mcaoOption = 'assessment';
+                              } else {
+                                mcaoOption = 'outlook';
+                              }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('MaxTemp');
+                              dailyProvider.setOption('MaxTemp',false,mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -281,9 +306,15 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
+                               String mcaoOption = 'assessment';
+                              if (mCaoTab == 0) {
+                                mcaoOption = 'assessment';
+                              } else {
+                                mcaoOption = 'outlook';
+                              }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('MinTemp');
+                              dailyProvider.setOption('MinTemp',false,mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -323,10 +354,7 @@ class _mCaOPageState extends State<mCaOPage>
                 height: 40,
                 width: 40,
                 child: Center(
-                  child: Image.asset( 'assets/waterdropmenu.png',
-                                          width: 50.0,
-                                          height: 50.0,)
-                ),
+                    child:  Icon(Icons.menu)),
               ),
             ),
           ),
@@ -334,5 +362,4 @@ class _mCaOPageState extends State<mCaOPage>
       ],
     );
   }
-
 }
