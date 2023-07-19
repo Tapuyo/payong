@@ -24,8 +24,8 @@ import 'package:provider/provider.dart';
 
 
 class SearchList extends HookWidget {
-  const SearchList({Key? key}) : super(key: key);
-
+  SearchList({required this.navClose});
+  final bool navClose;
   @override
   Widget build(BuildContext context) {
     
@@ -98,6 +98,9 @@ class SearchList extends HookWidget {
 
                     final dailyProvider1 = context.read<DailyProvider>();
                   dailyProvider1.setDailyId(dailyMods.locationId);
+                  if(navClose){
+                    Navigator.pop(context);
+                  }
 
                  
               },

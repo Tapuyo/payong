@@ -428,14 +428,14 @@ class _MyWidgetState extends State<MainNav> {
           HawkFabMenuItem(
             label: 'Daily Monitoring',
             ontap: () {
-               setState(() {
-                  selectedDate = DateTime.now();
-                  final dailyProvider = context.read<DailyProvider>();
-                  dailyProvider.setDateSelect(selectedDate);
-                  polygons.clear();
-                  title = 'Philippines';
-                  selectIndex = 1;
-                });
+              setState(() {
+                selectedDate = DateTime.now();
+                final dailyProvider = context.read<DailyProvider>();
+                dailyProvider.setDateSelect(selectedDate);
+                polygons.clear();
+                title = 'Philippines';
+                selectIndex = 1;
+              });
             },
             icon: const Icon(Icons.cloud_circle, size: 35),
             color: Colors.blue,
@@ -444,14 +444,14 @@ class _MyWidgetState extends State<MainNav> {
           HawkFabMenuItem(
             label: '10 Days monitoring',
             ontap: () {
-               setState(() {
-                  selectedDate = DateTime.now();
-                  final dailyProvider = context.read<DailyProvider>();
-                  dailyProvider.setDateSelect(selectedDate);
-                  polygons.clear();
-                  title = 'Philippines';
-                  selectIndex = 1;
-                });
+              setState(() {
+                selectedDate = DateTime.now();
+                final dailyProvider = context.read<DailyProvider>();
+                dailyProvider.setDateSelect(selectedDate);
+                polygons.clear();
+                title = 'Philippines';
+                selectIndex = 1;
+              });
             },
             icon: const Icon(Icons.cloud_done),
             color: Colors.blue,
@@ -461,16 +461,15 @@ class _MyWidgetState extends State<MainNav> {
             label: 'Daily Farm Weather Forecasts and Advisories',
             ontap: () {
               setState(() {
-                  selectedDate = DateTime.now();
-                  final dailyProvider = context.read<DailyProvider>();
-                  dailyProvider.setDateSelect(selectedDate);
-                  polygons.clear();
-                  title = 'Philippines';
-                  selectIndex = 2;
-                });
+                selectedDate = DateTime.now();
+                final dailyProvider = context.read<DailyProvider>();
+                dailyProvider.setDateSelect(selectedDate);
+                polygons.clear();
+                title = 'Philippines';
+                selectIndex = 2;
+              });
             },
             icon: const Icon(Icons.cloud_queue, size: 35),
-
             color: Colors.blue,
             labelColor: Colors.blue,
           ),
@@ -478,33 +477,31 @@ class _MyWidgetState extends State<MainNav> {
             label: '10 Days Regional Agri-weather Information',
             ontap: () {
               setState(() {
-                  selectedDate = DateTime.now();
-                  final dailyProvider = context.read<DailyProvider>();
-                  dailyProvider.setDateSelect(selectedDate);
-                  polygons.clear();
-                  title = 'Philippines';
-                  selectIndex = 3;
-                });
+                selectedDate = DateTime.now();
+                final dailyProvider = context.read<DailyProvider>();
+                dailyProvider.setDateSelect(selectedDate);
+                polygons.clear();
+                title = 'Philippines';
+                selectIndex = 3;
+              });
             },
             icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
-
             color: Colors.blue,
             labelColor: Colors.blue,
           ),
           HawkFabMenuItem(
             label: 'Monthly Climate Assessment and Outlook',
             ontap: () {
-                setState(() {
-                  selectedDate = DateTime.now();
-                  final dailyProvider = context.read<DailyProvider>();
-                  dailyProvider.setDateSelect(selectedDate);
-                  polygons.clear();
-                  title = 'Philippines';
-                  selectIndex = 4;
-                });
+              setState(() {
+                selectedDate = DateTime.now();
+                final dailyProvider = context.read<DailyProvider>();
+                dailyProvider.setDateSelect(selectedDate);
+                polygons.clear();
+                title = 'Philippines';
+                selectIndex = 4;
+              });
             },
             icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
-
             color: Colors.blue,
             labelColor: Colors.blue,
           ),
@@ -558,150 +555,6 @@ class _MyWidgetState extends State<MainNav> {
           ],
         ),
       ),
-
-      // bottomNavigationBar:
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.fromLTRB(0, 0, 00, 150),
-      //   child: ExpandableFabClass(
-      //     distanceBetween: 150.0,
-      //     subChildren: [
-      //       IconButton(
-      //         iconSize: 70,
-      //         color: kColorBlue,
-      //         onPressed: () => {
-      //           setState(() {
-      //             selectedDate = DateTime.now();
-      //             final dailyProvider = context.read<DailyProvider>();
-      //             dailyProvider.setDateSelect(selectedDate);
-      //             polygons.clear();
-      //             title = 'Philippines';
-      //             selectIndex = 0;
-      //           })
-      //         },
-      //         icon: const Icon(
-      //           Icons.cloud_circle,
-      //           size: 35,
-      //         ),
-      //       ),
-      //       IconButton(
-      //         iconSize: 70,
-      //         color: kColorBlue,
-      //         onPressed: () {
-      //           setState(() {
-      //             selectedDate = DateTime.now();
-      //             final dailyProvider = context.read<DailyProvider>();
-      //             dailyProvider.setDateSelect(selectedDate);
-      //             polygons.clear();
-      //             title = 'Philippines';
-      //             selectIndex = 1;
-      //           });
-      //           // final snackBar = SnackBar(
-      //           //   content:
-      //           //       const Text('Sorry, this module is under development.'),
-      //           //   // action: SnackBarAction(
-      //           //   //   label: 'Undo',
-      //           //   //   onPressed: () {
-      //           //   //     // Some code to undo the change.
-      //           //   //   },
-      //           //   // ),
-      //           // );
-
-      //           // // Find the ScaffoldMessenger in the widget tree
-      //           // // and use it to show a SnackBar.
-      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //         },
-      //         icon: const Icon(Icons.cloud_done, size: 35),
-      //       ),
-      //       IconButton(
-      //         iconSize: 70,
-      //         color: kColorBlue,
-      //         onPressed: () {
-      //           setState(() {
-      //             selectedDate = DateTime.now();
-      //             final dailyProvider = context.read<DailyProvider>();
-      //             dailyProvider.setDateSelect(selectedDate);
-      //             polygons.clear();
-      //             title = 'Philippines';
-      //             selectIndex = 2;
-      //           });
-      //           // final snackBar = SnackBar(
-      //           //   content:
-      //           //       const Text('Sorry, this module is under development.'),
-      //           //   // action: SnackBarAction(
-      //           //   //   label: 'Undo',
-      //           //   //   onPressed: () {
-      //           //   //     // Some code to undo the change.
-      //           //   //   },
-      //           //   // ),
-      //           // );
-
-      //           // // Find the ScaffoldMessenger in the widget tree
-      //           // // and use it to show a SnackBar.
-      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //         },
-      //         icon: const Icon(Icons.cloud_queue, size: 35),
-      //       ),
-      //       IconButton(
-      //         iconSize: 70,
-      //         color: kColorBlue,
-      //         onPressed: () {
-      //           setState(() {
-      //             selectedDate = DateTime.now();
-      //             final dailyProvider = context.read<DailyProvider>();
-      //             dailyProvider.setDateSelect(selectedDate);
-      //             polygons.clear();
-      //             title = 'Philippines';
-      //             selectIndex = 3;
-      //           });
-      //           // final snackBar = SnackBar(
-      //           //   content:
-      //           //       const Text('Sorry, this module is under development.'),
-      //           //   // action: SnackBarAction(
-      //           //   //   label: 'Undo',
-      //           //   //   onPressed: () {
-      //           //   //     // Some code to undo the change.
-      //           //   //   },
-      //           //   // ),
-      //           // );
-
-      //           // // Find the ScaffoldMessenger in the widget tree
-      //           // // and use it to show a SnackBar.
-      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //         },
-      //         icon: const Icon(FontAwesomeIcons.cloudRain, size: 35),
-      //       ),
-      //       IconButton(
-      //         iconSize: 70,
-      //         color: kColorBlue,
-      //         onPressed: () {
-      //           setState(() {
-      //             selectedDate = DateTime.now();
-      //             final dailyProvider = context.read<DailyProvider>();
-      //             dailyProvider.setDateSelect(selectedDate);
-      //             polygons.clear();
-      //             title = 'Philippines';
-      //             selectIndex = 4;
-      //           });
-      //           // final snackBar = SnackBar(
-      //           //   content:
-      //           //       const Text('Sorry, this module is under development.'),
-      //           //   // action: SnackBarAction(
-      //           //   //   label: 'Undo',
-      //           //   //   onPressed: () {
-      //           //   //     // Some code to undo the change.
-      //           //   //   },
-      //           //   // ),
-      //           // );
-
-      //           // // Find the ScaffoldMessenger in the widget tree
-      //           // // and use it to show a SnackBar.
-      //           // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //         },
-      //         icon: const Icon(FontAwesomeIcons.cloudSun, size: 35),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -1114,37 +967,111 @@ class _MyWidgetState extends State<MainNav> {
             ]),
           ),
         ),
-        Align(
-          child: Column(children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                onChanged: (value) async {
-                  final dailyProvider = context.read<Daily10Provider>();
-                  print(value);
-                  if (value.isNotEmpty) {
-                    print('ansldkjalksdjlaksjd');
-                    dailyProvider.setShowList(true);
-                  } else {
-                    print('mnv,mzn,mcnv,m');
-                    dailyProvider.setShowList(false);
-                  }
+        // Align(
+        //   child: Column(children: [
+        //     Padding(
+        //       padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
+        //       child: TextField(
+        //         style: TextStyle(color: Colors.black),
+        //         onChanged: (value) async {
+        //           final dailyProvider = context.read<Daily10Provider>();
+        //           print(value);
+        //           if (value.isNotEmpty) {
+        //             print('ansldkjalksdjlaksjd');
+        //             dailyProvider.setShowList(true);
+        //           } else {
+        //             print('mnv,mzn,mcnv,m');
+        //             dailyProvider.setShowList(false);
+        //           }
 
-                  dailyProvider.setSearchString(value);
-                  await Daily10Services.get10DaysSearch(context, value);
-                },
-                decoration: InputDecoration(
-                  hintText: "Search Location",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                  ),
+        //           dailyProvider.setSearchString(value);
+        //           await Daily10Services.get10DaysSearch(context, value);
+        //         },
+        //         decoration: InputDecoration(
+        //           hintText: "Search Location",
+        //           prefixIcon: Icon(Icons.search),
+        //           border: OutlineInputBorder(
+        //             borderRadius: BorderRadius.all(Radius.circular(7.0)),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     SearchList(
+        //       navClose: false,
+        //     )
+        //   ]),
+        // ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height - 100,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        // mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            child: TextField(
+                              style: TextStyle(color: Colors.black),
+                              onChanged: (value) async {
+                                final dailyProvider =
+                                    context.read<Daily10Provider>();
+                                print(value);
+                                if (value.isNotEmpty) {
+                                  print('ansldkjalksdjlaksjd');
+                                  dailyProvider.setShowList(true);
+                                } else {
+                                  print('mnv,mzn,mcnv,m');
+                                  dailyProvider.setShowList(false);
+                                }
+
+                                dailyProvider.setSearchString(value);
+                                await Daily10Services.get10DaysSearch(
+                                    context, value);
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Search Location",
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(7.0)),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SearchList(navClose: true)
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.search),
                 ),
               ),
             ),
-            SearchList()
-          ]),
+          ),
         ),
         Visibility(
           visible: rainDropShow,
@@ -1266,37 +1193,109 @@ class _MyWidgetState extends State<MainNav> {
             ),
           ),
         ),
-        Align(
-          child: Column(children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                onChanged: (value) async {
-                  final dailyProvider1 = context.read<Daily10Provider>();
-                  print(value);
-                  if (value.isNotEmpty) {
-                    print('ansldkjalksdjlaksjd');
-                    dailyProvider1.setShowList(true);
-                  } else {
-                    print('mnv,mzn,mcnv,m');
-                    dailyProvider1.setShowList(false);
-                  }
+        // Align(
+        //   child: Column(children: [
+        //     Padding(
+        //       padding: EdgeInsets.fromLTRB(10, 100, 10, 0),
+        //       child: TextField(
+        //         style: TextStyle(color: Colors.black),
+        //         onChanged: (value) async {
+        //           final dailyProvider1 = context.read<Daily10Provider>();
+        //           print(value);
+        //           if (value.isNotEmpty) {
+        //             print('ansldkjalksdjlaksjd');
+        //             dailyProvider1.setShowList(true);
+        //           } else {
+        //             print('mnv,mzn,mcnv,m');
+        //             dailyProvider1.setShowList(false);
+        //           }
 
-                  dailyProvider1.setSearchString(value);
-                  await Daily10Services.get10DaysSearch(context, value);
-                },
-                decoration: InputDecoration(
-                  hintText: "Search Location",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                  ),
+        //           dailyProvider1.setSearchString(value);
+        //           await Daily10Services.get10DaysSearch(context, value);
+        //         },
+        //         decoration: InputDecoration(
+        //           hintText: "Search Location",
+        //           prefixIcon: Icon(Icons.search),
+        //           border: OutlineInputBorder(
+        //             borderRadius: BorderRadius.all(Radius.circular(7.0)),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     SearchList()
+        //   ]),
+        // ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 120, 20, 0),
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return Container(
+                       height: MediaQuery.of(context).size.height - 100,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        // mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            child: TextField(
+                              style: TextStyle(color: Colors.black),
+                              onChanged: (value) async {
+                                final dailyProvider1 =
+                                    context.read<Daily10Provider>();
+                                print(value);
+                                if (value.isNotEmpty) {
+                                  print('ansldkjalksdjlaksjd');
+                                  dailyProvider1.setShowList(true);
+                                } else {
+                                  print('mnv,mzn,mcnv,m');
+                                  dailyProvider1.setShowList(false);
+                                }
+
+                                dailyProvider1.setSearchString(value);
+                                await Daily10Services.get10DaysSearch(
+                                    context, value);
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Search Location",
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(7.0)),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SearchList(navClose: true)
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 3),
+                  ],
+                ),
+                height: 40,
+                width: 40,
+                child: Center(
+                  child: Icon(Icons.search),
                 ),
               ),
             ),
-            SearchList()
-          ]),
+          ),
         ),
         Align(
           alignment: Alignment.topRight,
@@ -1483,10 +1482,11 @@ class _MyWidgetState extends State<MainNav> {
                 height: 40,
                 width: 40,
                 child: Center(
-                  child: Image.asset( 'assets/waterdropmenu.png',
-                                          width: 50.0,
-                                          height: 50.0,)
-                ),
+                    child: Image.asset(
+                  'assets/waterdropmenu.png',
+                  width: 50.0,
+                  height: 50.0,
+                )),
               ),
             ),
           ),
@@ -1495,16 +1495,16 @@ class _MyWidgetState extends State<MainNav> {
           Align(
             alignment: Alignment.topRight,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 200, 10, 0),
+              padding: const EdgeInsets.fromLTRB(20, 180, 10, 0),
               child: Container(
-                width: 150,
-                height: 300,
+                width: 100,
+                height: 400,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.black.withOpacity(.1),
+                  // color: Colors.black.withOpacity(.1),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -1515,30 +1515,29 @@ class _MyWidgetState extends State<MainNav> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 250,
+                        height: 300,
                         child: ListView.builder(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                           scrollDirection: Axis.vertical,
                           itemCount: dailyLegends.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                              child: Row(
+                              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
                                     dailyLegends[index].title,
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
                                   ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
+                                  
                                   ColoredBox(
                                     color: dailyLegends[index].color.toColor(),
                                     child: SizedBox(
-                                      width: 20,
-                                      height: 20,
+                                      width: 15,
+                                      height: 15,
                                     ),
                                   ),
                                 ],
