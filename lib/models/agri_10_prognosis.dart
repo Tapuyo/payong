@@ -6,8 +6,15 @@ class Agri10Prognosis {
   final String rainFall;
   final String rainyDays;
   final String relativeHumidity;
-  final List<SoilConditionModeil> soilCondition;
-  final List<Temperature> temp;
+    final List<Temperature> temp;
+  final String wetIcon;
+  final String wetSoilLocation;
+  final String moistIcon;
+  final String moistSoilLocation;
+  final String dryIcon;
+  final String drySoilLocation;
+
+
   
 
   Agri10Prognosis(
@@ -18,16 +25,14 @@ class Agri10Prognosis {
       this.rainFall,
       this.rainyDays,
       this.relativeHumidity,
-      this.soilCondition,
-      this.temp
+      this.temp,
+      this.wetIcon,
+      this.wetSoilLocation,
+      this.moistIcon,
+      this.moistSoilLocation,
+      this.dryIcon,
+      this.drySoilLocation
       );
-}
-
-class SoilConditionModeil{
-  final String soilCondition;
-  final String location;
-
-  SoilConditionModeil(this.soilCondition, this.location);
 }
 
 class Temperature{

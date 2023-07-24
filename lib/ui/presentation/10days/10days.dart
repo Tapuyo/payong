@@ -31,16 +31,16 @@ class Daily10Widget extends HookWidget {
     final highTemp = useState('0');
     final highTempColorCode = useState('#3d85c6');
     final selectIndex = useState<int>(0);
-    final showExpandable1 = useState<bool>(false);
-    final showExpandable2 = useState<bool>(false);
-    final showExpandable3 = useState<bool>(false);
-    final showExpandable4 = useState<bool>(false);
-    final showExpandable5 = useState<bool>(false);
-    final showExpandable6 = useState<bool>(false);
-    final showExpandable7 = useState<bool>(false);
-    final showExpandable8 = useState<bool>(false);
-    final showExpandable9 = useState<bool>(false);
-    final showExpandable10 = useState<bool>(false);
+    final showExpandable1 = useState<bool>(true);
+    final showExpandable2 = useState<bool>(true);
+    final showExpandable3 = useState<bool>(true);
+    final showExpandable4 = useState<bool>(true);
+    final showExpandable5 = useState<bool>(true);
+    final showExpandable6 = useState<bool>(true);
+    final showExpandable7 = useState<bool>(true);
+    final showExpandable8 = useState<bool>(true);
+    final showExpandable9 = useState<bool>(true);
+    final showExpandable10 = useState<bool>(true);
 
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
@@ -220,8 +220,21 @@ class Daily10Widget extends HookWidget {
                 ],
               ),
             ),
-            Padding(
+              Padding(
               padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Update as of ${DateFormat.yMMMMd().format(DateTime.now())}',
+                    style: kTextStyleSubtitle1,
+                  ),
+                ],
+              ),
+            ),
+            if(dailyDetails == null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -229,15 +242,12 @@ class Daily10Widget extends HookWidget {
                     dailyDetails != null
                         ? dailyDetails.locationDescription != ''
                             ? dailyDetails.locationDescription
-                            : 'No Data'
-                        : 'No Data',
+                            : ''
+                        : '',
                     style: kTextStyleSubtitle4,
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 10,
             ),
             Expanded(
               child: ListView(children: [
@@ -395,7 +405,7 @@ class Daily10Widget extends HookWidget {
                             ),
                             Text(
                               '°',
-                              style: kTextStyleDeg,
+                              style: TextStyle(fontSize: 30),
                             ),
                             Text(
                               'C',

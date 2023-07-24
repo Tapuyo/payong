@@ -516,16 +516,7 @@ abstract class AgriServices {
     print(jsondata.toString());
 
     for (var u in jsondata) {
-      List<SoilConditionModeil> soilCondition = [];
-
-      if (u['SoilCondition'] != null) {
-        for (var a in u['SoilCondition']) {
-          SoilConditionModeil soil =
-              SoilConditionModeil(a['SoilCondition'], a['Location']);
-          soilCondition.add(soil);
-        }
-      }
-
+   
       List<Temperature> temp = [];
       if (u['Temperature'] != null) {
         for (var a in u['Temperature']) {
@@ -544,8 +535,13 @@ abstract class AgriServices {
         u['RainFall'] ?? '',
         u['RainyDays'] ?? '',
         u['RelativeHumidity'] ?? '',
-        soilCondition,
         temp,
+        u['WetIcon'],
+        u['WetSoilLocation'],
+        u['MoistIcon'],
+        u['MoistSoilLocation'],
+        u['DryIcon'],
+        u['DrySoilLocation'],
       );
       newDailyList.add(daily);
     }

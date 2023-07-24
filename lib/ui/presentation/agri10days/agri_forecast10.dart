@@ -123,7 +123,7 @@ class AgriForecast10Widget extends HookWidget {
                                       windWidget(context, agri),
                                       galeWidget(context, agri)
                                     } else if (i == 'Enso') ...{
-                                      ensoWidget(context)
+                                      ensoWidget(context, agri)
                                     } else ...{
                                       weatherWidget(context, isScrollControlled,
                                           agriTab, agri)
@@ -417,7 +417,7 @@ class AgriForecast10Widget extends HookWidget {
     );
   }
 
-  Padding ensoWidget(BuildContext context) {
+  Padding ensoWidget(BuildContext context, List<AgriRegionalForecast> agri) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
       child: Container(
@@ -454,7 +454,7 @@ class AgriForecast10Widget extends HookWidget {
                       GestureDetector(
                         onTap: () {
                           loadReadmore(context,
-                              'La Niña still continues to weaken and transition to ENSO-neutral conditions during February-March-April (FMA) 2023 season is expected. La Nina increases the likelihood of having above normal rainfall conditions that could lead to potential adverse impacts (such as heavy rainfall,floods, flashfloods and landslides) over highly vulnerable areas.');
+                              agri.last.enso.last.description);
                         },
                         child: Container(
                           // width: 80,
@@ -501,6 +501,8 @@ class AgriForecast10Widget extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                  Column(
                     children: [
@@ -519,22 +521,23 @@ class AgriForecast10Widget extends HookWidget {
                  
                   
                   Column(
+                
                     children: [
                           if(agri.last.weatherCondition.isNotEmpty)
-                      SizedBox(
-                        width: 180,
-                        child: Text(agri.last.weatherCondition.last.location,
-                          style: TextStyle(color: Colors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: 180,
+                      //   child: Text(agri.last.weatherCondition.last.location,
+                      //     style: TextStyle(color: Colors.black),
+                      //     textAlign: TextAlign.center,
+                      //   ),
+                      // ),
                       
                       SizedBox(
                         height: 20,
                       ),
                       GestureDetector(
                         onTap: () {
-                          loadReadmore(context,agri.last.weatherCondition.last.description);
+                          loadReadmore(context,'${agri.last.weatherCondition.last.location} \n\n ${agri.last.weatherCondition.last.description}');
                         },
                         child: Container(
                           // width: 80,
@@ -581,6 +584,8 @@ class AgriForecast10Widget extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                  Column(
                     children: [
@@ -601,14 +606,14 @@ class AgriForecast10Widget extends HookWidget {
                   Column(
                     children: [
                           if(agri.last.galeWarning.isNotEmpty)
-                      SizedBox(
-                        width: 180,
-                        child: Text(agri.last.galeWarning.last.location,
-                          style: TextStyle(color: Colors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      
+                      // SizedBox(
+                      //  width: 180,
+                      //   child: Text(agri.last.galeWarning.last.location,
+                      //     style: TextStyle(color: Colors.black),
+                      //     textAlign: TextAlign.center,
+                      //   ),
+                      // ),
+                       
                       SizedBox(
                         height: 20,
                       ),
@@ -661,6 +666,8 @@ class AgriForecast10Widget extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                     crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
                     children: [
@@ -680,14 +687,14 @@ class AgriForecast10Widget extends HookWidget {
                   Column(
                     children: [
                         if(agri.last.windCondition.isNotEmpty)
-                      SizedBox(
-                        width: 180,
-                        child: Text(
-                          agri.last.windCondition.last.location,
-                          style: TextStyle(color: Colors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: 180,
+                      //   child: Text(
+                      //     agri.last.windCondition.last.location,
+                      //     style: TextStyle(color: Colors.black),
+                      //     textAlign: TextAlign.center,
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 20,
                       ),
