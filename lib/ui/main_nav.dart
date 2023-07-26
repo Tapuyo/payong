@@ -167,6 +167,7 @@ class _MyWidgetState extends State<MainNav> {
 
           dailyProvider.setPolygonDaiy(Polygon(
               onTap: () async {
+                print('jahskdjhaskjdhas');
                 prod.setProgID(name.dailyDetailsID);
 
                 dailyProvider.removePolygonDaiy(PolygonId(prognosisColorMap));

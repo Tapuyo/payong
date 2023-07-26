@@ -500,6 +500,7 @@ abstract class AgriServices {
   static Future<List<Agri10Prognosis>> getProgDetails(
       BuildContext context, String id) async {
     // id = '7';
+    
     final responseParent = await http
         .get(Uri.parse('http://18.139.91.35/payong/API/agri_info.php'));
     var jsondataParent = json.decode(responseParent.body);

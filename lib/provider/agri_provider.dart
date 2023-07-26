@@ -36,7 +36,7 @@ class AgriProvider with ChangeNotifier {
   List<AgriForecastLeafWetnessModel> _agriForecastLeafWetness = [];
   List<AgriForecastSoilConditionModel> _agriForecastSoilCondition = [];
   List<Agri10Prognosis> _progList = [];
-    String _progID = '';
+    String _progID = '1';
   String  get progID => _progID; 
 
   List<AgriForecastTempModel> get agriForecastTemp => _agriForecastTemp;
@@ -56,6 +56,7 @@ class AgriProvider with ChangeNotifier {
   }
   
   void setProgID(String value) {
+    print(value);
     _progID = value;
     notifyListeners();
   }

@@ -92,9 +92,10 @@ class RegionSearchList extends HookWidget {
               thickness: 2,
             ),
             GestureDetector(
-              onTap: (){
+              onTap: ()async{
                
                   prod.setProgID(dailyMods.id);
+                   await AgriServices.getProgDetails(context, dailyMods.id);
                   Navigator.pop(context);
 
               },

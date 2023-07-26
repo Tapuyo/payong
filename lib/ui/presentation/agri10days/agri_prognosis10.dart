@@ -46,7 +46,7 @@ class AgriPrognosis10Widget extends HookWidget {
         await AgriServices.getProgDetails(context, id.value);
       });
       return;
-    }, [id]);
+    }, [id.value]);
 
     return Container(
       height: MediaQuery.of(context).size.height - 200,
