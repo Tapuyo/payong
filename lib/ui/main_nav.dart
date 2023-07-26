@@ -13,6 +13,7 @@ import 'package:parallax_rain/parallax_rain.dart';
 import 'package:payong/models/agri_model.dart';
 import 'package:payong/models/daily_legend_model.dart';
 import 'package:payong/models/daily_model.dart';
+import 'package:payong/models/region_search_model.dart';
 import 'package:payong/provider/agri_provider.dart';
 import 'package:payong/provider/daily10_provider.dart';
 import 'package:payong/provider/daily_provider.dart';
@@ -41,6 +42,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:intl/intl.dart';
+
+import 'presentation/agri10days/components/regionListSearch.dart';
 
 class MainNav extends StatefulWidget {
   final int? index;
@@ -134,15 +137,19 @@ class _MyWidgetState extends State<MainNav> {
     context.read<InitProvider>().setIsLoading(true);
     final prod = context.read<AgriProvider>();
     dailyProvider.setPolygonDaiyClear();
+    dailyProvider.setRegionList([]);
     Set<Polygon> polygons = {};
+    List<RegionSearchModel> regList = [];
     // for (var i = 1; i < 17; i++) {
     final result = await AgriServices.getRegionMap(context);
 
     // try {
     setState(() {
       polygons.clear();
-
+    
       for (var name in result) {
+        RegionSearchModel rc = RegionSearchModel(name.dailyDetailsID, name.locationDescription);
+        regList.add(rc);
         // print(name.locationCoordinate);
         List<dynamic> coordinates = name.locationCoordinate;
         List<LatLng> polygonCoords = [];
@@ -151,7 +158,6 @@ class _MyWidgetState extends State<MainNav> {
             try {
               // print(coor['coordinate']);
               var latLng = coor['coordinate'].toString().split(",");
-              print(double.parse(latLng[0]).toString());
               double latitude = double.parse(latLng[0]);
               double longitude = double.parse(latLng[1]);
 
@@ -167,10 +173,8 @@ class _MyWidgetState extends State<MainNav> {
                 setState(() {
                   prognosisColorMap = name.dailyDetailsID;
                 });
-                print(name.dailyDetailsID);
                 dailyProvider.setPolygonDaiy(Polygon(
                     onTap: () async {
-                      print(name.dailyDetailsID);
                       prod.setProgID(name.dailyDetailsID);
                     },
                     consumeTapEvents: true,
@@ -190,6 +194,8 @@ class _MyWidgetState extends State<MainNav> {
         }
       }
     });
+
+    dailyProvider.setRegionList(regList);
     // } catch (e) {
     //   print('error $e');
     // }
@@ -228,7 +234,6 @@ class _MyWidgetState extends State<MainNav> {
 
               dailyProvider.setPolygonDaiy(Polygon(
                   onTap: () async {
-                    print('ID ${name.dailyDetailsID}');
                     final dailyProvider = context.read<Daily10Provider>();
                     dailyProvider.setDailyId(name.dailyDetailsID);
                     dailyProvider.setShowList(false);
@@ -243,7 +248,6 @@ class _MyWidgetState extends State<MainNav> {
           }
         });
       } catch (e) {
-        print('error $e');
       }
     }
     setState(() {
@@ -1026,12 +1030,9 @@ class _MyWidgetState extends State<MainNav> {
                               onChanged: (value) async {
                                 final dailyProvider =
                                     context.read<Daily10Provider>();
-                                print(value);
                                 if (value.isNotEmpty) {
-                                  print('ansldkjalksdjlaksjd');
                                   dailyProvider.setShowList(true);
                                 } else {
-                                  print('mnv,mzn,mcnv,m');
                                   dailyProvider.setShowList(false);
                                 }
 
@@ -1130,16 +1131,47 @@ class _MyWidgetState extends State<MainNav> {
         context.select((DailyProvider p) => p.dailyLegend);
     final String option = context.select((DailyProvider p) => p.option);
     String optionTitle = '';
+    String subTitle = '';
+     String mo = 'January';
+       if(selectedDate.month == 1){
+        mo = 'January';
+       }else if(selectedDate.month == 2){
+      mo = 'February';
+       }else if(selectedDate.month == 3){
+      mo = 'March';
+       }else if(selectedDate.month == 4){
+      mo = 'April';
+       }else if(selectedDate.month == 5){
+      mo = 'May';
+       }else if(selectedDate.month == 6){
+      mo = 'June';
+       }else if(selectedDate.month == 7){
+      mo = 'July';
+       }else if(selectedDate.month == 8){
+      mo = 'August';
+       }else if(selectedDate.month == 9){
+      mo = 'September';
+       }else if(selectedDate.month == 10){
+      mo = 'October';
+       }else if(selectedDate.month == 11){
+      mo = 'November';
+       }else if(selectedDate.month == 12){
+      mo = 'December';
+       }
     if (option == 'ActualRainfall') {
       optionTitle = 'Actual Rainfall';
+      subTitle = '$mo 1 - ${DateTime.now().day} ${DateTime.now().year}';
     } else if (option == 'NormalRainfall') {
       optionTitle = 'Normal Rainfall';
+        subTitle = '$mo ${DateTime.now().year}';
     } else if (option == 'RainfallPercent') {
       optionTitle = 'Percent Rainfall';
     } else if (option == 'MaxTemp') {
       optionTitle = 'Max Temp';
+       subTitle = '$mo ${DateTime.now().day} ${DateTime.now().year}';
     } else if (option == 'MinTemp') {
       optionTitle = 'Min Temp';
+      subTitle = '$mo ${DateTime.now().day} ${DateTime.now().year}';
     } else {
       optionTitle = 'Actual Rainfall';
     }
@@ -1250,12 +1282,9 @@ class _MyWidgetState extends State<MainNav> {
                               onChanged: (value) async {
                                 final dailyProvider1 =
                                     context.read<Daily10Provider>();
-                                print(value);
                                 if (value.isNotEmpty) {
-                                  print('ansldkjalksdjlaksjd');
                                   dailyProvider1.setShowList(true);
                                 } else {
-                                  print('mnv,mzn,mcnv,m');
                                   dailyProvider1.setShowList(false);
                                 }
 
@@ -1583,9 +1612,17 @@ class _MyWidgetState extends State<MainNav> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
-              child: Text(
-                optionTitle,
-                style: TextStyle(color: Colors.black, fontSize: 18),
+              child: Column(
+                children: [
+                  Text(
+                    optionTitle,
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                  Text(
+                    subTitle,
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                ],
               ),
             )),
         Visibility(
@@ -1784,6 +1821,66 @@ class _MyWidgetState extends State<MainNav> {
             ]),
           ),
         ),
+        Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height - 100,
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Padding(
+                            //   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            //   child: TextField(
+                            //     style: TextStyle(color: Colors.black),
+                            //     onChanged: (value) async {},
+                            //     decoration: InputDecoration(
+                            //       hintText: "Search Location",
+                            //       prefixIcon: Icon(Icons.search),
+                            //       border: OutlineInputBorder(
+                            //         borderRadius:
+                            //             BorderRadius.all(Radius.circular(7.0)),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            RegionSearchList(navClose: true)
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(color: Colors.white, spreadRadius: 3),
+                    ],
+                  ),
+                  height: 40,
+                  width: 40,
+                  child: const Center(
+                    child: Icon(
+                      Icons.search,
+                      color: kColorBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

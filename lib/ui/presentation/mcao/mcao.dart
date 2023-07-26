@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_legend_model.dart';
+import 'package:payong/models/mcao_search_prov_model.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/mcao_provider.dart';
 import 'package:payong/services/daily_services.dart';
@@ -65,23 +66,27 @@ class _mCaOPageState extends State<mCaOPage>
 
   getMapAll(BuildContext context) async {
     await McaoService.getDailyLegend(context);
+    // ignore: use_build_context_synchronously
     await getMap(context);
   }
 
-  Future<void> getMap(BuildContext context) async {
-    final dailyProvider = context.read<McaoProvider>();
+  Future<void> getMap(BuildContext contexts) async {
+    final dailyProvider = contexts.read<McaoProvider>();
     dailyProvider.setPolygonDaiyClear();
+    dailyProvider.setMcaoSearch([]);
     Set<Polygon> polygons = {};
     for (var i = 1; i < 116; i++) {
-      final result = await McaoService.getAssessment(context, i.toString());
+      final result = await McaoService.getAssessment(contexts, i.toString());
 
       polygons.clear();
-
+       List<McaoSearchModel> mcList = [];
       for (var name in result) {
-        print(name.locationDescription);
+        McaoSearchModel mc = McaoSearchModel(name.provinceID, name.locationDescription);
+        mcList.add(mc);
         List<dynamic> coordinates = name.coordinates;
         List<LatLng> polygonCoords = [];
         if (coordinates.isNotEmpty) {
+          
           for (var coor in coordinates) {
             try {
               var latLng = coor['coordinate'].toString().split(",");
@@ -94,21 +99,24 @@ class _mCaOPageState extends State<mCaOPage>
           }
           Color lxColor = Colors.blue.shade50;
 
-          try {
-            lxColor = name.color.toColor();
-          } catch (e) {}
-          dailyProvider.setPolygonDaiy(Polygon(
-              onTap: () async {
-                print(name.provinceID);
+
+          try {} catch (e) {}
+          Polygon pol = Polygon(
+              onTap: () {
+                print('jkahsdkjahsdkj');
+                dailyProvider.setProvID(name.provinceID);
+
               },
               consumeTapEvents: true,
               polygonId: PolygonId(name.provinceID),
               points: polygonCoords,
               strokeWidth: 4,
               fillColor: lxColor,
-              strokeColor: lxColor));
+              strokeColor: lxColor);
+          dailyProvider.setPolygonDaiy(pol);
         }
       }
+        dailyProvider.setMcaoSearch(mcList);
     }
   }
 
@@ -170,7 +178,8 @@ class _mCaOPageState extends State<mCaOPage>
                               }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('ActualRainfall', false, mcaoOption);
+                              dailyProvider.setOption(
+                                  'ActualRainfall', false, mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -198,7 +207,7 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
-                               String mcaoOption = 'assessment';
+                              String mcaoOption = 'assessment';
                               if (mCaoTab == 0) {
                                 mcaoOption = 'assessment';
                               } else {
@@ -206,7 +215,8 @@ class _mCaOPageState extends State<mCaOPage>
                               }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('NormalRainfall',false,mcaoOption);
+                              dailyProvider.setOption(
+                                  'NormalRainfall', false, mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -234,7 +244,7 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
-                               String mcaoOption = 'assessment';
+                              String mcaoOption = 'assessment';
                               if (mCaoTab == 0) {
                                 mcaoOption = 'assessment';
                               } else {
@@ -242,7 +252,8 @@ class _mCaOPageState extends State<mCaOPage>
                               }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('RainfallPercent',false,mcaoOption);
+                              dailyProvider.setOption(
+                                  'RainfallPercent', false, mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -270,7 +281,7 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
-                               String mcaoOption = 'assessment';
+                              String mcaoOption = 'assessment';
                               if (mCaoTab == 0) {
                                 mcaoOption = 'assessment';
                               } else {
@@ -278,7 +289,8 @@ class _mCaOPageState extends State<mCaOPage>
                               }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('MaxTemp',false,mcaoOption);
+                              dailyProvider.setOption(
+                                  'MaxTemp', false, mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -306,7 +318,7 @@ class _mCaOPageState extends State<mCaOPage>
                           ),
                           GestureDetector(
                             onTap: () {
-                               String mcaoOption = 'assessment';
+                              String mcaoOption = 'assessment';
                               if (mCaoTab == 0) {
                                 mcaoOption = 'assessment';
                               } else {
@@ -314,7 +326,8 @@ class _mCaOPageState extends State<mCaOPage>
                               }
                               final dailyProvider =
                                   context.read<DailyProvider>();
-                              dailyProvider.setOption('MinTemp',false,mcaoOption);
+                              dailyProvider.setOption(
+                                  'MinTemp', false, mcaoOption);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -353,8 +366,7 @@ class _mCaOPageState extends State<mCaOPage>
                 ),
                 height: 40,
                 width: 40,
-                child: Center(
-                    child:  Icon(Icons.menu)),
+                child: Center(child: Icon(Icons.menu)),
               ),
             ),
           ),

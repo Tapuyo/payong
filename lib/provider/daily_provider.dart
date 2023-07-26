@@ -81,6 +81,7 @@ class DailyProvider with ChangeNotifier{
       mo = 'December';
        }
       urlValue = 'http://18.139.91.35/payong/API/MonthlyMonMap.php?fdate=$mo%20${DateTime.now().year}&option=$value&$mcao=1';
+
     }
   
     // print(urlValue); 

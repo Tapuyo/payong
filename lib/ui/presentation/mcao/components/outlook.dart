@@ -5,6 +5,8 @@ import 'package:payong/models/daily_legend_model.dart';
 import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/mcao_provider.dart';
 import 'package:payong/services/mcao_services.dart';
+import 'package:payong/ui/presentation/10days/search_list.dart';
+import 'package:payong/ui/presentation/mcao/components/mcaoSearch.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,8 @@ class outlookPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final dailyProviderImage = context.read<DailyProvider>().mapImage;
-    print(dailyProviderImage);
+
+      final option = context.select((DailyProvider p) => p.option);
      rootBundle.loadString('assets/map_style.txt').then((string) {
       mapStyle = string;
     });
@@ -31,6 +34,16 @@ class outlookPage extends HookWidget {
     final onLoad = useState(true);
     final List<DailyLegendModel> dailyLegends =
         context.select((DailyProvider p) => p.dailyLegend);
+        final pr = context.select((McaoProvider p) => p.provinceID);
+           final provinceID = useState(context.read<McaoProvider>().provinceID);
+                 final deatilsMap = context.select((McaoProvider p) => p.mcaoDetails);
+
+     useEffect(() {
+      Future.microtask(() async {
+               McaoService.getDetails(context, pr,option,1,DateTime.now());
+      });
+      return;
+    }, [pr]);
 
     // useEffect(() {
     //   Future.microtask(() async {
@@ -38,6 +51,7 @@ class outlookPage extends HookWidget {
     //   });
     //   return;
     // }, []);
+    //  final dailyProvider = context.read<McaoProvider>();
 
 
     return SizedBox(
@@ -75,16 +89,16 @@ class outlookPage extends HookWidget {
                         ),
                       ),
                     ),
-                      IgnorePointer(
-                        child: ColoredBox(
-                          color: Colors.white,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
+                      // IgnorePointer(
+                      //   child: ColoredBox(
+                      //     color: Colors.white,
+                      //     child: SizedBox(
+                      //       width: MediaQuery.of(context).size.width,
+                      //       height: MediaQuery.of(context).size.height,
                             
-                          ),
-                        ),
-                      ),
+                      //     ),
+                      //   ),
+                      // ),
                      if (dailyProviderImage != '')
                       IgnorePointer(
                         child: ColoredBox(
@@ -104,6 +118,17 @@ class outlookPage extends HookWidget {
                           ),
                         ),
                       ),
+                     if(deatilsMap.isNotEmpty)
+                        Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(height: 150, width: MediaQuery.of(context).size.width, color: Colors.white,child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(children: [
+                            Text(deatilsMap.last.locationDescription, style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),),
+                            Text('${deatilsMap.last.option} : ${deatilsMap.last.value}',style: TextStyle(color: Colors.black))
+                          ]),
+                        ), ),
+                      )
                 ],
               ),
         ),
@@ -227,6 +252,69 @@ class outlookPage extends HookWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (agriTab.value != 0)
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height - 100,
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                              child: TextField(
+                                style: TextStyle(color: Colors.black),
+                                onChanged: (value) async {
+                                  
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Search Location",
+                                  prefixIcon: Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(7.0)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            McaoSearchList(navClose: true)
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(color: Colors.white, spreadRadius: 3),
+                    ],
+                  ),
+                  height: 40,
+                  width: 40,
+                  child: const Center(
+                    child: Icon(
+                      Icons.search,
+                      color: kColorBlue,
+                    ),
                   ),
                 ),
               ),

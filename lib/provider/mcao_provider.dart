@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/daily_10_model.dart';
 import 'package:payong/models/daily_10_search_model.dart';
+import 'package:payong/models/mcao_detals_model.dart';
+import 'package:payong/models/mcao_search_prov_model.dart';
 
 class McaoProvider with ChangeNotifier{
   List<DailyModel10> dailyList = [];
@@ -11,6 +13,35 @@ class McaoProvider with ChangeNotifier{
   DateTime selectedDate = DateTime.now();
   String _searchString = '';
   bool _showList = false;
+  List<McaoDetailsModel> _mcaoDetails = [];
+  String _provinceID = '';
+
+   List<McaoSearchModel> _mcaoProvList = [];
+
+
+  List<McaoSearchModel>  get mcaoProvList => _mcaoProvList;
+
+  String  get provinceID => _provinceID;
+
+   List<McaoDetailsModel> get mcaoDetails => _mcaoDetails;
+
+  void setMcaoSearch(List<McaoSearchModel> value) {
+    _mcaoProvList = value;
+    notifyListeners();
+  }
+
+
+   void setProvID(String provID){
+    _provinceID = provID;
+    print(_provinceID);
+    notifyListeners();
+   }
+
+  void setMcaoDetails(List<McaoDetailsModel> value) {
+    _mcaoDetails = value;
+    notifyListeners();
+  }
+
 
   int _mCaoTab = 0;
 

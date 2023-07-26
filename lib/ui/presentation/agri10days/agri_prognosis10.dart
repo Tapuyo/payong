@@ -70,10 +70,22 @@ class AgriPrognosis10Widget extends HookWidget {
       child: Column(children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "REGIONAL AGROMETEOROLOGICAL SITUATION AND PROGNOSIS",
-            style: kTextStyleSubtitle4,
-            textAlign: TextAlign.center,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.arrow_upward, color: Colors.white,),
+              SizedBox(width: 12,),
+              Column(
+                children: [
+                  Text(
+                    "REGIONAL AGROMETEOROLOGICAL\n SITUATION AND PROGNOSIS",
+                    style: kTextStyleSubtitle4,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
         Padding(

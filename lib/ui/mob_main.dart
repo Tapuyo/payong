@@ -51,11 +51,9 @@ class _MainPageState extends State<MainPage> {
       sound: true,
     );
     FirebaseMessaging.instance.getToken().then((value) {
-      print('token: $value');
     });
 
     FirebaseMessaging.onMessage.listen((event) {
-      print(event.data);
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -75,7 +73,6 @@ class _MainPageState extends State<MainPage> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print(message.data);
     });
 
     FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(

@@ -24,8 +24,6 @@ abstract class SystemService{
       McaoAssessment daily = McaoAssessment(
         u['ProvinceID'] ?? '',
         u['LocationDescription'] ?? '',
-        u['ActualRaifall'] ?? '',
-         u['Color'] ?? '',
           u['coordinates'] ?? [],
           
       );

@@ -7,6 +7,8 @@ import 'package:payong/provider/daily_provider.dart';
 import 'package:payong/provider/mcao_provider.dart';
 import 'package:payong/services/agri_service.dart';
 import 'package:payong/services/mcao_services.dart';
+import 'package:payong/ui/presentation/10days/search_list.dart';
+import 'package:payong/ui/presentation/mcao/components/mcaoSearch.dart';
 import 'package:payong/utils/hex_to_color.dart';
 import 'package:payong/utils/themes.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +27,7 @@ class assessmentPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final dailyProviderImage = context.read<DailyProvider>().mapImage;
-    print(dailyProviderImage);
+    final option = context.select((DailyProvider p) => p.option);
     rootBundle.loadString('assets/map_style.txt').then((string) {
       mapStyle = string;
     });
@@ -35,6 +37,18 @@ class assessmentPage extends HookWidget {
     final onLoad = useState(true);
     final List<DailyLegendModel> dailyLegends =
         context.select((DailyProvider p) => p.dailyLegend);
+    final pr = context.select((McaoProvider p) => p.provinceID);
+    final deatilsMap = context.select((McaoProvider p) => p.mcaoDetails);
+
+    useEffect(() {
+      Future.microtask(() async {
+        print('Prov change');
+        McaoService.getDetails(context, pr, option, 0,
+            DateTime.now().subtract(Duration(days: 30)));
+      });
+      return;
+    }, [pr]);
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height - 150,
@@ -84,6 +98,31 @@ class assessmentPage extends HookWidget {
                               fit: BoxFit.fitWidth,
                               // opacity: const AlwaysStoppedAnimation(.5),
                             ),
+                          ),
+                        ),
+                      ),
+                    if (deatilsMap.isNotEmpty)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(children: [
+                              Text(
+                                deatilsMap.last.locationDescription,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                  '${deatilsMap.last.option} : ${deatilsMap.last.value}',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18))
+                            ]),
                           ),
                         ),
                       ),
@@ -192,7 +231,8 @@ class assessmentPage extends HookWidget {
                                 children: [
                                   Text(
                                     dailyLegends[index].title,
-                                    style: TextStyle(color: Colors.white, fontSize: 12),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
                                   ),
                                   SizedBox(
                                     width: 12,
@@ -216,49 +256,108 @@ class assessmentPage extends HookWidget {
               ),
             ),
           ),
+        if (agriTab.value != 0)
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height - 100,
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Padding(
+                            //   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            //   child: TextField(
+                            //     style: TextStyle(color: Colors.black),
+                            //     onChanged: (value) async {},
+                            //     decoration: InputDecoration(
+                            //       hintText: "Search Location",
+                            //       prefixIcon: Icon(Icons.search),
+                            //       border: OutlineInputBorder(
+                            //         borderRadius:
+                            //             BorderRadius.all(Radius.circular(7.0)),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            McaoSearchList(navClose: true)
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(color: Colors.white, spreadRadius: 3),
+                    ],
+                  ),
+                  height: 40,
+                  width: 40,
+                  child: const Center(
+                    child: Icon(
+                      Icons.search,
+                      color: kColorBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
       ]),
     );
   }
 
-  Future<void> getMap(BuildContext context) async {
-    final dailyProvider = context.read<McaoProvider>();
-    dailyProvider.setPolygonDaiyClear();
-    Set<Polygon> polygons = {};
-    for (var i = 1; i < 116; i++) {
-      final result = await McaoService.getAssessment(context, i.toString());
+  // Future<void> getMap(BuildContext context) async {
+  //   final dailyProvider = context.read<McaoProvider>();
+  //   dailyProvider.setPolygonDaiyClear();
+  //   Set<Polygon> polygons = {};
+  //   for (var i = 1; i < 116; i++) {
+  //     final result = await McaoService.getAssessment(context, i.toString());
 
-      try {
-        polygons.clear();
+  //     try {
+  //       polygons.clear();
 
-        for (var name in result) {
-          print(name.provinceID);
-          List<dynamic> coordinates = name.coordinates;
-          List<LatLng> polygonCoords = [];
-          if (coordinates.isNotEmpty) {
-            for (var coor in coordinates) {
-              var latLng = coor['coordinate'].toString().split(",");
-              print(double.parse(latLng[0]).toString());
-              double latitude = double.parse(latLng[0]);
-              double longitude = double.parse(latLng[1]);
+  //       for (var name in result) {
+  //         List<dynamic> coordinates = name.coordinates;
+  //         List<LatLng> polygonCoords = [];
+  //         if (coordinates.isNotEmpty) {
+  //           for (var coor in coordinates) {
+  //             var latLng = coor['coordinate'].toString().split(",");
+  //             double latitude = double.parse(latLng[0]);
+  //             double longitude = double.parse(latLng[1]);
 
-              polygonCoords.add(LatLng(longitude, latitude));
-            }
-            Color lxColor = Colors.transparent;
-            dailyProvider.setPolygonDaiy(Polygon(
-                onTap: () async {},
-                consumeTapEvents: true,
-                polygonId: PolygonId(name.provinceID),
-                points: polygonCoords,
-                strokeWidth: 4,
-                fillColor: lxColor,
-                strokeColor: lxColor));
-          }
-        }
-      } catch (e) {
-        print('error $e');
-      }
-    }
-  }
+  //             polygonCoords.add(LatLng(longitude, latitude));
+  //           }
+  //           Color lxColor = Colors.transparent;
+  //           dailyProvider.setPolygonDaiy(Polygon(
+  //               onTap: () async {},
+  //               consumeTapEvents: true,
+  //               polygonId: PolygonId(name.provinceID),
+  //               points: polygonCoords,
+  //               strokeWidth: 4,
+  //               fillColor: lxColor,
+  //               strokeColor: lxColor));
+  //         }
+  //       }
+  //     } catch (e) {
+  //       print('error $e');
+  //     }
+  //   }
+  // }
 
   String monthReturn(int val) {
     if (val == 1) {

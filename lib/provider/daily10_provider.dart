@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:payong/models/agri_10_prognosis.dart';
 import 'package:payong/models/daily_10_model.dart';
 import 'package:payong/models/daily_10_search_model.dart';
+import 'package:payong/models/region_search_model.dart';
 
 class Daily10Provider with ChangeNotifier{
   List<DailyModel10> dailyList = [];
@@ -13,7 +14,9 @@ class Daily10Provider with ChangeNotifier{
   DateTime selectedDate = DateTime.now();
   String _searchString = '';
   bool _showList = false;
+  List<RegionSearchModel> _regList = [];
 
+   List<RegionSearchModel>  get regList => _regList; 
   
 
   List<Daily10SearchModel> _daily10Search = [];
@@ -44,7 +47,10 @@ class Daily10Provider with ChangeNotifier{
 
  
 
-
+  void setRegionList(List<RegionSearchModel> value) {
+    _regList = value;
+    notifyListeners();
+  }
 
   void setPolygonDaiy(Polygon value) {
     // polygon = value;
