@@ -34,6 +34,15 @@ class Daily10Provider with ChangeNotifier{
 
   String  get searchString => _searchString; 
 
+  String _municity = '';
+  
+  String  get municity => _municity; 
+
+  void setMuniName(String value){
+    _municity = value;
+    notifyListeners();
+  }
+
   
 
   DailyModel10?  get dailyDetails => daily; 

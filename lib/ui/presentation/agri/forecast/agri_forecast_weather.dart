@@ -43,6 +43,7 @@ class AgriForecastWeatherWidget extends HookWidget {
             child: SizedBox(
               height: MediaQuery.of(context).size.height + 100,
               child: ListView.builder(
+                // reverse: true,
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
                 scrollDirection: Axis.vertical,
                 itemCount: dailyAgriDetails.length,

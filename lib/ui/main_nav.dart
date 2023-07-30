@@ -231,6 +231,8 @@ class _MyWidgetState extends State<MainNav> {
                 double longitude = double.parse(latLng[1]);
 
                 polygonCoords.add(LatLng(longitude, latitude));
+                final dailyProvider = context.read<Daily10Provider>();
+                  dailyProvider.setMuniName(name.locationDescription);
               }
 
               dailyProvider.setPolygonDaiy(Polygon(
@@ -1167,6 +1169,7 @@ class _MyWidgetState extends State<MainNav> {
         subTitle = '$mo ${DateTime.now().year}';
     } else if (option == 'RainfallPercent') {
       optionTitle = 'Percent Rainfall';
+        subTitle = '$mo 1 - ${DateTime.now().day} ${DateTime.now().year}';
     } else if (option == 'MaxTemp') {
       optionTitle = 'Max Temp';
        subTitle = '$mo ${DateTime.now().day} ${DateTime.now().year}';

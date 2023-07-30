@@ -344,7 +344,7 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${meanTemp1.value}°C',
+                      '${double.parse(meanTemp1.value).toStringAsFixed(1)}°C',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -354,7 +354,7 @@ class DailyWidget extends HookWidget {
                       Row(
                         children: [
                           Text(
-                            'High ${highTemp1.value}',
+                            'High ${double.parse(highTemp1.value).toStringAsFixed(1)}',
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(
@@ -369,7 +369,7 @@ class DailyWidget extends HookWidget {
                       Row(
                         children: [
                           Text(
-                            'Low ${lowTemp1.value}',
+                            'Low ${double.parse(lowTemp1.value).toStringAsFixed(1)}',
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(
@@ -408,7 +408,7 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${meanTemp2.value}°C',
+                      '${double.parse(meanTemp2.value).toStringAsFixed(1)}°C',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -417,7 +417,7 @@ class DailyWidget extends HookWidget {
                       Row(
                         children: [
                           Text(
-                            'High ${highTemp2.value}',
+                            'High ${double.parse(highTemp2.value).toStringAsFixed(1)}',
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(
@@ -432,7 +432,7 @@ class DailyWidget extends HookWidget {
                       Row(
                         children: [
                           Text(
-                            'Low ${lowTemp2.value}',
+                            'Low ${double.parse(lowTemp2.value).toStringAsFixed(1)}',
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(
@@ -471,7 +471,7 @@ class DailyWidget extends HookWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      '${meanTemp3.value}°c',
+                      '${double.parse(meanTemp3.value).toStringAsFixed(1)}°c',
                       style: kTextStyleWeather2,
                     ),
                   ),
@@ -480,7 +480,7 @@ class DailyWidget extends HookWidget {
                       Row(
                         children: [
                           Text(
-                            'High ${highTemp3.value}',
+                            'High ${double.parse(highTemp3.value).toStringAsFixed(1)}',
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(
@@ -495,7 +495,7 @@ class DailyWidget extends HookWidget {
                       Row(
                         children: [
                           Text(
-                            'Low ${lowTemp3.value}',
+                            'Low ${double.parse(lowTemp3.value).toStringAsFixed(1)}',
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(

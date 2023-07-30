@@ -215,7 +215,7 @@ class AgriForecast10Widget extends HookWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12), color: Colors.white70
+                  borderRadius: BorderRadius.circular(12), color: kColorBlue.withOpacity(.5)
                   ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class AgriForecast10Widget extends HookWidget {
                   SizedBox(height: 20,),
                   Text(
                     'Weather systems that will likely affected the whole country',
-                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                     SizedBox(height: 10,),
@@ -537,7 +537,7 @@ class AgriForecast10Widget extends HookWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          loadReadmore(context,'${agri.last.weatherCondition.last.location} \n\n ${agri.last.weatherCondition.last.description}');
+                          loadReadmore(context,'${agri.last.weatherCondition.last.location} }');
                         },
                         child: Container(
                           // width: 80,

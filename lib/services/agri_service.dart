@@ -246,7 +246,7 @@ abstract class AgriServices {
         for (var a in u['GaleWarning']) {
           AgriRegionalForecastGaleWarning weather =
               AgriRegionalForecastGaleWarning(
-                  a['Location'] ?? '', '${a['Title']} \n\n ${a['Description']}' ?? '', a['Icon'] ?? '');
+                  a['Location'] ?? '', ' ${a['Description']}' ?? '', a['Icon'] ?? '');
           galeWarning.add(weather);
         }
       }
@@ -412,6 +412,7 @@ abstract class AgriServices {
     }
     // ignore: use_build_context_synchronously
     final dailyProvider = context.read<AgriProvider>();
+    // newDailyList.toList().reversed;
     dailyProvider.setAgriForecastWeather(newDailyList);
   }
 

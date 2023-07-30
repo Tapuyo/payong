@@ -98,6 +98,7 @@ class SearchList extends HookWidget {
 
                     final dailyProvider1 = context.read<DailyProvider>();
                   dailyProvider1.setDailyId(dailyMods.locationId);
+                  dailyProvider.setMuniName(dailyMods.locationDescription);
                   if(navClose){
                     Navigator.pop(context);
                   }

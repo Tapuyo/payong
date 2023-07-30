@@ -52,6 +52,7 @@ class Daily10Widget extends HookWidget {
 
     final bool isRefresh = context.select((Daily10Provider p) => p.isRefresh);
     final String id = context.select((Daily10Provider p) => p.dailyIDSelected);
+    final String muniCity = context.select((Daily10Provider p) => p.municity);
     final String? locId = context.select((InitProvider p) => p.myLocationId);
     final DailyModel10? dailyDetails =
         context.select((Daily10Provider p) => p.dailyDetails);
@@ -176,7 +177,7 @@ class Daily10Widget extends HookWidget {
       });
       return;
     }, [id]);
-
+    // print(dailyDetails!.locationDescription);
     return SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height - 200,
@@ -226,7 +227,7 @@ class Daily10Widget extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Update as of ${DateFormat.yMMMMd().format(DateTime.now())}',
+                    'Updated as of ${DateFormat.yMMMMd().format(DateTime.now())}',
                     style: kTextStyleSubtitle1,
                   ),
                 ],
@@ -239,11 +240,7 @@ class Daily10Widget extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    dailyDetails != null
-                        ? dailyDetails.locationDescription != ''
-                            ? dailyDetails.locationDescription
-                            : ''
-                        : '',
+                    muniCity,
                     style: kTextStyleSubtitle4,
                   ),
                 ],
@@ -339,7 +336,7 @@ class Daily10Widget extends HookWidget {
                       style: kTextStyleWeather3,
                     ),
                     Text(
-                      'MeanTemp ${dailyDetails != null ? '${dailyDetails.meanTemp}°C' : '0°C'}',
+                      'Min Temp ${dailyDetails != null ? '${dailyDetails.meanTemp}°C' : '0°C'}',
                       style: kTextStyleWeather3,
                     ),
                   ],
@@ -398,7 +395,7 @@ class Daily10Widget extends HookWidget {
                             Text(
                               dailyDetails != null
                                   ? dailyDetails.meanTemp != ''
-                                      ? dailyDetails.meanTemp
+                                      ? double.parse(dailyDetails.meanTemp).toStringAsFixed(1)
                                       : '0'
                                   : '0',
                               style: kTextStyleWeather,

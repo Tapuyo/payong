@@ -178,10 +178,10 @@ class AgriPrognosis10Widget extends HookWidget {
                 ),
               ],
             ),
-            SizedBox(
-                width: 70,
-                height: 70,
-                child: Image.network(dailyDetails.last.moistIcon)),
+            // SizedBox(
+            //     width: 70,
+            //     height: 70,
+            //     child: Image.network(dailyDetails.last.moistIcon)),
              Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               // ignore: prefer_const_literals_to_create_immutables
@@ -192,10 +192,10 @@ class AgriPrognosis10Widget extends HookWidget {
                 ),
               ],
             ),
-            SizedBox(
-                width: 70,
-                height: 70,
-                child: Image.network(dailyDetails.last.dryIcon)),
+            // SizedBox(
+            //     width: 70,
+            //     height: 70,
+            //     child: Image.network(dailyDetails.last.dryIcon)),
              Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               // ignore: prefer_const_literals_to_create_immutables
@@ -206,19 +206,21 @@ class AgriPrognosis10Widget extends HookWidget {
                 ),
               ],
             ),
-            SizedBox(
-                width: 70,
-                height: 70,
-                child: Image.network(dailyDetails.last.wetIcon)),
+            // SizedBox(
+            //     width: 70,
+            //     height: 70,
+            //     child: Image.network(dailyDetails.last.wetIcon)),
             // cloudIcons('CLOUDY'),
             SizedBox(
               height: 20,
             ),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Forecast Rainfall',
@@ -228,11 +230,11 @@ class AgriPrognosis10Widget extends HookWidget {
                       height: 8,
                     ),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           '${dailyDetails.last.rainFall}mm',
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 18),textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -242,6 +244,8 @@ class AgriPrognosis10Widget extends HookWidget {
                   width: 12,
                 ),
                 Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Temperature',
@@ -251,11 +255,11 @@ class AgriPrognosis10Widget extends HookWidget {
                       height: 8,
                     ),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           '$tempe°C',
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 18),
                         ),
                         // Text(
                         //   '°',
