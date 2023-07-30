@@ -76,7 +76,7 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                  color: Color.fromRGBO(113, 157, 130, 1),
+                                  color: kColorBlue,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       topRight: Radius.circular(10)),
@@ -127,7 +127,7 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                  color: Color.fromRGBO(113, 157, 130, 1),
+                                  color: kColorBlue,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       topRight: Radius.circular(10)),
@@ -178,7 +178,7 @@ class AgriForecastSoilMoistWidget extends HookWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                  color: Color.fromRGBO(113, 157, 130, 1),
+                                  color: kColorBlue,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       topRight: Radius.circular(10)),

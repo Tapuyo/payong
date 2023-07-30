@@ -25,7 +25,7 @@ import 'package:provider/provider.dart';
 
 bool dayNow = true;
 CarouselController buttonCarouselController = CarouselController();
-List<String> tb = ['Weather','Condition', 'Wind', 'Enso'];
+List<String> tb = ['Weather', 'Condition'];
 
 class AgriForecast10Widget extends HookWidget {
   const AgriForecast10Widget({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class AgriForecast10Widget extends HookWidget {
     final agri = useState<List<AgriRegionalForecast>>([]);
     final String backImg =
         context.select((InitProvider p) => p.backImgAssetUrl);
-        final bool withRain = context.select((InitProvider p) => p.withRain);
+    final bool withRain = context.select((InitProvider p) => p.withRain);
     useEffect(() {
       Future.microtask(() async {
         agri.value = await AgriServices.getAgri10DaysRegional(context, id);
@@ -60,17 +60,23 @@ class AgriForecast10Widget extends HookWidget {
     }, const []);
     print(agri.value);
     return agri.value.isNotEmpty
-        ? loadDetails(context, isScrollControlled, agriTab, agri.value, backImg,withRain)
+        ? loadDetails(
+            context, isScrollControlled, agriTab, agri.value, backImg, withRain)
         : SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Center(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
               child: CircularProgressIndicator(),
             ),
-        );
+          );
   }
 
-  loadDetails(BuildContext context, ValueNotifier isScrollControlled,
-      ValueNotifier agriTab, List<AgriRegionalForecast> agri, String backImg, bool withRain) {
+  loadDetails(
+      BuildContext context,
+      ValueNotifier isScrollControlled,
+      ValueNotifier agriTab,
+      List<AgriRegionalForecast> agri,
+      String backImg,
+      bool withRain) {
     print(agri.last.content);
     return SingleChildScrollView(
       child: Container(
@@ -85,7 +91,8 @@ class AgriForecast10Widget extends HookWidget {
                   child: Image.asset(backImg),
                 ),
               ),
-              if(withRain) ParallaxRain(
+              if (withRain)
+                ParallaxRain(
                   // ignore: prefer_const_literals_to_create_immutables
                   dropColors: [Colors.white],
                   trail: true,
@@ -94,7 +101,7 @@ class AgriForecast10Widget extends HookWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                 child: SizedBox(
-                   width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height - 150,
                   child: ListView(
                     children: [
@@ -117,16 +124,13 @@ class AgriForecast10Widget extends HookWidget {
                                     if (i == 'Weather') ...{
                                       weatherWidget(context, isScrollControlled,
                                           agriTab, agri)
-                                    }  else if (i == 'Condition') ...{
-                                      weatherConditionWidget(context, agri)
-                                    } else if (i == 'Wind') ...{
-                                      windWidget(context, agri),
-                                      galeWidget(context, agri)
-                                    } else if (i == 'Enso') ...{
-                                      ensoWidget(context, agri)
                                     } else ...{
-                                      weatherWidget(context, isScrollControlled,
-                                          agriTab, agri)
+                                      weatherConditionWidget(context, agri),
+                                      // windWidget(context, agri),
+                                      // galeWidget(context, agri),
+                                      // ensoWidget(context, agri),
+                                      // weatherWidget(context, isScrollControlled,
+                                      //     agriTab, agri)
                                     }
                                   ],
                                 ),
@@ -135,33 +139,35 @@ class AgriForecast10Widget extends HookWidget {
                           );
                         }).toList(),
                       ),
-                      SizedBox(height: 20,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              buttonCarouselController.nextPage(
-                                  duration: Duration(milliseconds: 100),
-                                  curve: Curves.linear);
-                            },
-                            child: Container(
-                              width: 300,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: kColorBlue,
-                              ),
-                              height: 35,
-                              child: Center(
-                                child: Text(
-                                  'Next',
-                                  style: kTextStyleSubtitle4b,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      SizedBox(
+                        height: 20,
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         buttonCarouselController.nextPage(
+                      //             duration: Duration(milliseconds: 100),
+                      //             curve: Curves.linear);
+                      //       },
+                      //       child: Container(
+                      //         width: 125,
+                      //         decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(10),
+                      //           color: kColorBlue,
+                      //         ),
+                      //         height: 35,
+                      //         child: Center(
+                      //           child: Text(
+                      //             'Next',
+                      //             style: kTextStyleSubtitle4b,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -215,19 +221,23 @@ class AgriForecast10Widget extends HookWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12), color: kColorBlue.withOpacity(.5)
-                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  color: kColorBlue.withOpacity(.5)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     'Weather systems that will likely affected the whole country',
                     style: TextStyle(fontSize: 20, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                    SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 2.5,
                     width: MediaQuery.of(context).size.width,
@@ -248,7 +258,7 @@ class AgriForecast10Widget extends HookWidget {
                               width: 200,
                               child: Text(
                                 agri.last.weatherSystem[i].name,
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                                 // overflow: TextOverflow.ellipsis,
                               ),
@@ -258,7 +268,6 @@ class AgriForecast10Widget extends HookWidget {
                       },
                     ),
                   ),
-                  
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -355,12 +364,18 @@ class AgriForecast10Widget extends HookWidget {
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: MediaQuery.of(context).size.height - 250,
-                                                width: MediaQuery.of(context).size.width,
-                                                child: ListView(
-                                                  children:[ Padding(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height -
+                                                    250,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: ListView(children: [
+                                                  Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
                                                       agri.last.content,
                                                       style: GoogleFonts.roboto(
@@ -368,12 +383,14 @@ class AgriForecast10Widget extends HookWidget {
                                                               const TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 16,
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: 'NunitoSans',
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily:
+                                                            'NunitoSans',
                                                       )),
                                                     ),
-                                                  ),]
-                                                ),
+                                                  ),
+                                                ]),
                                               ),
                                             ],
                                           ),
@@ -453,8 +470,8 @@ class AgriForecast10Widget extends HookWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          loadReadmore(context,
-                              agri.last.enso.last.description);
+                          loadReadmore(
+                              context, agri.last.enso.last.description);
                         },
                         child: Container(
                           // width: 80,
@@ -486,14 +503,15 @@ class AgriForecast10Widget extends HookWidget {
     );
   }
 
-    Padding weatherConditionWidget(BuildContext context, List<AgriRegionalForecast> agri) {
+  Padding weatherConditionWidget(
+      BuildContext context, List<AgriRegionalForecast> agri) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 400,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), color: Colors.white70),
+            borderRadius: BorderRadius.circular(12), color: kColorBlue.withOpacity(.5)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -501,229 +519,116 @@ class AgriForecast10Widget extends HookWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                 Column(
-                    children: [
-                        if(agri.last.weatherCondition.isNotEmpty)
-                      SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Image.network(agri.last.weatherCondition.last.icon)),
-                      Text(
-                        'Weather Condition',
-                        style: TextStyle(color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                 
-                  
-                  Column(
-                
-                    children: [
-                          if(agri.last.weatherCondition.isNotEmpty)
-                      // SizedBox(
-                      //   width: 180,
-                      //   child: Text(agri.last.weatherCondition.last.location,
-                      //     style: TextStyle(color: Colors.black),
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
-                      
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          loadReadmore(context,'${agri.last.weatherCondition.last.location} }');
-                        },
-                        child: Container(
-                          // width: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          height: 35,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                            child: Center(
-                              child: Text(
-                                'Read more',
-                                style:
-                                    TextStyle(color: kColorBlue, fontSize: 16),
-                              ),
-                            ),
-                          ),
+                  if (agri.last.weatherCondition.isNotEmpty) 
+                  GestureDetector(
+                    onTap: () {
+                      if (agri.last.weatherCondition.isNotEmpty) {
+                        loadReadmore(context,
+                            '${agri.last.weatherCondition.last.location} }');
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        if (agri.last.weatherCondition.isNotEmpty)
+                          SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: Image.network(
+                                  agri.last.weatherCondition.last.icon)),
+                        Text(
+                          'Weather Condition',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding galeWidget(BuildContext context, List<AgriRegionalForecast> agri) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), color: Colors.white70),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                 Column(
-                    children: [
-                        if(agri.last.galeWarning.isNotEmpty)
-                      SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Image.network(agri.last.galeWarning.last.icon)),
-                      Text(
-                        'Sea Condition',
-                        style: TextStyle(color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                 
-                  
-                  Column(
-                    children: [
-                          if(agri.last.galeWarning.isNotEmpty)
-                      // SizedBox(
-                      //  width: 180,
-                      //   child: Text(agri.last.galeWarning.last.location,
-                      //     style: TextStyle(color: Colors.black),
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
-                       
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          loadReadmore(context,agri.last.galeWarning.last.description);
-                        },
-                        child: Container(
-                          // width: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          height: 35,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                            child: Center(
-                              child: Text(
-                                'Read more',
-                                style:
-                                    TextStyle(color: kColorBlue, fontSize: 16),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding windWidget(BuildContext context, List<AgriRegionalForecast> agri) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 150,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), color: Colors.white70),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                     crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      if(agri.last.windCondition.isNotEmpty)
-                      SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Image.network(agri.last.windCondition.last.icon)),
-                      Text(
-                        'Wind',
-                        style: TextStyle(color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                
-                  Column(
-                    children: [
-                        if(agri.last.windCondition.isNotEmpty)
-                      // SizedBox(
-                      //   width: 180,
-                      //   child: Text(
-                      //     agri.last.windCondition.last.location,
-                      //     style: TextStyle(color: Colors.black),
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GestureDetector(
-                        onTap: () {
+                  if (agri.last.windCondition.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        if (agri.last.windCondition.isNotEmpty) {
                           loadReadmore(context,
                               agri.last.windCondition.last.description);
-                        },
-                        child: Container(
-                          // width: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          if (agri.last.weatherCondition.isNotEmpty)
+                            SizedBox(
+                                width: 80,
+                                height: 80,
+                                child: Image.network(
+                                    agri.last.windCondition.last.icon)),
+                          Text(
+                            'Wind',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                          height: 35,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                            child: Center(
-                              child: Text(
-                                'Read more',
-                                style:
-                                    TextStyle(color: kColorBlue, fontSize: 16),
-                              ),
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (agri.last.galeWarning.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        if (agri.last.galeWarning.isNotEmpty) {
+                          loadReadmore(context,
+                              '${agri.last.galeWarning.last.description} }');
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          if (agri.last.galeWarning.isNotEmpty)
+                            SizedBox(
+                                width: 80,
+                                height: 80,
+                                child: Image.network(
+                                    agri.last.galeWarning.last.icon)),
+                          Text(
+                            'Sea Condition',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (agri.last.enso.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        if (agri.last.enso.isNotEmpty) {
+                          loadReadmore(
+                              context, agri.last.enso.last.description);
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          if (agri.last.enso.isNotEmpty)
+                            SizedBox(
+                                width: 80,
+                                height: 80,
+                                child: agri.last.enso.last.icon.isNotEmpty
+                                    ? Image.network(agri.last.enso.last.icon)
+                                    : Image.asset('assets/windicon.png')),
+                          Text(
+                            'ENSO Alert',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -731,36 +636,6 @@ class AgriForecast10Widget extends HookWidget {
         ),
       ),
     );
-  }
-
-  WidgetBody(
-      BuildContext context, List<Agri10DaysForecastvModel> dailyAgriDetails) {
-    return dailyAgriDetails != null
-        ? SizedBox(
-            height: MediaQuery.of(context).size.height - 180,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height + 100,
-                        child: ListView.builder(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 500),
-                          scrollDirection: Axis.vertical,
-                          itemCount: dailyAgriDetails.length,
-                          itemBuilder: (context, index) {
-                            return foreCastWidget(
-                                context, dailyAgriDetails[index]);
-                          },
-                        ),
-                      ),
-                    ]),
-              ),
-            ),
-          )
-        : SizedBox();
   }
 
   loadReadmore(BuildContext context, String content) {
@@ -788,7 +663,7 @@ class AgriForecast10Widget extends HookWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: ColoredBox(
-                  color: Colors.transparent ,
+                  color: Colors.transparent,
                   child: Text(
                     content,
                     style: TextStyle(color: Colors.black),
@@ -802,21 +677,24 @@ class AgriForecast10Widget extends HookWidget {
     );
   }
 
-  loadMap(BuildContext context, String content,
-      ValueNotifier isScrollControlled, ValueNotifier agriTab,List<AgriRegionalForecast> agri) {
+  loadMap(
+      BuildContext context,
+      String content,
+      ValueNotifier isScrollControlled,
+      ValueNotifier agriTab,
+      List<AgriRegionalForecast> agri) {
     String normalRainfallImage = '';
     String actualRainfallImage = '';
 
     print(agri.last.map.last.description);
 
     for (var i = 0; i < agri.last.map.length; i++) {
-        if(agri.last.map[i].description == 'ACTUAL RAINFALL'){
-          normalRainfallImage = agri.last.map[i].map;
-        }else{
-          actualRainfallImage = agri.last.map[i].map;
-        }
+      if (agri.last.map[i].description == 'ACTUAL RAINFALL') {
+        normalRainfallImage = agri.last.map[i].map;
+      } else {
+        actualRainfallImage = agri.last.map[i].map;
+      }
     }
-
 
     return showModalBottomSheet<void>(
       isScrollControlled: isScrollControlled.value,
@@ -829,7 +707,6 @@ class AgriForecast10Widget extends HookWidget {
               padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
               child: SingleChildScrollView(
                 child: Stack(children: [
-                
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -938,7 +815,9 @@ class AgriForecast10Widget extends HookWidget {
                                 ),
                               ],
                             ),
-                              SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             agriTab.value == 1
                                 ? Container(
                                     color: Colors.white70,

@@ -235,7 +235,7 @@ abstract class AgriServices {
         for (var a in u['WindCondition']) {
           AgriRegionalForecastWindCondition weather =
               AgriRegionalForecastWindCondition(
-                  a['Location'] ?? '', ' ${a['Description']} \n\n ${a['WindDescription']}' ?? '', a['Icon'] ?? '');
+                  a['Location'] ?? '',   a['WindDescription'], a['Icon'] ?? '');
           windCondition.add(weather);
         }
       }
@@ -246,7 +246,7 @@ abstract class AgriServices {
         for (var a in u['GaleWarning']) {
           AgriRegionalForecastGaleWarning weather =
               AgriRegionalForecastGaleWarning(
-                  a['Location'] ?? '', ' ${a['Description']}' ?? '', a['Icon'] ?? '');
+                  a['Location'] ?? '', a['Description'], a['Icon'] ?? '');
           galeWarning.add(weather);
         }
       }

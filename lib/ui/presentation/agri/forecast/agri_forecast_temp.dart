@@ -91,7 +91,7 @@ class AgriForecastTempWidget extends HookWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(177, 169, 10, 1),
+                              color: kColorBlue,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10)),
@@ -104,58 +104,69 @@ class AgriForecastTempWidget extends HookWidget {
                                 children: [
                                   Text(
                                     'Lowland: (${dailyAgriDetails[index].lowLandMaxTemp} ${dailyAgriDetails[index].lowLandMinTemp})°C',
-                                    style: kTextStyleSubtitle4b,
+                                   style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'NunitoSans',
+                                    )),
                                   ),
                                   VerticalDivider(),
                                  
                                    Text(
                                     'Upland: (${dailyAgriDetails[index].highLandMaxTemp} ${dailyAgriDetails[index].highLandMinTemp})°C',
-                                    style: kTextStyleSubtitle4b,
+                                   style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'NunitoSans',
+                                    )),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          Row(
+                          Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(
-                                    child: Column(
+                                SizedBox(
+                                    width: 200,
+                                    height: 100,
+                                    child:
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            if(dailyAgriDetails[index].lowLandMinTempIcon != '')
+                                            SizedBox(
+                                               width: 80,
+                                              height: 80,
+                                              child: Image.network(dailyAgriDetails[index].lowLandMinTempIcon)),
+                                              Spacer(),
+                                              if(dailyAgriDetails[index].highLandMinTempIcon != '')
+                                            SizedBox(
+                                               width: 80,
+                                              height: 80,
+                                              child: Image.network(dailyAgriDetails[index].highLandMinTempIcon)),
+                                          ],
+                                        )),
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(8, 0, 8, 10),
-                                      child: Text(
-                                        dailyAgriDetails[index].locations,
-                                        style: kTextStyleSubtitle4b,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                                Expanded(
-                                  child: SizedBox(
-                                      width: 200,
-                                      height: 200,
-                                      child:
-                                          Column(
-                                            children: [
-                                              if(dailyAgriDetails[index].lowLandMinTempIcon != '')
-                                              SizedBox(
-                                                 width: 80,
-                                                height: 80,
-                                                child: Image.network(dailyAgriDetails[index].lowLandMinTempIcon)),
-                                                SizedBox(height: 12,),
-                                                if(dailyAgriDetails[index].highLandMinTempIcon != '')
-                                              SizedBox(
-                                                 width: 80,
-                                                height: 80,
-                                                child: Image.network(dailyAgriDetails[index].highLandMinTempIcon)),
-                                            ],
-                                          )),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 10),
+                                  child: Text(
+                                    dailyAgriDetails[index].locations,
+                                    style: kTextStyleSubtitle4b,
+                                  ),
                                 )
+                                  ],
+                                ),
+                                
                               ]),
                         ],
                       ),

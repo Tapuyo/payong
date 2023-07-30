@@ -180,7 +180,7 @@ class AgriAdvisoryWidget extends HookWidget {
                                   contentChoose.value =
                                       dailyAgriDetails[value].content;
                                 },
-                                height: 100.0,
+                                height: 140.0,
                                 viewportFraction: 1,
                                 autoPlay: false,
                                 enlargeFactor: .4),
@@ -194,74 +194,77 @@ class AgriAdvisoryWidget extends HookWidget {
                             }).toList(),
                           ),
                           if (contentChoose.value != '')
-                            Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Container(
-                                    margin: const EdgeInsets.all(15.0),
-                                    padding: const EdgeInsets.all(3.0),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white60,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border:
-                                            Border.all(color: Colors.black)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        contentChoose.value,
-                                        style: TextStyle(color: Colors.black),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 130),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                    child: Container(
+                                      margin: const EdgeInsets.all(15.0),
+                                      padding: const EdgeInsets.all(3.0),
+                                      decoration: BoxDecoration(
+                                          color: kColorBlue.withOpacity(.5),
+                                          borderRadius: BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: kColorBlue)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          contentChoose.value,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                        onTap: () {
-                                          buttonCarouselController.nextPage(
-                                              duration:
-                                                  Duration(milliseconds: 100),
-                                              curve: Curves.linear);
-
-                                          titleChoose.value = dailyAgriDetails[
-                                                  carouselInt.value]
-                                              .title;
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.arrow_back_ios),
-                                            Icon(Icons.arrow_back_ios)
-                                          ],
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    GestureDetector(
-                                        onTap: () {
-                                          buttonCarouselController.previousPage(
-                                              duration:
-                                                  Duration(milliseconds: 100),
-                                              curve: Curves.linear);
-
-                                          titleChoose.value = dailyAgriDetails[
-                                                  carouselInt.value]
-                                              .title;
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.arrow_forward_ios),
-                                            Icon(Icons.arrow_forward_ios)
-                                          ],
-                                        )),
-                                  ],
-                                )
-                              ],
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            buttonCarouselController.nextPage(
+                                                duration:
+                                                    Duration(milliseconds: 100),
+                                                curve: Curves.linear);
+                            
+                                            titleChoose.value = dailyAgriDetails[
+                                                    carouselInt.value]
+                                                .title;
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.arrow_back_ios),
+                                              Icon(Icons.arrow_back_ios)
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            buttonCarouselController.previousPage(
+                                                duration:
+                                                    Duration(milliseconds: 100),
+                                                curve: Curves.linear);
+                            
+                                            titleChoose.value = dailyAgriDetails[
+                                                    carouselInt.value]
+                                                .title;
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.arrow_forward_ios),
+                                              Icon(Icons.arrow_forward_ios)
+                                            ],
+                                          )),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                         ]),
                   ),
@@ -275,7 +278,7 @@ class AgriAdvisoryWidget extends HookWidget {
   Widget advisoryWidget(BuildContext context, AgriAdvModel? agriAdsModel,
       ValueNotifier titleChoose, ValueNotifier contentChoose) {
     return Expanded(
-      flex: 1,
+      flex: 2,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
@@ -287,27 +290,29 @@ class AgriAdvisoryWidget extends HookWidget {
             // width: 120,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.black),
-              color: Colors.white38,
+              border: Border.all(color: kColorBlue),
+              color: kColorBlue.withOpacity(.5),
             ),
-            height: 20,
+            // height: 40,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       agriAdsModel!.title,
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(
-                      height: 12,
+                      height: 4,
                     ),
                     Text(
                       'Publish date: ${agriAdsModel!.datePublish}',
                       style: TextStyle(
-                          fontSize: 14, color: Color.fromARGB(255, 63, 61, 61)),
+                          fontSize: 14, color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                     //  Text(

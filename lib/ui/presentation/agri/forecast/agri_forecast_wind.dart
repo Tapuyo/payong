@@ -85,7 +85,7 @@ class AgriForecastWindWidget extends HookWidget {
                           Container(
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(10, 155, 177, 1),
+                              color: kColorBlue,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10)),
@@ -108,6 +108,13 @@ class AgriForecastWindWidget extends HookWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                  if(dailyAgriDetails[index].windConditionIcon != '')
+                                Expanded(
+                                  child: SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: Image.network(dailyAgriDetails[index].windConditionIcon)),
+                                ),
                                 Expanded(
                                     child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -123,13 +130,7 @@ class AgriForecastWindWidget extends HookWidget {
                                     )
                                   ],
                                 )),
-                                if(dailyAgriDetails[index].windConditionIcon != '')
-                                Expanded(
-                                  child: SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: Image.network(dailyAgriDetails[index].windConditionIcon)),
-                                )
+                              
                               ]),
                         ],
                       ),

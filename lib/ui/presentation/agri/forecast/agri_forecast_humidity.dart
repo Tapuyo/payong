@@ -85,7 +85,7 @@ class AgriForecastHumidityWidget extends HookWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                          color: Color.fromRGBO(33, 150, 243, 1),
+                          color: kColorBlue,
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10) ),),
                             
                             child: SizedBox(
@@ -112,6 +112,14 @@ class AgriForecastHumidityWidget extends HookWidget {
                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                                if(dailyAgriDetails[index].humidityIcon != '')
+                            Expanded(
+                              child: SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child:
+                                      Image.network(dailyAgriDetails[index].humidityIcon)),
+                            ),
                             Expanded(
                                 child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -126,14 +134,7 @@ class AgriForecastHumidityWidget extends HookWidget {
                                 )
                               ],
                             )),
-                            if(dailyAgriDetails[index].humidityIcon != '')
-                            Expanded(
-                              child: SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child:
-                                      Image.network(dailyAgriDetails[index].humidityIcon)),
-                            )
+                          
                           ]),
                         ],
                       ),

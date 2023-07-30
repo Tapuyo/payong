@@ -103,6 +103,8 @@ class AgriPrognosis10Widget extends HookWidget {
 
   Widget listPrognosis(BuildContext context, List<Agri10Prognosis> dailyDetails,
       ValueNotifier showExpand, ValueNotifier soilCondition) {
+         final String backImg =
+        context.select((InitProvider p) => p.backImgAssetUrl);
     String tempe = '';
     if (dailyDetails.last.temp.isNotEmpty) {
       for (var u in dailyDetails.last.temp) {
@@ -117,9 +119,13 @@ class AgriPrognosis10Widget extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                dailyDetails.last.regionDescription,
-                style: kTextStyleSubtitle4,
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 100,
+                child: Text(
+                  dailyDetails.last.regionDescription,
+                  style: kTextStyleSubtitle4,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
@@ -133,7 +139,7 @@ class AgriPrognosis10Widget extends HookWidget {
               children: [
                 Text(
                   '  No. of Rainy Days: ${dailyDetails.last.rainyDays}',
-                  // style: kTextStyleWeather3,
+                  style: kTextStyleWeather3,
                 ),
               ],
             ),
@@ -146,7 +152,7 @@ class AgriPrognosis10Widget extends HookWidget {
               children: [
                 Text(
                   ' Relative Humidity (%): ${dailyDetails.last.relativeHumidity}',
-                  // style: kTextStyleWeather3,
+                  style: kTextStyleWeather3,
                 ),
               ],
             ),
@@ -163,7 +169,7 @@ class AgriPrognosis10Widget extends HookWidget {
               children: [
                 Text(
                   'Soil Condition',
-                  // style: kTextStyleWeather3,
+                  style: kTextStyleWeather3,
                 ),
               ],
             ),
@@ -174,7 +180,7 @@ class AgriPrognosis10Widget extends HookWidget {
               children: [
                 Text(
                   'Wet area: ${dailyDetails.last.wetSoilLocation}',
-                  // style: kTextStyleWeather3,
+                  style: kTextStyleWeather3,
                 ),
               ],
             ),
@@ -188,7 +194,7 @@ class AgriPrognosis10Widget extends HookWidget {
               children: [
                 Text(
                   'Moist area: ${dailyDetails.last.moistSoilLocation}',
-                  // style: kTextStyleWeather3,
+                  style: kTextStyleWeather3,
                 ),
               ],
             ),
@@ -202,7 +208,7 @@ class AgriPrognosis10Widget extends HookWidget {
               children: [
                 Text(
                   'Dry area: ${dailyDetails.last.drySoilLocation}',
-                  // style: kTextStyleWeather3,
+                  style: kTextStyleWeather3,
                 ),
               ],
             ),
@@ -224,24 +230,25 @@ class AgriPrognosis10Widget extends HookWidget {
                   children: [
                     Text(
                       'Forecast Rainfall',
-                      style: kTextStyleWeather2,
+                      style: kTextStyleWeather3,
                     ),
                     SizedBox(
-                      height: 8,
+                      height: 4,
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           '${dailyDetails.last.rainFall}mm',
-                          style: TextStyle(fontSize: 18),textAlign: TextAlign.center,
+                          style: kTextStyleWeather3,textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ],
                 ),
                 SizedBox(
-                  width: 12,
+                  height: 12,
                 ),
                 Column(
                    mainAxisAlignment: MainAxisAlignment.center,
@@ -249,17 +256,18 @@ class AgriPrognosis10Widget extends HookWidget {
                   children: [
                     Text(
                       'Temperature',
-                      style: kTextStyleWeather2,
+                      style: kTextStyleWeather3,
                     ),
                     SizedBox(
-                      height: 8,
+                      height: 4,
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           '$tempe°C',
-                          style: TextStyle(fontSize: 18),
+                          style: kTextStyleWeather3,
                         ),
                         // Text(
                         //   '°',
@@ -275,10 +283,12 @@ class AgriPrognosis10Widget extends HookWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Crop Phenology, Situation and Farm Activities',
                     style: kTextStyleWeather3,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
@@ -305,7 +315,7 @@ class AgriPrognosis10Widget extends HookWidget {
                                   height:
                                       MediaQuery.of(context).size.height - 150,
                                   child: FittedBox(
-                                    child: Image.asset('assets/manila.jpeg'),
+                                    child: Image.asset(backImg),
                                     fit: BoxFit.fitHeight,
                                   ),
                                 ),
@@ -346,17 +356,27 @@ class AgriPrognosis10Widget extends HookWidget {
                                         ],
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(20.0),
+                                        padding:  EdgeInsets.all(20.0),
                                         child: Container(
-                                          color: Colors.white,
+                                            decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    color: kColorBlue.withOpacity(.5),
+                                                  boxShadow: [
+                                                    const BoxShadow(
+                                                        color: kColorBlue,
+                                                        spreadRadius: 3),
+                                                  ],
+                                                ),
+                                        
                                           child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
+                                            padding:  EdgeInsets.fromLTRB(
                                                 20, 20, 20, 20),
                                             child: Text(
                                               dailyDetails.last.content,
                                               style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Colors.black87),
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),

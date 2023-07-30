@@ -85,7 +85,7 @@ class AgriForecastLeafWidget extends HookWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                          color: Color.fromRGBO(10, 177, 27, 1),
+                          color: kColorBlue,
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10) ),),
                             
                             child: SizedBox(
@@ -112,6 +112,14 @@ class AgriForecastLeafWidget extends HookWidget {
                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                               if(dailyAgriDetails[index].leafWetnessIcon != '')
+                            Expanded(
+                              child: SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child:
+                                      Image.network(dailyAgriDetails[index].leafWetnessIcon )),
+                            ),
                             Expanded(
                                 child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -126,14 +134,7 @@ class AgriForecastLeafWidget extends HookWidget {
                                 )
                               ],
                             )),
-                            if(dailyAgriDetails[index].leafWetnessIcon != '')
-                            Expanded(
-                              child: SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child:
-                                      Image.network(dailyAgriDetails[index].leafWetnessIcon )),
-                            )
+                           
                           ]),
                         ],
                       ),

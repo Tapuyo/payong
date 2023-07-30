@@ -121,9 +121,10 @@ class AgriAdvisory10Widget extends HookWidget {
                         padding: EdgeInsets.all(5),
                         width: MediaQuery.of(context).size.width - 20,
                         decoration: BoxDecoration(
-                            color: Colors.white60,
+                            color: kColorBlue.withOpacity(.5),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.black)),
+                            // border: Border.all(color: Colors.black)
+                            ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -136,9 +137,12 @@ class AgriAdvisory10Widget extends HookWidget {
                               // SizedBox(
                               //   height: 12,
                               // ),
-                              Text(
-                                agriAdsModel.title,
-                                style: kTextStyleSubtitle4b,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 100,
+                                child: Text(
+                                  agriAdsModel.title,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                               SizedBox(
                                 height: 12,

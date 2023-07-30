@@ -101,18 +101,18 @@ class AgriSynopsisWidget extends HookWidget {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    color: Colors.white60,
+                    color: kColorBlue.withOpacity(.5),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black)),
+                      border: Border.all(color: kColorBlue.withOpacity(.5))),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
                     child: Text(agriSypnosis != null ?
                       agriSypnosis.content: '',
                       style: GoogleFonts.roboto(
                           textStyle: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              fontSize: 16,
+                              // fontWeight: FontWeight.w500,
                               fontFamily: 'NunitoSans',
                               wordSpacing: 2), )
                     ),
