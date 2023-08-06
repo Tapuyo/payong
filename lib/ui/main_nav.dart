@@ -61,7 +61,7 @@ class _MyWidgetState extends State<MainNav> {
   List<AgriModel> agriList = [];
   Set<Polygon> polygons = {};
   List<DateTime> lastDay = [];
-  DateTime selectedDate = DateTime.now();
+
   bool isRefresh = false;
   MapType mapType = MapType.normal;
   String title = 'Philippines';
@@ -266,28 +266,50 @@ class _MyWidgetState extends State<MainNav> {
 
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setPolygonDaiyClear();
-    String dt = DateFormat('yyyy-MM-dd').format(selectedDate);
+    
     String optionFilter = 'ActualRainfall';
+    String url = '';
     if (dailyProvider.option == 'MinTemp') {
       optionFilter = 'MinTemp';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=4';
     } else if (dailyProvider.option == 'NormalRainfall') {
       optionFilter = 'NormalRainfall';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=1';
     } else if (dailyProvider.option == 'MaxTemp') {
       optionFilter = 'MaxTemp';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=5';
     } else if (dailyProvider.option == 'ActualRainfall') {
       optionFilter = 'ActualRainfall';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=2';
     } else if (dailyProvider.option == 'RainfallPercent') {
       optionFilter = 'RainfallPercent';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=3';
     } else {
       optionFilter = 'ActualRainfall';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=2';
     }
     dailyProvider.setOption(optionFilter, true,'');
     // for (var i = 1; i < 200; i++) {
     // print('john paul $i');
-    final dailymap =
-        await DailyServices.getDailyList(context, dt, '1', optionFilter);
+    String dt = DateFormat('yyyy-MM-dd').format(DateTime.now());
+   final response = await http.get(Uri.parse(url));
+     var jsondata = json.decode(response.body);
+    String dateSelect = '';
+      if (jsondata.isNotEmpty) {
+        dateSelect = jsondata[0]['CurrentDate'];
+        print(dateSelect);
+      } else {
+        dateSelect = dt;
+      }
+    
+    dailyProvider.setDateBE(dateSelect);
+   
 
-    dailyProvider.setDateSelect(selectedDate);
+
+    final dailymap =
+        await DailyServices.getDailyList(context, dateSelect, '1', optionFilter);
+
+    dailyProvider.setDateSelect(dailyProvider.selectedDate);
     colorMap(dailymap);
     // }
     setState(() {
@@ -436,9 +458,10 @@ class _MyWidgetState extends State<MainNav> {
             label: 'Daily Monitoring',
             ontap: () {
               setState(() {
-                selectedDate = DateTime.now();
+               
                 final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
+
+                dailyProvider.setDateSelect(dailyProvider.selectedDate);
                 polygons.clear();
                 title = 'Philippines';
                 selectIndex = 0;
@@ -452,9 +475,8 @@ class _MyWidgetState extends State<MainNav> {
             label: '10 Days Weather Outlook',
             ontap: () {
               setState(() {
-                selectedDate = DateTime.now();
                 final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
+                dailyProvider.setDateSelect(DateTime.now());
                 polygons.clear();
                 title = 'Philippines';
                 selectIndex = 2;
@@ -468,9 +490,8 @@ class _MyWidgetState extends State<MainNav> {
             label: 'Daily Farm Weather Forecasts and Advisories',
             ontap: () {
               setState(() {
-                selectedDate = DateTime.now();
                 final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
+                dailyProvider.setDateSelect(DateTime.now());
                 polygons.clear();
                 title = 'Philippines';
                 selectIndex = 1;
@@ -484,9 +505,8 @@ class _MyWidgetState extends State<MainNav> {
             label: '10 Days Regional Agri-weather Information',
             ontap: () {
               setState(() {
-                selectedDate = DateTime.now();
                 final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
+                dailyProvider.setDateSelect(DateTime.now());
                 polygons.clear();
                 title = 'Philippines';
                 selectIndex = 3;
@@ -500,9 +520,8 @@ class _MyWidgetState extends State<MainNav> {
             label: 'Monthly Climate Assessment and Outlook',
             ontap: () {
               setState(() {
-                selectedDate = DateTime.now();
                 final dailyProvider = context.read<DailyProvider>();
-                dailyProvider.setDateSelect(selectedDate);
+                dailyProvider.setDateSelect(DateTime.now());
                 polygons.clear();
                 title = 'Philippines';
                 selectIndex = 4;
@@ -1128,6 +1147,7 @@ class _MyWidgetState extends State<MainNav> {
   }
 
   Widget mapWid() {
+    final prov = context.read<DailyProvider>();
     final dailyProvider = context.read<DailyProvider>().polygons;
     final dailyProviderImage = context.read<DailyProvider>().mapImage;
     final List<DailyLegendModel> dailyLegends =
@@ -1136,46 +1156,46 @@ class _MyWidgetState extends State<MainNav> {
     String optionTitle = '';
     String subTitle = '';
      String mo = 'January';
-       if(selectedDate.month == 1){
+       if(prov.selectedDate.month == 1){
         mo = 'January';
-       }else if(selectedDate.month == 2){
+       }else if(prov.selectedDate.month == 2){
       mo = 'February';
-       }else if(selectedDate.month == 3){
+       }else if(prov.selectedDate.month == 3){
       mo = 'March';
-       }else if(selectedDate.month == 4){
+       }else if(prov.selectedDate.month == 4){
       mo = 'April';
-       }else if(selectedDate.month == 5){
+       }else if(prov.selectedDate.month == 5){
       mo = 'May';
-       }else if(selectedDate.month == 6){
+       }else if(prov.selectedDate.month == 6){
       mo = 'June';
-       }else if(selectedDate.month == 7){
+       }else if(prov.selectedDate.month == 7){
       mo = 'July';
-       }else if(selectedDate.month == 8){
+       }else if(prov.selectedDate.month == 8){
       mo = 'August';
-       }else if(selectedDate.month == 9){
+       }else if(prov.selectedDate.month == 9){
       mo = 'September';
-       }else if(selectedDate.month == 10){
+       }else if(prov.selectedDate.month == 10){
       mo = 'October';
-       }else if(selectedDate.month == 11){
+       }else if(prov.selectedDate.month == 11){
       mo = 'November';
-       }else if(selectedDate.month == 12){
+       }else if(prov.selectedDate.month == 12){
       mo = 'December';
        }
     if (option == 'ActualRainfall') {
       optionTitle = 'Actual Rainfall';
-      subTitle = '$mo 1 - ${DateTime.now().day} ${DateTime.now().year}';
+      subTitle = '$mo 1 - ${prov.selectedDate.day} ${prov.selectedDate.year}';
     } else if (option == 'NormalRainfall') {
       optionTitle = 'Normal Rainfall';
-        subTitle = '$mo ${DateTime.now().year}';
+        subTitle = '$mo ${prov.selectedDate.year}';
     } else if (option == 'RainfallPercent') {
       optionTitle = 'Percent Rainfall';
-        subTitle = '$mo 1 - ${DateTime.now().day} ${DateTime.now().year}';
+        subTitle = '$mo 1 - ${prov.selectedDate.day} ${prov.selectedDate.year}';
     } else if (option == 'MaxTemp') {
       optionTitle = 'Max Temp';
-       subTitle = '$mo ${DateTime.now().day} ${DateTime.now().year}';
+       subTitle = '$mo ${prov.selectedDate.day} ${prov.selectedDate.year}';
     } else if (option == 'MinTemp') {
       optionTitle = 'Min Temp';
-      subTitle = '$mo ${DateTime.now().day} ${DateTime.now().year}';
+      subTitle = '$mo ${prov.selectedDate.day} ${prov.selectedDate.year}';
     } else {
       optionTitle = 'Actual Rainfall';
     }
@@ -1190,7 +1210,8 @@ class _MyWidgetState extends State<MainNav> {
           zoomGesturesEnabled: false,
           tiltGesturesEnabled: false,
           zoomControlsEnabled: false,
-          scrollGesturesEnabled: true,
+          scrollGesturesEnabled: false,
+          
           onMapCreated: (GoogleMapController controller) {
             // controller.setMapStyle(mapStyle);
             _controller.complete(controller);
@@ -1889,55 +1910,55 @@ class _MyWidgetState extends State<MainNav> {
     );
   }
 
-  Widget display10DaysWidget() {
-    return SizedBox(
-      height: 80.0,
-      child: ListView(scrollDirection: Axis.horizontal, children: <Widget>[
-        for (var item in lastDay.reversed.toList())
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedDate = item;
-                getDailyList('10days');
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Container(
-                width: 120,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(17.0),
-                  color: selectedDate == item
-                      ? Colors.white.withOpacity(.8)
-                      : Colors.white.withOpacity(.4),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          '${getMonthString(item.month)} ${item.year}',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        Text(
-                          getFormatedDay(item, 'name'),
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(getFormatedDay(item, 'Day')),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
-      ]),
-    );
-  }
+  // Widget display10DaysWidget() {
+  //   return SizedBox(
+  //     height: 80.0,
+  //     child: ListView(scrollDirection: Axis.horizontal, children: <Widget>[
+  //       for (var item in lastDay.reversed.toList())
+  //         GestureDetector(
+  //           onTap: () {
+  //             setState(() {
+  //               selectedDate = item;
+  //               getDailyList('10days');
+  //             });
+  //           },
+  //           child: Padding(
+  //             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+  //             child: Container(
+  //               width: 120,
+  //               height: 100,
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(17.0),
+  //                 color: selectedDate == item
+  //                     ? Colors.white.withOpacity(.8)
+  //                     : Colors.white.withOpacity(.4),
+  //               ),
+  //               child: Padding(
+  //                 padding: const EdgeInsets.all(2.0),
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.all(10.0),
+  //                   child: Column(
+  //                     children: [
+  //                       Text(
+  //                         '${getMonthString(item.month)} ${item.year}',
+  //                         style: TextStyle(fontSize: 10),
+  //                       ),
+  //                       Text(
+  //                         getFormatedDay(item, 'name'),
+  //                         style: TextStyle(
+  //                             fontSize: 18, fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(getFormatedDay(item, 'Day')),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         )
+  //     ]),
+  //   );
+  // }
 
   static String getFormatedDay(DateTime? date, String nameOnly) {
     if (nameOnly == 'Day') {

@@ -57,8 +57,9 @@ class assessmentPage extends HookWidget {
           width: MediaQuery.of(context).size.width,
           child: agriTab.value == 0
               ? WebView(
+                //?fdate=${monthReturn(DateTime.now().month)}%20${DateTime.now().year}
                   initialUrl:
-                      'http://18.139.91.35/payong/assessment.php?fdate=${monthReturn(DateTime.now().subtract(Duration(days: 30)).month)}%20${DateTime.now().year}',
+                      'http://18.139.91.35/payong/assessment.php',
                   onPageFinished: (url) {
                     onLoad.value = false;
                   },
@@ -360,29 +361,30 @@ class assessmentPage extends HookWidget {
   // }
 
   String monthReturn(int val) {
-    if (val == 1) {
+    print(val);
+    if (val == 2) {
       return 'JANUARY';
-    } else if (val == 2) {
-      return 'FEBRUARY';
     } else if (val == 3) {
-      return 'MARCH';
+      return 'FEBRUARY';
     } else if (val == 4) {
-      return 'APRIL';
+      return 'MARCH';
     } else if (val == 5) {
-      return 'MAY';
+      return 'APRIL';
     } else if (val == 6) {
-      return 'JUNE';
+      return 'MAY';
     } else if (val == 7) {
-      return 'JULY';
+      return 'JUNE';
     } else if (val == 8) {
-      return 'AUGUST';
+      return 'JULY';
     } else if (val == 9) {
-      return 'SEPTEMBER';
+      return 'AUGUST';
     } else if (val == 10) {
-      return 'OCTOBER';
+      return 'SEPTEMBER';
     } else if (val == 11) {
-      return 'NOVEMBER';
+      return 'OCTOBER';
     } else if (val == 12) {
+      return 'NOVEMBER';
+    } else if (val == 1) {
       return 'DECEMBER';
     } else {
       return 'JANUARY';

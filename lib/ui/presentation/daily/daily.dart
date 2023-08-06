@@ -42,6 +42,7 @@ class DailyWidget extends HookWidget {
     final lowTemp3 = useState('0');
     final highTemp3 = useState('0');
     final meanTemp3 = useState('0');
+      final dailyProvider = context.read<DailyProvider>();
 
     if (DateTime.now().hour > 6 && DateTime.now().hour < 18) {
       //evening
@@ -96,34 +97,38 @@ class DailyWidget extends HookWidget {
         } else {
           optionTitle = 'Daily Weather Actual Rainfall';
         }
-        final dailyProvider = context.read<DailyProvider>();
+      
         String dt = DateFormat('yyyy-MM-dd')
-            .format(dailyProvider.selectedDate.subtract(Duration(days: 1)));
+            .format(dailyProvider.selectedDate);
         if (id.isEmpty) {
           await DailyServices.getDailyDetails(context, locId!, dt);
           // ignore: use_build_context_synchronously
         } else {
-          await DailyServices.getDailyDetails(context, id, dt);
+         try{
+           await DailyServices.getDailyDetails(context, id, dt);
+         }catch(e){
+          
+         }
         }
 
         meanTemp.value =
-            dailyDetails != null ? dailyDetails.overAllMeannTemp : '0';
+            dailyDetails != null ? dailyDetails1!.overAllMeannTemp : '0';
         highTemp.value =
-            dailyDetails != null ? dailyDetails.overAllMaxTemp : '0';
+            dailyDetails != null ? dailyDetails1!.overAllMaxTemp : '0';
         lowTemp.value =
-            dailyDetails != null ? dailyDetails.overAllMinTemp : '0';
+            dailyDetails != null ? dailyDetails1!.overAllMinTemp : '0';
         if (dailyProvider.option == 'MinTemp') {
-          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+          accumulatedRainFall.value = dailyDetails1!.totalNormalRainFall;
         } else if (dailyProvider.option == 'NormalRainfall') {
-          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+          accumulatedRainFall.value = dailyDetails1!.totalNormalRainFall;
         } else if (dailyProvider.option == 'MaxTemp') {
-          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+          accumulatedRainFall.value = dailyDetails1!.totalNormalRainFall;
         } else if (dailyProvider.option == 'ActualRainfall') {
-          accumulatedRainFall.value = dailyDetails!.totalActualRainFall;
+          accumulatedRainFall.value = dailyDetails1!.totalActualRainFall;
         } else if (dailyProvider.option == 'RainfallPercent') {
-          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+          accumulatedRainFall.value = dailyDetails1!.totalNormalRainFall;
         } else {
-          accumulatedRainFall.value = dailyDetails!.totalNormalRainFall;
+          accumulatedRainFall.value = dailyDetails1!.totalNormalRainFall;
         }
         print('Accumulated: ${accumulatedRainFall.value}');
 
@@ -215,7 +220,7 @@ class DailyWidget extends HookWidget {
         ),
         // cloudIcons('CLOUDY'),
         Text(
-          'Report as of ${DateFormat.MMMEd().format(DateTime.now().subtract(Duration(days: 1))).toString()}',
+          'Report as of ${DateFormat.MMMEd().format(dailyProvider.selectedDate).toString()}',
           style: kTextStyleSubTitle,
         ),
         SizedBox(
@@ -329,7 +334,7 @@ class DailyWidget extends HookWidget {
                     flex: 2,
                     child: Text(
                       DateFormat.MMMEd()
-                          .format(DateTime.now().subtract(Duration(days: 1)))
+                          .format(dailyProvider.selectedDate)
                           .toString(),
                       style: kTextStyleWeather2,
                     ),
@@ -393,7 +398,7 @@ class DailyWidget extends HookWidget {
                     flex: 2,
                     child: Text(
                       DateFormat.MMMEd()
-                          .format(DateTime.now().subtract(Duration(days: 2)))
+                          .format(dailyProvider.selectedDate.subtract(Duration(days: 1)))
                           .toString(),
                       style: kTextStyleWeather2,
                     ),
@@ -456,7 +461,7 @@ class DailyWidget extends HookWidget {
                     flex: 2,
                     child: Text(
                       DateFormat.MMMEd()
-                          .format(DateTime.now().subtract(Duration(days: 3)))
+                          .format(dailyProvider.selectedDate.subtract(Duration(days: 2)))
                           .toString(),
                       style: kTextStyleWeather2,
                     ),

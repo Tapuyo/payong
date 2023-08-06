@@ -7,7 +7,7 @@ import 'package:payong/models/daily_model.dart';
 
 import '../models/daily_legend_model.dart';
 
-class DailyProvider with ChangeNotifier{
+class DailyProvider with ChangeNotifier {
   List<DailyModel> dailyList = [];
   List<DailyLegendModel> _dailyLegend = [];
   DailyModel? daily;
@@ -20,77 +20,122 @@ class DailyProvider with ChangeNotifier{
   DateTime selectedDate = DateTime.now();
   Set<Polygon> polygon = {};
   String _mapImage = '';
+  String _dateFromBe = '';
 
-  String  get mapImage => _mapImage; 
+  String get dateFromBe => _dateFromBe;
 
-  DateTime  get dateSelect => selectedDate; 
+  String get mapImage => _mapImage;
 
-  bool  get isRefresh => refresh; 
+  DateTime get dateSelect => selectedDate;
 
-  String  get dailyIDSelected => dailyID; 
+  bool get isRefresh => refresh;
+
+  String get dailyIDSelected => dailyID;
 
   List<DailyLegendModel> get dailyLegend => _dailyLegend;
-  DailyModel?  get dailyDetails => daily; 
-  DailyModel?  get dailyDetails1 => daily1; 
-  DailyModel?  get dailyDetails2 => daily2; 
-  DailyModel?  get dailyDetails3 => daily3; 
+  DailyModel? get dailyDetails => daily;
+  DailyModel? get dailyDetails1 => daily1;
+  DailyModel? get dailyDetails2 => daily2;
+  DailyModel? get dailyDetails3 => daily3;
 
-  Set<Polygon>?  get polygons => polygon; 
+  Set<Polygon>? get polygons => polygon;
 
   List<DailyModel> get myDailyList => dailyList;
 
-  String  get option => _option;
+  String get option => _option;
 
   void clearPolygon() {
     polygon = {};
     notifyListeners();
   }
 
-  void setOption(String value, bool daily, String mcao)async {
-    String dt = DateFormat('yyyy-MM-dd').format(selectedDate.subtract(Duration(days: 1)));
-    // dt = '2023-07-17';
-   
-      String urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
-    if(daily){
-      urlValue = 'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
-    }else{
-      String mo = 'January';
-       if(selectedDate.month == 1){
-        mo = 'January';
-       }else if(DateTime.now().month == 2){
-      mo = 'February';
-       }else if(DateTime.now().month == 3){
-      mo = 'March';
-       }else if(DateTime.now().month == 4){
-      mo = 'April';
-       }else if(DateTime.now().month == 5){
-      mo = 'May';
-       }else if(DateTime.now().month == 6){
-      mo = 'Jun';
-       }else if(DateTime.now().month == 7){
-      mo = 'July';
-       }else if(DateTime.now().month == 8){
-      mo = 'August';
-       }else if(DateTime.now().month == 9){
-      mo = 'September';
-       }else if(DateTime.now().month == 10){
-      mo = 'October';
-       }else if(DateTime.now().month == 11){
-      mo = 'November';
-       }else if(DateTime.now().month == 12){
-      mo = 'December';
-       }
-      urlValue = 'http://18.139.91.35/payong/API/MonthlyMonMap.php?fdate=$mo%20${DateTime.now().year}&option=$value&$mcao=1';
+    void setDateBE(String value) {
+    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(value);
+    _dateFromBe = value;
+    selectedDate = tempDate;
+    notifyListeners();
+  }
 
+  void setOption(String value, bool daily, String mcao) async {
+    String dt = DateFormat('yyyy-MM-dd')
+        .format(selectedDate.subtract(Duration(days: 1)));
+    // dt = '2023-07-17';
+
+    String urlValue =
+        'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
+    if (daily) {
+      urlValue =
+          'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=${_dateFromBe}&option=$value';
+    } else {
+       String mo = 'January';
+       int yr = DateTime.now().year;
+      if (mcao == 'assessment') {
+        if (selectedDate.month == 2) {
+          mo = 'January';
+        } else if (DateTime.now().month == 3) {
+          mo = 'February';
+        } else if (DateTime.now().month == 4) {
+          mo = 'March';
+        } else if (DateTime.now().month == 5) {
+          mo = 'April';
+        } else if (DateTime.now().month == 6) {
+          mo = 'May';
+        } else if (DateTime.now().month == 7) {
+          mo = 'June';
+        } else if (DateTime.now().month == 8) {
+          mo = 'July';
+        } else if (DateTime.now().month == 9) {
+          mo = 'August';
+        } else if (DateTime.now().month == 10) {
+          mo = 'September';
+        } else if (DateTime.now().month == 11) {
+          mo = 'October';
+        } else if (DateTime.now().month == 12) {
+          mo = 'November';
+        } else if (DateTime.now().month == 1) {
+          mo = 'December';
+          yr = DateTime.now().year - 1;
+        }
+      } else {
+       
+        if (selectedDate.month == 1) {
+          mo = 'January';
+        } else if (DateTime.now().month == 2) {
+          mo = 'February';
+        } else if (DateTime.now().month == 3) {
+          mo = 'March';
+        } else if (DateTime.now().month == 4) {
+          mo = 'April';
+        } else if (DateTime.now().month == 5) {
+          mo = 'May';
+        } else if (DateTime.now().month == 6) {
+          mo = 'June';
+        } else if (DateTime.now().month == 7) {
+          mo = 'July';
+        } else if (DateTime.now().month == 8) {
+          mo = 'August';
+        } else if (DateTime.now().month == 9) {
+          mo = 'September';
+        } else if (DateTime.now().month == 10) {
+          mo = 'October';
+        } else if (DateTime.now().month == 11) {
+          mo = 'November';
+        } else if (DateTime.now().month == 12) {
+          mo = 'December';
+        }
+      }
+      urlValue =
+          'http://18.139.91.35/payong/API/MonthlyMonMap.php?fdate=$mo%20$yr&option=$value&$mcao=1';
+      print(urlValue);
     }
-  
-    // print(urlValue); 
+
+    // print(urlValue);
     final response = await http.get(Uri.parse(urlValue));
     var jsondata = json.decode(response.body);
     // print(jsondata);
-    if(jsondata.isNotEmpty){
-       _mapImage = jsondata[0]['Map'];
-    }else{
+    if (jsondata.isNotEmpty) {
+      _mapImage = jsondata[0]['Map'];
+    } else {
       _mapImage = '';
     }
     print(_mapImage);
@@ -98,11 +143,10 @@ class DailyProvider with ChangeNotifier{
     notifyListeners();
   }
 
-   void setListDailyLegend(List<DailyLegendModel> value) {
+  void setListDailyLegend(List<DailyLegendModel> value) {
     _dailyLegend = value;
     notifyListeners();
   }
-
 
   void setPolygonDaiy(Polygon value) {
     // polygon = value;
@@ -130,14 +174,17 @@ class DailyProvider with ChangeNotifier{
     daily = value;
     notifyListeners();
   }
+
   void setDailyDetails1(DailyModel value) {
     daily1 = value;
     notifyListeners();
   }
+
   void setDailyDetails2(DailyModel value) {
     daily2 = value;
     notifyListeners();
   }
+
   void setDailyDetails3(DailyModel value) {
     daily3 = value;
     notifyListeners();

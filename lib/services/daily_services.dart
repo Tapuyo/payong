@@ -125,7 +125,7 @@ abstract class DailyServices {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
     String dt = DateFormat('yyyy-MM-dd')
-        .format(dailyProvider.selectedDate.subtract(Duration(days: 1)));
+        .format(dailyProvider.selectedDate);
     // dt = '2023-04-04';
     // dailyDetailsID = '12';
     print('$dailyDetails fdate=$dt&location_id=$dailyDetailsID');
@@ -145,7 +145,7 @@ abstract class DailyServices {
       }catch(e){
         meanTemp = '0';
       }
-      print( u['MinTemp']);
+      print( 'AJSHDKJAHSDKj ${u['TotalNormalRainFall']}');
       DailyModel daily = DailyModel(
           u['LocationID'] ?? '',
           u['LocationDescription'] ?? '',
@@ -187,9 +187,10 @@ abstract class DailyServices {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
     String dt = DateFormat('yyyy-MM-dd')
-        .format(dailyProvider.selectedDate.subtract(Duration(days: 2)));
+        .format(dailyProvider.selectedDate.subtract(Duration(days: 1)));
     // dt = '2023-04-03';
     // dailyDetailsID = '12';
+    print('details2 $dailyDetails fdate=$dt&location_id=$dailyDetailsID');
     final response = await http
         .get(Uri.parse('$dailyDetails fdate=$dt&location_id=$dailyDetailsID'));
 
@@ -250,9 +251,10 @@ abstract class DailyServices {
     final dailyProvider = context.read<DailyProvider>();
     dailyProvider.setRefresh(true);
     String dt = DateFormat('yyyy-MM-dd')
-        .format(dailyProvider.selectedDate.subtract(Duration(days: 3)));
+        .format(dailyProvider.selectedDate.subtract(Duration(days: 2)));
     // dt = '2023-04-02';
     // dailyDetailsID = '12';
+    print('$dailyDetails fdate=$dt&location_id=$dailyDetailsID');
     final response = await http
         .get(Uri.parse('$dailyDetails fdate=$dt&location_id=$dailyDetailsID'));
 

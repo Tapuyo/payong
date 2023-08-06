@@ -118,7 +118,10 @@ class AgriForecastHumidityWidget extends HookWidget {
                                   width: 100,
                                   height: 100,
                                   child:
-                                      Image.network(dailyAgriDetails[index].humidityIcon)),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.network(dailyAgriDetails[index].humidityIcon),
+                                      )),
                             ),
                             Expanded(
                                 child: Column(
