@@ -243,7 +243,7 @@ class DailyWidget extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      double.parse(accumulatedRainFall.value)
+                      double.parse(accumulatedRainFall.value.replaceAll(RegExp('[,]'), ''))
                           .toStringAsFixed(1),
                       style: kTextStyleWeather,
                     ),

@@ -257,6 +257,54 @@ class _MyWidgetState extends State<MainNav> {
       isRefresh = false;
     });
   }
+    Future<void> getDailyListFromSet(String mod) async {
+    await DailyServices.getDailyLegend(context);
+    setState(() {
+      isRefresh = true;
+    });
+
+    final dailyProvider = context.read<DailyProvider>();
+    // dailyProvider.setPolygonDaiyClear();
+    
+    String optionFilter = 'ActualRainfall';
+    String url = '';
+    if (dailyProvider.option == 'MinTemp') {
+      optionFilter = 'MinTemp';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=4';
+    } else if (dailyProvider.option == 'NormalRainfall') {
+      optionFilter = 'NormalRainfall';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=1';
+    } else if (dailyProvider.option == 'MaxTemp') {
+      optionFilter = 'MaxTemp';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=5';
+    } else if (dailyProvider.option == 'ActualRainfall') {
+      optionFilter = 'ActualRainfall';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=2';
+    } else if (dailyProvider.option == 'RainfallPercent') {
+      optionFilter = 'RainfallPercent';
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=3';
+    }
+    
+    // for (var i = 1; i < 200; i++) {
+    // print('john paul $i');
+    String dt = DateFormat('yyyy-MM-dd').format(DateTime.now());
+   final response = await http.get(Uri.parse(url));
+     var jsondata = json.decode(response.body);
+    String dateSelect = '';
+      if (jsondata.isNotEmpty) {
+        dateSelect = jsondata[0]['CurrentDate'];
+        print(dateSelect);
+      } else {
+        dateSelect = dt;
+      }
+    print('lakjshdjlkaslkdjlakjd ${dailyProvider.option}');
+    dailyProvider.setDateBE(dateSelect);
+   dailyProvider.setOption(dailyProvider.option, true,'');
+    // }
+    setState(() {
+      isRefresh = false;
+    });
+  }
 
   Future<void> getDailyList(String mod) async {
     await DailyServices.getDailyLegend(context);
@@ -1368,11 +1416,12 @@ class _MyWidgetState extends State<MainNav> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () {
+                            onTap: ()async {
                               final dailyProvider =
                                   context.read<DailyProvider>();
                               dailyProvider.setOption('ActualRainfall', true,'');
-                              getDailyList('daily');
+                              // getDailyListFromSet('daily');
+                                await DailyServices.getDailyLegend(context);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -1399,11 +1448,12 @@ class _MyWidgetState extends State<MainNav> {
                             height: 5,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: ()async {
                               final dailyProvider =
                                   context.read<DailyProvider>();
                               dailyProvider.setOption('NormalRainfall', true,'');
-                              getDailyList('daily');
+                              // getDailyListFromSet('daily');
+                                await DailyServices.getDailyLegend(context);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -1430,11 +1480,12 @@ class _MyWidgetState extends State<MainNav> {
                             height: 5,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async{
                               final dailyProvider =
                                   context.read<DailyProvider>();
                               dailyProvider.setOption('RainfallPercent', true,'');
-                              getDailyList('daily');
+                              // getDailyListFromSet('daily');
+                                await DailyServices.getDailyLegend(context);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -1461,11 +1512,12 @@ class _MyWidgetState extends State<MainNav> {
                             height: 5,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async{
                               final dailyProvider =
                                   context.read<DailyProvider>();
                               dailyProvider.setOption('MaxTemp', true,'');
-                              getDailyList('daily');
+                              // getDailyListFromSet('daily');
+                                await DailyServices.getDailyLegend(context);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -1492,11 +1544,12 @@ class _MyWidgetState extends State<MainNav> {
                             height: 5,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: ()async {
                               final dailyProvider =
                                   context.read<DailyProvider>();
                               dailyProvider.setOption('MinTemp', true,'');
-                              getDailyList('daily');
+                              // getDailyListFromSet('daily');
+                                await DailyServices.getDailyLegend(context);
                               Navigator.pop(context);
                             },
                             child: Container(

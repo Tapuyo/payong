@@ -16,7 +16,7 @@ extension ColorExtension on String {
   
     var col = hexString.replaceAll('#', 'ff');
 
-    return Color(int.parse(col, radix: 16));
+    return Colors.transparent;
    }
   }
 }

@@ -57,12 +57,43 @@ class DailyProvider with ChangeNotifier {
   }
 
   void setOption(String value, bool daily, String mcao) async {
+
+
     String dt = DateFormat('yyyy-MM-dd')
         .format(selectedDate.subtract(Duration(days: 1)));
     // dt = '2023-07-17';
+    String url = '';
+    if (value == 'MinTemp') {
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=4';
+    } else if (value == 'NormalRainfall') {
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=1';
+    } else if (value == 'MaxTemp') {
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=5';
+    } else if (value == 'ActualRainfall') {
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=2';
+    } else if (value == 'RainfallPercent') {
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=3';
+    } else {
+      url = 'http://18.139.91.35/payong/api/datecheck_dailymon.php?dtype=2';
+    }
+    print('landlksldkajslkdj $url');
+    String dtx = DateFormat('yyyy-MM-dd').format(DateTime.now());
+   final res = await http.get(Uri.parse(url));
+     var jsond = json.decode(res.body);
+    String dateSelect = '';
+      if (jsond.isNotEmpty) {
+        dateSelect = jsond[0]['CurrentDate'];
+        print(dateSelect);
+      } else {
+        dateSelect = dt;
+      }
+
+    print(dateSelect);
+    
+    setDateBE(dateSelect);
 
     String urlValue =
-        'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dt&option=$value';
+        'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=$dateSelect&option=$value';
     if (daily) {
       urlValue =
           'http://18.139.91.35/payong/API/DailyMonMap.php?fdate=${_dateFromBe}&option=$value';
